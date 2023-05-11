@@ -74,8 +74,8 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 
 |平台|Windows|MacOS|Linux/X11|Linux/Wayland|
 |:---|:---|:---|:---|:---|
-|版本|10||||
-|Qt5Widgets|√||||
+|版本|10||openEuler 23.03/GNOME 43.2||
+|Qt5Widgets|√||√||
 |QtDesinger|||||
 |Qt5Quick|||||
 |PyQt5|||||
@@ -103,6 +103,8 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 - github：[https://github.com/canpool/QxRibbon](https://github.com/canpool/QxRibbon)
 - gitee：[https://gitee.com/icanpool/QxRibbon](https://gitee.com/icanpool/QxRibbon)
 
+# 教程
+- [CSDN QxRibbon](https://blog.csdn.net/canpool/category_12316710.html)
 
 # 协议
 * 遵循 [MIT](./LICENSE) 开源许可协议
@@ -129,9 +131,13 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 * QQ群：831617934（Qt业余交流）
 
 # 演示
-- <font size=4>mainwindow demo</font>
+- <font size=4>mainwindow demo（Windows 10）</font>
 
 ![](./doc/images/mainwindow.png)
+
+- <font size=4>mainwindow demo（openEuler 23.03/X11/GNOME 43.2）</font>
+
+![](./doc/images/mainwindow_linux.png)
 
 # 案例
 
