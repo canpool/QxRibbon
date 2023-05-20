@@ -72,14 +72,14 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 
 **1）平台支持**
 
-|平台|Windows|MacOS|Linux/X11|Linux/Wayland|
-|:---|:---|:---|:---|:---|
-|版本|10||openEuler 23.03/GNOME 43.2||
-|Qt5Widgets|√||√||
-|QtDesinger|||||
-|Qt5Quick|||||
-|PyQt5|||||
-|PySide2|||||
+|平台|Windows|MacOS|Linux/X11|Linux/Wayland|备注|
+|:---|:---|:---|:---|:---|:---|
+|版本|10||openEuler 23.03/GNOME 43.2|||
+|Qt5Widgets|√||√|||
+|QtDesinger||||||
+|Qt5Quick||||||
+|PyQt5|√||||Python 3.9|
+|PySide2||||||
 
 
 **2）构建支持**
@@ -138,6 +138,10 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 - <font size=4>mainwindow demo（openEuler 23.03/X11/GNOME 43.2）</font>
 
 ![](./doc/images/mainwindow_linux.png)
+
+- <font size=4>mainwindow demo（Python 3.9/PyQt5）</font>
+
+![](./doc/images/mainwindow_pyqt.png)
 
 # 案例
 
