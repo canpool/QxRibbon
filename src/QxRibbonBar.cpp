@@ -221,23 +221,7 @@ void RibbonBarPrivate::updateTabData()
         }
     }
     // 刷新完tabdata信息也要接着刷新ContextPage信息
-    for (PageContextManagerData &cd : m_currentShowingPageContextList) {
-        cd.tabPageIndex.clear();
-        for (int i = 0; i < cd.pageContext->pageCount(); ++i) {
-            RibbonPage *page = cd.pageContext->page(i);
-            for (int t = 0; t < tabcount; ++t) {
-                QVariant v = m_tabBar->tabData(t);
-                if (v.isValid()) {
-                    RibbonTabData data = v.value<RibbonTabData>();
-                    if (data.page == page) {
-                        cd.tabPageIndex.append(t);
-                    }
-                } else {
-                    cd.tabPageIndex.append(-1);
-                }
-            }
-        }
-    }
+    updatePageContextManagerData();
 }
 
 /**
@@ -292,7 +276,6 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
     //! 显示上下文标签
     p.save();
     QList<PageContextManagerData> pageContextDataList = m_currentShowingPageContextList;
-    bool isCurrentSelectPageContext = false;
 
     QPoint pageContextPos(q->width(), -1);
     QMargins border = q->contentsMargins();
@@ -319,15 +302,13 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
                 pageContextPos.setY(contextTitleRect.right());
             }
         }
-        isCurrentSelectPageContext = indexs.contains(m_tabBar->currentIndex());
-        if (isCurrentSelectPageContext) {
+        if (indexs.contains(m_tabBar->currentIndex())) {
             QPen pen;
             pen.setColor(clr);
             pen.setWidth(1);
             p.setPen(pen);
             p.setBrush(Qt::NoBrush);
             p.drawRect(m_stack->geometry());
-            isCurrentSelectPageContext = false;
         }
     }
     p.restore();
@@ -371,7 +352,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
     //! 显示上下文标签
     p.save();
     QList<PageContextManagerData> pageContextDataList = m_currentShowingPageContextList;
-    bool isCurrentSelectPageContext = false;
+
     QMargins border = q->contentsMargins();
     for (int i = 0; i < pageContextDataList.size(); ++i) {
         QRect contextTitleRect;
@@ -389,15 +370,13 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
             // 绘制
             paintPageContextTab(p, QString(), contextTitleRect, clr);
         }
-        isCurrentSelectPageContext = indexs.contains(m_tabBar->currentIndex());
-        if (isCurrentSelectPageContext) {
+        if (indexs.contains(m_tabBar->currentIndex())) {
             QPen pen;
             pen.setColor(clr);
             pen.setWidth(1);
             p.setPen(pen);
             p.setBrush(Qt::NoBrush);
             p.drawRect(m_stack->geometry());
-            isCurrentSelectPageContext = false;
         }
     }
     p.restore();
@@ -499,54 +478,47 @@ void RibbonBarPrivate::resizeInOfficeStyle()
     const int tabH = q->tabBarHeight();
 
     x += m_iconRightBorderPosition + 5;
-    if (QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner)) {
-        if (connerL->isVisible()) {
-            QSize connerSize = connerL->sizeHint();
-            if (connerSize.height() < validTitleBarHeight) {
-                int detal = (validTitleBarHeight - connerSize.height()) / 2;
-                connerL->setGeometry(x, y + detal, connerSize.width(), connerSize.height());
-            } else {
-                connerL->setGeometry(x, y, connerSize.width(), validTitleBarHeight);
-            }
-            x = connerL->geometry().right() + 5;
+    QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner);
+    if (connerL && connerL->isVisible()) {
+        QSize connerSize = connerL->sizeHint();
+        if (connerSize.height() < validTitleBarHeight) {
+            int detal = (validTitleBarHeight - connerSize.height()) / 2;
+            connerL->setGeometry(x, y + detal, connerSize.width(), connerSize.height());
+        } else {
+            connerL->setGeometry(x, y, connerSize.width(), validTitleBarHeight);
         }
+        x = connerL->geometry().right() + 5;
     }
     // quick access bar定位
-    if (m_quickAccessBar) {
-        if (m_quickAccessBar->isVisible()) {
-            if (m_quickAccessBar->height() != validTitleBarHeight) {
-                m_quickAccessBar->setFixedHeight(validTitleBarHeight);
-            }
-            QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
-            m_quickAccessBar->setGeometry(x, y, quickAccessBarSize.width(), validTitleBarHeight);
+    if (m_quickAccessBar && m_quickAccessBar->isVisible()) {
+        if (m_quickAccessBar->height() != validTitleBarHeight) {
+            m_quickAccessBar->setFixedHeight(validTitleBarHeight);
         }
+        QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
+        m_quickAccessBar->setGeometry(x, y, quickAccessBarSize.width(), validTitleBarHeight);
     }
     // 第二行，开始布局applicationButton，tabbar，tabBarRightSizeButtonGroupWidget，TopRightCorner
     x = border.left();
     y += validTitleBarHeight;
     // applicationButton 定位
-    if (m_applicationButton) {
-        if (m_applicationButton->isVisible()) {
-            m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
-            x = m_applicationButton->geometry().right();
-        }
+    if (m_applicationButton && m_applicationButton->isVisible()) {
+        m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
+        x = m_applicationButton->geometry().right();
     }
     // top right是一定要配置的，对于多文档窗口，子窗口的缩放等按钮就是通过这个窗口实现，
     // 由于这个窗口一定要在最右，因此先对这个窗口进行布局
     // cornerWidget - TopRightCorner
     // 获取最右边的位置
     int endX = q->width() - border.right();
-
-    if (QWidget *connerW = q->cornerWidget(Qt::TopRightCorner)) {
-        if (connerW->isVisible()) {
-            QSize connerSize = connerW->sizeHint();
-            endX -= connerSize.width();
-            if (connerSize.height() < tabH) {
-                int detal = (tabH - connerSize.height()) / 2;
-                connerW->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
-            } else {
-                connerW->setGeometry(endX, y, connerSize.width(), tabH);
-            }
+    QWidget *connerW = q->cornerWidget(Qt::TopRightCorner);
+    if (connerW && connerW->isVisible()) {
+        QSize connerSize = connerW->sizeHint();
+        endX -= connerSize.width();
+        if (connerSize.height() < tabH) {
+            int detal = (tabH - connerSize.height()) / 2;
+            connerW->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
+        } else {
+            connerW->setGeometry(endX, y, connerSize.width(), tabH);
         }
     }
     // applicationButton和TopRightCorner完成定位，才可以定位tab bar
@@ -577,17 +549,15 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
     // 先布局右边内容
     //  cornerWidget - TopRightCorner
     int endX = q->width() - border.right() - m_windowButtonsSize.width();
-
-    if (QWidget *connerW = q->cornerWidget(Qt::TopRightCorner)) {
-        if (connerW->isVisible()) {
-            QSize connerSize = connerW->sizeHint();
-            endX -= connerSize.width();
-            if (connerSize.height() < validTitleBarHeight) {
-                int detal = (validTitleBarHeight - connerSize.height()) / 2;
-                connerW->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
-            } else {
-                connerW->setGeometry(endX, y, connerSize.width(), validTitleBarHeight);
-            }
+    QWidget *connerR = q->cornerWidget(Qt::TopRightCorner);
+    if (connerR && connerR->isVisible()) {
+        QSize connerSize = connerR->sizeHint();
+        endX -= connerSize.width();
+        if (connerSize.height() < validTitleBarHeight) {
+            int detal = (validTitleBarHeight - connerSize.height()) / 2;
+            connerR->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
+        } else {
+            connerR->setGeometry(endX, y, connerSize.width(), validTitleBarHeight);
         }
     }
 
@@ -598,24 +568,21 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
         m_rightButtonGroup->setGeometry(endX, y, wSize.width(), validTitleBarHeight);
     }
     // quick access bar定位
-    if (m_quickAccessBar) {
-        if (m_quickAccessBar->isVisible()) {
-            QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
-            endX -= quickAccessBarSize.width();
-            m_quickAccessBar->setGeometry(endX, y, quickAccessBarSize.width(), validTitleBarHeight);
-        }
+    if (m_quickAccessBar && m_quickAccessBar->isVisible()) {
+        QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
+        endX -= quickAccessBarSize.width();
+        m_quickAccessBar->setGeometry(endX, y, quickAccessBarSize.width(), validTitleBarHeight);
     }
     // cornerWidget - TopLeftCorner
-    if (QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner)) {
-        if (connerL->isVisible()) {
-            QSize connerSize = connerL->sizeHint();
-            endX -= connerSize.width();
-            if (connerSize.height() < validTitleBarHeight) {
-                int detal = (validTitleBarHeight - connerSize.height()) / 2;
-                connerL->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
-            } else {
-                connerL->setGeometry(endX, y, connerSize.width(), validTitleBarHeight);
-            }
+    QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner);
+    if (connerL && connerL->isVisible()) {
+        QSize connerSize = connerL->sizeHint();
+        endX -= connerSize.width();
+        if (connerSize.height() < validTitleBarHeight) {
+            int detal = (validTitleBarHeight - connerSize.height()) / 2;
+            connerL->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
+        } else {
+            connerL->setGeometry(endX, y, connerSize.width(), validTitleBarHeight);
         }
     }
 
@@ -629,11 +596,9 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
     y = y + validTitleBarHeight - tabH;   // 如果tabH较小，则下以，让tab底部和title的底部对齐
 
     // applicationButton 定位，与TabBar同高
-    if (m_applicationButton) {
-        if (m_applicationButton->isVisible()) {
-            m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
-            x = m_applicationButton->geometry().right() + 2;
-        }
+    if (m_applicationButton && m_applicationButton->isVisible()) {
+        m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
+        x = m_applicationButton->geometry().right() + 2;
     }
     // tab bar 定位 wps模式下applicationButton的右边就是tab bar
     int tabBarWidth = endX - x;
@@ -775,19 +740,16 @@ void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
         }
         if (m_minimized) {
             m_tabBar->clearFocus();
-            if (!m_stack->isVisible()) {
-                if (m_stack->isPopup()) {
-                    // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
-                    QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
-                                    m_tabBar->mapToGlobal(QCursor::pos()));
-                    QApplication::sendEvent(m_tabBar, &ehl);
-                    resizeStackedWidget();
-                    m_stack->setFocus();
-                    m_stack->show();
-                    // 在最小模式下，每次显示完stackedContainerWidget后把tab的
-                    // 的index设置为-1，这样每次点击都会触发onCurrentRibbonTabChanged
-                }
-            } else {
+            if (!m_stack->isVisible() && m_stack->isPopup()) {
+                // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+                QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
+                                m_tabBar->mapToGlobal(QCursor::pos()));
+                QApplication::sendEvent(m_tabBar, &ehl);
+                resizeStackedWidget();
+                m_stack->setFocus();
+                m_stack->show();
+                // 在最小模式下，每次显示完stackedContainerWidget后把tab的
+                // 的index设置为-1，这样每次点击都会触发onCurrentRibbonTabChanged
             }
         }
     }
@@ -809,17 +771,15 @@ void RibbonBarPrivate::onCurrentRibbonTabClicked(int index)
         return;
     }
     if (m_minimized) {
-        if (!m_stack->isVisible()) {
-            if (m_stack->isPopup()) {
-                // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
-                QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
-                                m_tabBar->mapToGlobal(QCursor::pos()));
-                QApplication::sendEvent(m_tabBar, &ehl);
-                // 弹出前都调整一下位置，避免移动后位置异常
-                resizeStackedWidget();
-                m_stack->setFocus();
-                m_stack->show();
-            }
+        if (!m_stack->isVisible() && m_stack->isPopup()) {
+            // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+            QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
+                            m_tabBar->mapToGlobal(QCursor::pos()));
+            QApplication::sendEvent(m_tabBar, &ehl);
+            // 弹出前都调整一下位置，避免移动后位置异常
+            resizeStackedWidget();
+            m_stack->setFocus();
+            m_stack->show();
         }
     }
 }
@@ -986,10 +946,8 @@ RibbonPage *RibbonBar::pageByName(const QString &title) const
 
     for (int i = 0; i < c; ++i) {
         RibbonPage *w = qobject_cast<RibbonPage *>(d->m_stack->widget(i));
-        if (w) {
-            if (w->windowTitle() == title) {
-                return w;
-            }
+        if (w && w->windowTitle() == title) {
+            return w;
         }
     }
     return Q_NULLPTR;
@@ -1007,10 +965,8 @@ RibbonPage *RibbonBar::pageByObjectName(const QString &objname) const
 
     for (int i = 0; i < c; ++i) {
         RibbonPage *w = qobject_cast<RibbonPage *>(d->m_stack->widget(i));
-        if (w) {
-            if (w->objectName() == objname) {
-                return (w);
-            }
+        if (w && w->objectName() == objname) {
+            return (w);
         }
     }
     return Q_NULLPTR;
@@ -1158,18 +1114,7 @@ void RibbonBar::movePage(int from, int to)
  */
 int RibbonBar::pageIndex(RibbonPage *page) const
 {
-    int tabcount = d->m_tabBar->count();
-
-    for (int i = 0; i < tabcount; ++i) {
-        QVariant var = d->m_tabBar->tabData(i);
-        if (var.isValid()) {
-            RibbonTabData p = var.value<RibbonTabData>();
-            if (p.page == page) {
-                return i;
-            }
-        }
-    }
-    return -1;
+    return d->tabIndex(page);
 }
 
 /**
@@ -1254,14 +1199,12 @@ void RibbonBar::showPageContext(RibbonPageContext *context)
 void RibbonBar::hidePageContext(RibbonPageContext *context)
 {
     bool needResize = false;
-    int indexOffset = 0;
 
     for (int i = 0; i < d->m_currentShowingPageContextList.size(); ++i) {
         if (d->m_currentShowingPageContextList[i].pageContext == context) {
             const QList<int> &indexs = d->m_currentShowingPageContextList[i].tabPageIndex;
             for (int j = indexs.size() - 1; j >= 0; --j) {
                 d->m_tabBar->removeTab(indexs[j]);
-                ++indexOffset;
             }
             // 注意，再删除ContextPage后，tab的序号就会改变，这时，这个tab后面的都要调整它的序号
             needResize = true;
@@ -1333,9 +1276,9 @@ void RibbonBar::destroyPageContext(RibbonPageContext *context)
     //!
     QList<RibbonPage *> res = context->pageList();
 
-    for (RibbonPage *c : res) {
-        c->hide();
-        c->deleteLater();
+    for (RibbonPage *page : res) {
+        page->hide();
+        page->deleteLater();
     }
     context->deleteLater();
     QApplication::postEvent(this, new QResizeEvent(size(), size()));
@@ -1359,12 +1302,12 @@ void RibbonBar::setMinimized(bool flag)
     emit minimizationChanged(flag);
 }
 
-bool RibbonBar::haveShowMinimumModeButton() const
+bool RibbonBar::haveShowMinimumButton() const
 {
     return (Q_NULLPTR != d->m_minimumPageButton);
 }
 
-void RibbonBar::showMinimumModeButton(bool isShow)
+void RibbonBar::showMinimumButton(bool isShow)
 {
     if (isShow) {
         activeRightButtonGroup();
@@ -1508,8 +1451,8 @@ void RibbonBar::updateRibbonGeometry()
 {
     d->updateRibbonElementGeometry();
     QList<RibbonPage *> pages = this->pages();
-    for (RibbonPage *c : pages) {
-        c->updateItemGeometry();
+    for (RibbonPage *page : pages) {
+        page->updateItemGeometry();
     }
 }
 

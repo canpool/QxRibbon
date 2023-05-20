@@ -145,6 +145,7 @@ void RibbonButtonPrivate::drawSmallButton(QStyleOptionToolButton &opt, QPainter 
     // 绘制背景
     QStyleOption tool(0);
     tool.palette = opt.palette;
+    QStyle::PrimitiveElement pe = autoRaise ? QStyle::PE_PanelButtonTool : QStyle::PE_PanelButtonBevel;
     if ((opt.subControls & QStyle::SC_ToolButton) && (opt.features & QStyleOptionToolButton::MenuButtonPopup)) {
         tool.rect = opt.rect;
         tool.state = bflags;
@@ -158,43 +159,26 @@ void RibbonButtonPrivate::drawSmallButton(QStyleOptionToolButton &opt, QPainter 
                     // 鼠标在文字区，把图标显示为正常
                     tool.rect = m_iconRect;
                     tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
-                    if (autoRaise) {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-                    } else {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-                    }
                 } else {
                     // 鼠标在图标区，把文字显示为正常
                     tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
                     tool.rect = opt.rect.adjusted(m_iconRect.width() + m_iconAndTextSpace, m_iconAndTextSpace,
                                                   -m_iconAndTextSpace, -m_iconAndTextSpace);
-                    if (autoRaise) {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-                    } else {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-                    }
                 }
+                style()->drawPrimitive(pe, &tool, &p, w);
             }
         }
     } else if ((opt.subControls & QStyle::SC_ToolButton) && (opt.features & QStyleOptionToolButton::HasMenu)) {
         tool.rect = opt.rect;
         tool.state = bflags;
-        if (autoRaise) {
-            style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-        } else {
-            style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-        }
+        style()->drawPrimitive(pe, &tool, &p, w);
     } else if (opt.subControls & QStyle::SC_ToolButton) {
         tool.rect = opt.rect;
         tool.state = bflags;
         if (opt.state & QStyle::State_Sunken) {
             tool.state &= ~QStyle::State_MouseOver;
         }
-        if (autoRaise) {
-            style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-        } else {
-            style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-        }
+        style()->drawPrimitive(pe, &tool, &p, w);
     }
     drawIconAndLabel(opt, p, w);
 }
@@ -232,6 +216,7 @@ void RibbonButtonPrivate::drawLargeButton(QStyleOptionToolButton &opt, QPainter 
     // 绘制背景
     QStyleOption tool(0);
     tool.palette = opt.palette;
+    QStyle::PrimitiveElement pe = autoRaise ? QStyle::PE_PanelButtonTool : QStyle::PE_PanelButtonBevel;
     // MenuButtonPopup特殊处理
     if ((opt.subControls & QStyle::SC_ToolButton) && (opt.features & QStyleOptionToolButton::MenuButtonPopup)) {
         // 此时按钮的菜单弹出
@@ -249,44 +234,27 @@ void RibbonButtonPrivate::drawLargeButton(QStyleOptionToolButton &opt, QPainter 
                     // 鼠标在文字区，把图标显示为正常
                     tool.rect = m_iconRect;
                     tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
-                    if (autoRaise) {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-                    } else {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-                    }
                 } else {
                     // 鼠标在图标区，把文字显示为正常
                     tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
                     tool.rect.setRect(m_textRect.x(), m_textRect.y(), tool.rect.width() - 2 * m_iconAndTextSpace,
                                       m_textRect.height());
-                    if (autoRaise) {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-                    } else {
-                        style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-                    }
                 }
+                style()->drawPrimitive(pe, &tool, &p, w);
             }
         }
     } else if ((opt.subControls & QStyle::SC_ToolButton) && (opt.features & QStyleOptionToolButton::HasMenu)) {
         // 按钮含有菜单
         tool.rect = opt.rect;
         tool.state = bflags;
-        if (autoRaise) {
-            style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-        } else {
-            style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-        }
+        style()->drawPrimitive(pe, &tool, &p, w);
     } else if (opt.subControls & QStyle::SC_ToolButton) {
         tool.rect = opt.rect;
         tool.state = bflags;
         if (opt.state & QStyle::State_Sunken) {
             tool.state &= ~QStyle::State_MouseOver;
         }
-        if (autoRaise) {
-            style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
-        } else {
-            style()->drawPrimitive(QStyle::PE_PanelButtonBevel, &tool, &p, w);
-        }
+        style()->drawPrimitive(pe, &tool, &p, w);
     }
 
     // 绘制Focus
@@ -494,10 +462,8 @@ void RibbonButtonPrivate::drawIconAndLabel(QStyleOptionToolButton &opt, QPainter
         }
     } else {
         // 小图标
-        QSize pmSize = opt.iconSize;
         if (!opt.icon.isNull()) {
             QPixmap pm = createIconPixmap(opt, m_iconRect.size());
-            pmSize = pm.size() / pm.devicePixelRatio();
 
             if (opt.toolButtonStyle != Qt::ToolButtonIconOnly) {
                 p.save();

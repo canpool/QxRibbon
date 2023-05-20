@@ -154,10 +154,10 @@ void RibbonPagePrivate::setGroupLayoutMode(RibbonGroup::GroupLayoutMode m)
         return;
     }
     m_groupLayoutMode = m;
-    QList<RibbonGroup *> ps = groupList();
+    QList<RibbonGroup *> groups = groupList();
 
-    for (RibbonGroup *p : ps) {
-        p->setGroupLayoutMode(m);
+    for (RibbonGroup *group : groups) {
+        group->setGroupLayoutMode(m);
     }
     updateItemGeometry();
 }
@@ -189,12 +189,12 @@ int RibbonPagePrivate::totalSizeHintWidth() const
             continue;
         }
         QSize groupSize = item.m_group->sizeHint();
-        QSize SeparatorSize(0, 0);
+        QSize separatorSize(0, 0);
         if (item.m_separator) {
-            SeparatorSize = item.m_separator->sizeHint();
+            separatorSize = item.m_separator->sizeHint();
         }
         total += groupSize.width();
-        total += SeparatorSize.width();
+        total += separatorSize.width();
     }
     return total;
 }
@@ -272,17 +272,17 @@ void RibbonPagePrivate::updateItemGeometry()
             item.m_willSetSeparatorGeometry = QRect(0, 0, 0, 0);
             continue;
         }
-        RibbonGroup *p = item.m_group;
-        if (Q_NULLPTR == p) {
+        RibbonGroup *group = item.m_group;
+        if (Q_NULLPTR == group) {
             qDebug() << "unknow widget in RibbonPageLayout";
             continue;
         }
-        QSize groupSize = p->sizeHint();
-        QSize SeparatorSize(0, 0);
+        QSize groupSize = group->sizeHint();
+        QSize separatorSize(0, 0);
         if (item.m_separator) {
-            SeparatorSize = item.m_separator->sizeHint();
+            separatorSize = item.m_separator->sizeHint();
         }
-        if (p->isExpanding()) {
+        if (group->isExpanding()) {
             // 可扩展，就把group扩展到最大
             groupSize.setWidth(groupSize.width() + expandWidth);
         }
@@ -290,7 +290,7 @@ void RibbonPagePrivate::updateItemGeometry()
         item.m_willSetGroupGeometry = QRect(x, y, w, contentSize.height());
         x += w;
         total += w;
-        w = SeparatorSize.width();
+        w = separatorSize.width();
         item.m_willSetSeparatorGeometry = QRect(x, y, w, contentSize.height());
         x += w;
         total += w;
@@ -483,6 +483,11 @@ void RibbonPage::setPageName(const QString &title)
     setWindowTitle(title);
 }
 
+RibbonGroup::GroupLayoutMode RibbonPage::groupLayoutMode() const
+{
+    return d->m_groupLayoutMode;
+}
+
 /**
  * @brief 设置group的模式
  *
@@ -575,15 +580,15 @@ RibbonGroup *RibbonPage::groupByObjectName(const QString &objname) const
 
 /**
  * @brief 查找group对应的索引
- * @param p
+ * @param group
  * @return 如果找不到，返回-1
  */
-int RibbonPage::groupIndex(RibbonGroup *p) const
+int RibbonPage::groupIndex(RibbonGroup *group) const
 {
     int c = groupCount();
 
     for (int i = 0; i < c; ++i) {
-        if (d->m_itemList[i].m_group == p) {
+        if (d->m_itemList[i].m_group == group) {
             return i;
         }
     }
@@ -728,9 +733,9 @@ RibbonBar *RibbonPage::ribbonBar() const
  */
 void RibbonPage::updateItemGeometry()
 {
-    QList<RibbonGroup *> ps = groupList();
-    for (RibbonGroup *p : ps) {
-        p->updateGeometry();
+    QList<RibbonGroup *> groups = groupList();
+    for (RibbonGroup *group : groups) {
+        group->updateGeometry();
     }
     d->updateItemGeometry();
 }

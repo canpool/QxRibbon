@@ -9,7 +9,6 @@
 
 class RibbonWindowPrivate;
 class RibbonBar;
-class FramelessHelper;
 
 /**
  * @brief 如果要使用 RibbonBar，必须使用此类代替 QMainWindow
@@ -51,8 +50,6 @@ public:
     const RibbonBar *ribbonBar() const;
     RibbonBar *ribbonBar();
 
-    FramelessHelper *framelessHelper();
-
     void setRibbonTheme(RibbonTheme theme);
     RibbonTheme ribbonTheme() const;
 
@@ -61,7 +58,7 @@ public:
     void updateWindowFlag(Qt::WindowFlags flags);
     Qt::WindowFlags windowButtonFlags() const;
 
-    void setMenuWidget(QWidget *menubar);
+    void setMenuWidget(QWidget *menuBar);
     void setMenuBar(QMenuBar *menuBar);
 protected:
     void loadTheme(const QString &themeFile);

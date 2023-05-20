@@ -89,12 +89,12 @@ bool RibbonPageContext::eventFilter(QObject *watched, QEvent *e)
     }
     switch (e->type()) {
     case QEvent::Close: {
-        RibbonPage *c = qobject_cast<RibbonPage *>(watched);
-        if (c) {
+        RibbonPage *page = qobject_cast<RibbonPage *>(watched);
+        if (page) {
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
             qDebug() << " -----------> close event";
 #endif
-            takePage(c);
+            takePage(page);
         }
     } break;
 
@@ -143,8 +143,8 @@ QList<RibbonPage *> RibbonPageContext::pageList() const
 {
     QList<RibbonPage *> res;
 
-    for (RibbonPageData &c : d->pageDataList) {
-        res.append(c.page);
+    for (RibbonPageData &data : d->pageDataList) {
+        res.append(data.page);
     }
     return res;
 }

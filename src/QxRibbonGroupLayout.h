@@ -48,7 +48,7 @@ class RibbonGroupLayout : public QLayout
 {
     Q_OBJECT
 public:
-    RibbonGroupLayout(QWidget *p = 0);
+    RibbonGroupLayout(QWidget *p = Q_NULLPTR);
     ~RibbonGroupLayout();
 
     virtual int indexOf(QAction *action) const;

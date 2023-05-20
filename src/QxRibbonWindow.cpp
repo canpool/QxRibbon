@@ -18,6 +18,7 @@ class RibbonWindowPrivate
 public:
     RibbonWindowPrivate(RibbonWindow *p);
     void init();
+    void setMenuWidget(QWidget *menuBar);
 public:
     RibbonWindow *q;
     RibbonBar *m_ribbonBar;
@@ -39,6 +40,39 @@ RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
 
 void RibbonWindowPrivate::init()
 {
+}
+
+void RibbonWindowPrivate::setMenuWidget(QWidget *menuBar)
+{
+    RibbonBar *bar = qobject_cast<RibbonBar *>(menuBar);
+
+    if (bar) {
+        m_ribbonBar = bar;
+        m_ribbonBar->installEventFilter(q);
+        if (Q_NULLPTR == m_framelessHelper) {
+            m_framelessHelper = new FramelessHelper(q);
+        }
+        m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
+        if (Q_NULLPTR == m_windowButtonGroup) {
+            m_windowButtonGroup = new WindowButtonGroup(q);
+        }
+        QSize s = m_windowButtonGroup->sizeHint();
+        s.setHeight(m_ribbonBar->titleBarHeight());
+        m_windowButtonGroup->setFixedSize(s);
+        m_windowButtonGroup->setWindowStates(q->windowState());
+        m_useRibbon = true;
+        m_windowButtonGroup->show();
+    } else {
+        m_ribbonBar = Q_NULLPTR;
+        m_useRibbon = false;
+        if (m_framelessHelper) {
+            delete m_framelessHelper;
+            m_framelessHelper = Q_NULLPTR;
+        }
+        if (m_windowButtonGroup) {
+            m_windowButtonGroup->hide();
+        }
+    }
 }
 
 RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
@@ -69,11 +103,6 @@ const RibbonBar *RibbonWindow::ribbonBar() const
 RibbonBar *RibbonWindow::ribbonBar()
 {
     return d->m_ribbonBar;
-}
-
-FramelessHelper *RibbonWindow::framelessHelper()
-{
-    return d->m_framelessHelper;
 }
 
 void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
@@ -117,72 +146,17 @@ Qt::WindowFlags RibbonWindow::windowButtonFlags() const
     return windowFlags();
 }
 
-void RibbonWindow::setMenuWidget(QWidget *menubar)
+void RibbonWindow::setMenuWidget(QWidget *menuBar)
 {
-    QMainWindow::setMenuWidget(menubar);
-    RibbonBar *bar = qobject_cast<RibbonBar *>(menubar);
+    QMainWindow::setMenuWidget(menuBar);
+    d->setMenuWidget(menuBar);
 
-    if (bar) {
-        d->m_ribbonBar = bar;
-        d->m_ribbonBar->installEventFilter(this);
-        if (Q_NULLPTR == d->m_framelessHelper) {
-            d->m_framelessHelper = new FramelessHelper(this);
-        }
-        d->m_framelessHelper->setTitleHeight(d->m_ribbonBar->titleBarHeight());
-        if (Q_NULLPTR == d->m_windowButtonGroup) {
-            d->m_windowButtonGroup = new WindowButtonGroup(this);
-        }
-        QSize s = d->m_windowButtonGroup->sizeHint();
-        s.setHeight(d->m_ribbonBar->titleBarHeight());
-        d->m_windowButtonGroup->setFixedSize(s);
-        d->m_windowButtonGroup->setWindowStates(windowState());
-        d->m_useRibbon = true;
-        d->m_windowButtonGroup->show();
-    } else {
-        d->m_ribbonBar = Q_NULLPTR;
-        d->m_useRibbon = false;
-        if (d->m_framelessHelper) {
-            delete d->m_framelessHelper;
-            d->m_framelessHelper = Q_NULLPTR;
-        }
-        if (d->m_windowButtonGroup) {
-            d->m_windowButtonGroup->hide();
-        }
-    }
 }
 
 void RibbonWindow::setMenuBar(QMenuBar *menuBar)
 {
     QMainWindow::setMenuBar(menuBar);
-    RibbonBar *bar = qobject_cast<RibbonBar *>(menuBar);
-
-    if (bar) {
-        d->m_ribbonBar = bar;
-        d->m_ribbonBar->installEventFilter(this);
-        if (Q_NULLPTR == d->m_framelessHelper) {
-            d->m_framelessHelper = new FramelessHelper(this);
-        }
-        d->m_framelessHelper->setTitleHeight(d->m_ribbonBar->titleBarHeight());
-        if (Q_NULLPTR == d->m_windowButtonGroup) {
-            d->m_windowButtonGroup = new WindowButtonGroup(this);
-        }
-        QSize s = d->m_windowButtonGroup->sizeHint();
-        s.setHeight(d->m_ribbonBar->titleBarHeight());
-        d->m_windowButtonGroup->setFixedSize(s);
-        d->m_windowButtonGroup->setWindowStates(windowState());
-        d->m_useRibbon = true;
-        d->m_windowButtonGroup->show();
-    } else {
-        d->m_ribbonBar = Q_NULLPTR;
-        d->m_useRibbon = false;
-        if (d->m_framelessHelper) {
-            delete d->m_framelessHelper;
-            d->m_framelessHelper = Q_NULLPTR;
-        }
-        if (d->m_windowButtonGroup) {
-            d->m_windowButtonGroup->hide();
-        }
-    }
+    d->setMenuWidget(menuBar);
 }
 
 void RibbonWindow::resizeEvent(QResizeEvent *event)

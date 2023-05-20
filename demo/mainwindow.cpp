@@ -329,7 +329,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     actShowHideButton->setCheckable(true);
     groupStyle->addSmallAction(actShowHideButton);
     connect(actShowHideButton, &QAction::triggered, this, [this](bool b) {
-        this->ribbonBar()->showMinimumModeButton(b);   // 显示ribbon最小化按钮
+        this->ribbonBar()->showMinimumButton(b);   // 显示ribbon最小化按钮
     });
     actShowHideButton->trigger();
 

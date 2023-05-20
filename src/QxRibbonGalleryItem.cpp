@@ -120,14 +120,14 @@ void RibbonGalleryItem::setSelectable(bool isSelectable)
     if (isSelectable) {
         d->m_flags |= Qt::ItemIsSelectable;
     } else {
-        d->m_flags = (d->m_flags & (~Qt::ItemIsSelectable));
+        d->m_flags &= ~Qt::ItemIsSelectable;
     }
 }
 
 bool RibbonGalleryItem::isEnable() const
 {
     if (d->m_action) {
-        return (d->m_action->isEnabled());
+        return d->m_action->isEnabled();
     }
     return (d->m_flags & Qt::ItemIsEnabled);
 }
@@ -141,7 +141,7 @@ void RibbonGalleryItem::setEnable(bool isEnable)
     if (isEnable) {
         d->m_flags |= Qt::ItemIsEnabled;
     } else {
-        d->m_flags = (d->m_flags & (~Qt::ItemIsEnabled));
+        d->m_flags &= ~Qt::ItemIsEnabled;
     }
 }
 
@@ -167,7 +167,7 @@ void RibbonGalleryItem::setAction(QAction *act)
     if (act->isEnabled()) {
         d->m_flags |= Qt::ItemIsEnabled;
     } else {
-        d->m_flags = (d->m_flags & (~Qt::ItemIsEnabled));
+        d->m_flags &= ~Qt::ItemIsEnabled;
     }
 }
 

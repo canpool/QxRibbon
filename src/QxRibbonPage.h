@@ -49,7 +49,7 @@ public:
     RibbonGroup *groupByName(const QString &title) const;
     RibbonGroup *groupByObjectName(const QString &objname) const;
 
-    int groupIndex(RibbonGroup *p) const;
+    int groupIndex(RibbonGroup *group) const;
 
     void moveGroup(int from, int to);
 
