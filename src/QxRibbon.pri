@@ -68,3 +68,7 @@ RESOURCES += \
 
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
+
+win32 {
+    LIBS += -lUser32
+}
