@@ -2,10 +2,18 @@
 
 #include <QObject>
 
+#ifdef Q_OS_WINDOWS
+#include <QAbstractNativeEventFilter>
+#endif
+
 class QWidget;
 class FramelessHelperPrivate;
 
+#ifdef Q_OS_WINDOWS
+class FramelessHelper : public QObject, public QAbstractNativeEventFilter
+#else
 class FramelessHelper : public QObject
+#endif
 {
     Q_OBJECT
 public:
@@ -36,6 +44,9 @@ public:
 protected:
     // 事件过滤，进行移动、缩放等
     virtual bool eventFilter(QObject *obj, QEvent *event);
+#ifdef Q_OS_WINDOWS
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+#endif
 private:
     FramelessHelperPrivate *d;
 };

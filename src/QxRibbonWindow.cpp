@@ -13,13 +13,6 @@
 #include <QHash>
 #include <QWindowStateChangeEvent>
 
-#ifdef Q_OS_WINDOWS
-#include <windows.h>
-#include <windowsx.h>
-#include <winuser.h>
-#include <QScreen>
-#endif
-
 class RibbonWindowPrivate
 {
 public:
@@ -224,28 +217,3 @@ void RibbonWindow::loadTheme(const QString &themeFile)
     setStyleSheet(file.readAll());
     file.close();
 }
-
-#ifdef Q_OS_WINDOWS
-bool RibbonWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
-{
-    if (isUseRibbon()) {
-        MSG *msg = reinterpret_cast<MSG *>(message);
-        switch (msg->message) {
-            case WM_GETMINMAXINFO: {
-                // prevent taskbar is covered when maximized
-                if (this->isMaximized()) {
-                    const QRect rc = this->screen()->availableGeometry();
-                    MINMAXINFO *p = (MINMAXINFO *)(msg->lParam);
-                    p->ptMaxPosition.x = 0;
-                    p->ptMaxPosition.y = 0;
-                    p->ptMaxSize.x = rc.width();
-                    p->ptMaxSize.y = rc.height();
-                    *result = ::DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
-                    return true;
-                }
-            }
-        }
-    }
-    return QMainWindow::nativeEvent(eventType, message, result);
-}
-#endif // Q_OS_WINDOWS

@@ -7,6 +7,13 @@
 #include <QRubberBand>
 #include <QMainWindow>
 
+#ifdef Q_OS_WINDOWS
+#include <windows.h>
+#include <windowsx.h>
+#include <winuser.h>
+#include <QScreen>
+#endif
+
 class WidgetData;
 
 /*****
@@ -460,10 +467,16 @@ FramelessHelper::FramelessHelper(QObject *parent)
             activateOn(w);
         }
     }
+#ifdef Q_OS_WINDOWS
+    qApp->installNativeEventFilter(this);
+#endif
 }
 
 FramelessHelper::~FramelessHelper()
 {
+#ifdef Q_OS_WINDOWS
+    qApp->removeNativeEventFilter(this);
+#endif
     QList<QWidget *> keys = d->m_widgetDataHash.keys();
     int size = keys.size();
 
@@ -494,6 +507,36 @@ bool FramelessHelper::eventFilter(QObject *obj, QEvent *event)
     }
     return (QObject::eventFilter(obj, event));
 }
+
+#ifdef Q_OS_WINDOWS
+bool FramelessHelper::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+{
+    if (eventType == "windows_generic_MSG") {
+        MSG *msg = reinterpret_cast<MSG *>(message);
+        QWidget *widget = QWidget::find(reinterpret_cast<WId>(msg->hwnd));
+        WidgetData *data = d->m_widgetDataHash.value(widget);
+        if (data == Q_NULLPTR) {
+            return false;
+        }
+        switch (msg->message) {
+            case WM_GETMINMAXINFO: {
+                // prevent taskbar is covered when maximized
+                if (widget->isMaximized()) {
+                    const QRect rc = widget->screen()->availableGeometry();
+                    MINMAXINFO *p = (MINMAXINFO *)(msg->lParam);
+                    p->ptMaxPosition.x = 0;
+                    p->ptMaxPosition.y = 0;
+                    p->ptMaxSize.x = rc.width();
+                    p->ptMaxSize.y = rc.height();
+                    *result = ::DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+#endif
 
 void FramelessHelper::activateOn(QWidget *topLevelWidget)
 {
