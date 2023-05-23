@@ -124,4 +124,5 @@ public:
     QColor m_tabBarBaseLineColor;
     Qt::Alignment m_titleAligment;
     bool m_minimized;
+    bool m_titleVisible;
 };

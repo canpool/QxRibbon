@@ -176,7 +176,6 @@ WidgetData::WidgetData(FramelessHelperPrivate *_d, QWidget *pTopLevelWidget)
 WidgetData::~WidgetData()
 {
     m_pWidget->setMouseTracking(false);
-    m_pWidget->setWindowFlags(m_windowFlags);
     m_pWidget->setAttribute(Qt::WA_Hover, false);
 
     delete m_pRubberBand;
@@ -481,6 +480,7 @@ FramelessHelper::~FramelessHelper()
     int size = keys.size();
 
     for (int i = 0; i < size; ++i) {
+        keys[i]->removeEventFilter(this);
         delete d->m_widgetDataHash.take(keys[i]);
     }
 

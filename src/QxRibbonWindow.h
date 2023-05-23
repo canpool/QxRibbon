@@ -55,6 +55,9 @@ public:
 
     bool isUseRibbon() const;
 
+    bool isFrameless() const;
+    void setFrameless(bool frameless);
+
     void updateWindowFlag(Qt::WindowFlags flags);
     Qt::WindowFlags windowButtonFlags() const;
 

@@ -230,6 +230,9 @@ WindowButtonGroup::WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags)
 
 WindowButtonGroup::~WindowButtonGroup()
 {
+    if (this->parent()) {
+        this->parent()->removeEventFilter(this);
+    }
     delete d;
 }
 

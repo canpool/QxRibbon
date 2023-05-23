@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QCheckBox>
 #include <QSpinBox>
 #include <QStatusBar>
 #include <QTextEdit>
@@ -375,6 +376,15 @@ void MainWindow::createPageMain(RibbonPage *page)
     connect(g, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this,
             &MainWindow::onStyleClicked);
 #endif
+
+    QCheckBox *cb = new QCheckBox();
+    cb->setObjectName(QStringLiteral("use frameless"));
+    cb->setText(tr("use frameless"));
+    cb->setChecked(isFrameless());
+    groupStyle->addSmallWidget(cb);
+    connect(cb, &QCheckBox::clicked, this, [this](bool checked) {
+        this->setFrameless(checked);
+    });
 
     RibbonGroup *groupToolButtonStyle = page->addGroup(("ribbon toolbutton style"));
 

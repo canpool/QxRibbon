@@ -114,6 +114,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_tabBarBaseLineColor(186, 201, 219)
     , m_titleAligment(Qt::AlignCenter)
     , m_minimized(true)
+    , m_titleVisible(true)
 {
     q = par;
     m_pageContextColorList << QColor(201, 89, 156)   // 玫红
@@ -314,7 +315,7 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
     p.restore();
     //! 显示标题等
     QWidget *parWindow = q->parentWidget();
-    if (parWindow) {
+    if (parWindow && m_titleVisible) {
         QRect titleRegion;
         if (pageContextPos.y() < 0) {
             titleRegion.setRect(m_quickAccessBar->geometry().right() + 1, border.top(),
@@ -325,7 +326,7 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
             int leftwidth =
                 pageContextPos.x() - m_quickAccessBar->geometry().right() - m_iconRightBorderPosition;
             int rightwidth = q->width() - pageContextPos.y() - m_windowButtonsSize.width();
-            //            if (width() - pageContextPos.y() > pageContextPos.x()-x) {
+            // if (width() - pageContextPos.y() > pageContextPos.x()-x) {
             if (rightwidth > leftwidth) {
                 // 说明右边的区域大一点，标题显示在右，显示在右边需要减去windowbutton宽度
                 titleRegion.setRect(pageContextPos.y(), border.top(), rightwidth, q->titleBarHeight());
@@ -384,7 +385,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
 
     QWidget *parWindow = q->parentWidget();
 
-    if (parWindow) {
+    if (parWindow && m_titleVisible) {
         int start = m_tabBar->x() + m_tabBar->width();
         int width = m_quickAccessBar->x() - start;
         if (width > 20) {
@@ -1388,7 +1389,7 @@ void RibbonBar::setRibbonStyle(RibbonBar::RibbonStyle v)
 {
     d->m_ribbonStyle = v;
     d->m_lastShowStyle = v;
-    d->m_quickAccessBar->setIconVisible(isOfficeStyle());
+    d->m_quickAccessBar->setIconVisible(isOfficeStyle() && d->m_titleVisible);
     d->updateRibbonElementGeometry();
 
     QSize oldSize = size();
@@ -1484,6 +1485,12 @@ Qt::Alignment RibbonBar::windowTitleAligment() const
 void RibbonBar::setWindowTitleAligment(Qt::Alignment al)
 {
     d->m_titleAligment = al;
+}
+
+void RibbonBar::setWindowTitleVisible(bool visible)
+{
+    d->m_titleVisible = visible;
+    d->m_quickAccessBar->setIconVisible(isOfficeStyle() && visible);
 }
 
 bool RibbonBar::eventFilter(QObject *obj, QEvent *e)

@@ -19,6 +19,9 @@ public:
     RibbonWindowPrivate(RibbonWindow *p);
     void init();
     void setMenuWidget(QWidget *menuBar);
+    void destroyFrameless();
+    void setFrameless(bool frameless);
+    void resizeRibbon();
 public:
     RibbonWindow *q;
     RibbonBar *m_ribbonBar;
@@ -26,6 +29,7 @@ public:
     WindowButtonGroup *m_windowButtonGroup;
     FramelessHelper *m_framelessHelper;
     bool m_useRibbon;
+    bool m_frameless;
 };
 
 RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
@@ -35,6 +39,7 @@ RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
     , m_windowButtonGroup(Q_NULLPTR)
     , m_framelessHelper(Q_NULLPTR)
     , m_useRibbon(true)
+    , m_frameless(true)
 {
 }
 
@@ -49,30 +54,67 @@ void RibbonWindowPrivate::setMenuWidget(QWidget *menuBar)
     if (bar) {
         m_ribbonBar = bar;
         m_ribbonBar->installEventFilter(q);
-        if (Q_NULLPTR == m_framelessHelper) {
-            m_framelessHelper = new FramelessHelper(q);
-        }
-        m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
-        if (Q_NULLPTR == m_windowButtonGroup) {
-            m_windowButtonGroup = new WindowButtonGroup(q);
-        }
-        QSize s = m_windowButtonGroup->sizeHint();
-        s.setHeight(m_ribbonBar->titleBarHeight());
-        m_windowButtonGroup->setFixedSize(s);
-        m_windowButtonGroup->setWindowStates(q->windowState());
         m_useRibbon = true;
-        m_windowButtonGroup->show();
     } else {
         m_ribbonBar = Q_NULLPTR;
         m_useRibbon = false;
-        if (m_framelessHelper) {
-            delete m_framelessHelper;
-            m_framelessHelper = Q_NULLPTR;
-        }
-        if (m_windowButtonGroup) {
-            m_windowButtonGroup->hide();
-        }
     }
+    setFrameless(m_frameless);
+}
+
+void RibbonWindowPrivate::destroyFrameless()
+{
+    if (m_framelessHelper) {
+        delete m_framelessHelper;
+        m_framelessHelper = Q_NULLPTR;
+    }
+    if (m_windowButtonGroup) {
+        m_windowButtonGroup->hide();
+        delete m_windowButtonGroup;
+        m_windowButtonGroup = Q_NULLPTR;
+    }
+}
+
+void RibbonWindowPrivate::setFrameless(bool frameless)
+{
+    if (m_useRibbon) {
+        if (frameless) {
+            if (Q_NULLPTR == m_framelessHelper) {
+                m_framelessHelper = new FramelessHelper(q);
+            }
+            m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
+            if (Q_NULLPTR == m_windowButtonGroup) {
+                m_windowButtonGroup = new WindowButtonGroup(q);
+            }
+            QSize s = m_windowButtonGroup->sizeHint();
+            s.setHeight(m_ribbonBar->titleBarHeight());
+            m_windowButtonGroup->setFixedSize(s);
+            m_windowButtonGroup->setWindowStates(q->windowState());
+            m_windowButtonGroup->show();
+
+#ifdef Q_OS_UNIX
+            q->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+#else
+            q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
+#endif
+        } else {
+            destroyFrameless();
+            q->setWindowFlags(q->windowFlags() & ~Qt::FramelessWindowHint);
+        }
+    } else {
+        destroyFrameless();
+    }
+}
+
+void RibbonWindowPrivate::resizeRibbon()
+{
+    if (m_windowButtonGroup) {
+        m_ribbonBar->setWindowButtonsSize(m_windowButtonGroup->size());
+    } else {
+        m_ribbonBar->setWindowButtonsSize(QSize(0, 0));
+    }
+    QApplication::postEvent(m_ribbonBar, new QResizeEvent(m_ribbonBar->size(),
+                                                          m_ribbonBar->size()));
 }
 
 RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
@@ -80,13 +122,9 @@ RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
     , d(new RibbonWindowPrivate(this))
 {
     d->init();
-    d->m_useRibbon = useRibbon;
     if (useRibbon) {
         setRibbonTheme(ribbonTheme());
         setMenuWidget(new RibbonBar(this));
-#ifdef Q_OS_UNIX
-        setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-#endif
     }
 }
 
@@ -130,18 +168,39 @@ bool RibbonWindow::isUseRibbon() const
     return d->m_useRibbon;
 }
 
+bool RibbonWindow::isFrameless() const
+{
+    return d->m_frameless;
+}
+
+void RibbonWindow::setFrameless(bool frameless)
+{
+    if (d->m_frameless == frameless) {
+        return;
+    }
+    d->m_frameless = frameless;
+    d->setFrameless(frameless);
+    d->m_ribbonBar->setWindowTitleVisible(frameless);
+    d->resizeRibbon();
+    show();
+}
+
 void RibbonWindow::updateWindowFlag(Qt::WindowFlags flags)
 {
-    if (isUseRibbon()) {
-        d->m_windowButtonGroup->updateWindowFlag(flags);
+    if (isUseRibbon() && isFrameless()) {
+        if (d->m_windowButtonGroup) {
+            d->m_windowButtonGroup->updateWindowFlag(flags);
+        }
     }
     repaint();
 }
 
 Qt::WindowFlags RibbonWindow::windowButtonFlags() const
 {
-    if (isUseRibbon()) {
-        return d->m_windowButtonGroup->windowButtonFlags();
+    if (isUseRibbon() && isFrameless()) {
+        if (d->m_windowButtonGroup) {
+            return d->m_windowButtonGroup->windowButtonFlags();
+        }
     }
     return windowFlags();
 }
@@ -150,7 +209,6 @@ void RibbonWindow::setMenuWidget(QWidget *menuBar)
 {
     QMainWindow::setMenuWidget(menuBar);
     d->setMenuWidget(menuBar);
-
 }
 
 void RibbonWindow::setMenuBar(QMenuBar *menuBar)
@@ -167,6 +225,8 @@ void RibbonWindow::resizeEvent(QResizeEvent *event)
         }
         if (d->m_windowButtonGroup) {
             d->m_ribbonBar->setWindowButtonsSize(d->m_windowButtonGroup->size());
+        } else {
+            d->m_ribbonBar->setWindowButtonsSize(QSize(0, 0));
         }
     }
     QMainWindow::resizeEvent(event);
@@ -174,18 +234,20 @@ void RibbonWindow::resizeEvent(QResizeEvent *event)
 
 bool RibbonWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    // event post ribbonBar -> mainwindow -> framelessHelper
-    if (obj == d->m_ribbonBar) {
-        switch (e->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseMove:
-        case QEvent::Leave:
-        case QEvent::HoverMove:
-        case QEvent::MouseButtonDblClick:
-            QApplication::sendEvent(this, e); // post to framelessHelper
-        default:
-            break;
+    if (isFrameless()) {
+        // event post ribbonBar -> mainwindow -> framelessHelper
+        if (obj == d->m_ribbonBar) {
+            switch (e->type()) {
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonRelease:
+            case QEvent::MouseMove:
+            case QEvent::Leave:
+            case QEvent::HoverMove:
+            case QEvent::MouseButtonDblClick:
+                QApplication::sendEvent(this, e); // post to framelessHelper
+            default:
+                break;
+            }
         }
     }
     return QMainWindow::eventFilter(obj, e);
@@ -196,8 +258,10 @@ bool RibbonWindow::event(QEvent *e)
     if (e) {
         switch (e->type()) {
         case QEvent::WindowStateChange: {
-            if (isUseRibbon()) {
-                d->m_windowButtonGroup->setWindowStates(windowState());
+            if (isUseRibbon() && isFrameless()) {
+                if (d->m_windowButtonGroup) {
+                    d->m_windowButtonGroup->setWindowStates(windowState());
+                }
             }
         } break;
         default:

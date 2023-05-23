@@ -190,6 +190,8 @@ public:
     Qt::Alignment windowTitleAligment() const;
     void setWindowTitleAligment(Qt::Alignment al);
 
+    void setWindowTitleVisible(bool visible);
+
 signals:
     void minimizationChanged(bool minimized);
     void applicationButtonClicked();
