@@ -42,39 +42,35 @@ class MainWindow(RibbonWindow):
         pageMain.setObjectName("pageMain")
         self.createPageMain(pageMain)
 
-        # FIXME: multiple pages cannot work
+        pageOther = RibbonPage(ribbon)
+        pageOther.setPageName('Other')
+        pageOther.setObjectName('pageOther')
+        ribbon.addPage(pageOther)
+        self.createPageOther(pageOther)
 
-        # pageOther = RibbonPage(ribbon)
-        # pageOther.setPageName('Other')
-        # pageOther.setObjectName('pageOther')
-        # ribbon.addPage(pageOther)
-        # # self.createPageOther(pageOther)
+        pageDelete = RibbonPage()
+        pageDelete.setPageName('Delete')
+        pageDelete.setObjectName('pageDelete')
+        ribbon.addPage(pageDelete)
+        self.createPageDelete(pageDelete)
 
-        # pageDelete = RibbonPage()
-        # pageDelete.setPageName('Delete')
-        # pageDelete.setObjectName('pageDelete')
-        # ribbon.addPage(pageDelete)
-        # # self.createPageDelete(pageDelete)
-        #
-        # pageSize = RibbonPage()
-        # pageSize.setPageName("Size(example long page)")
-        # pageSize.setObjectName("pageSize")
-        # ribbon.addPage(pageSize)
-        # # self.createPageSize(pageSize)
+        pageSize = RibbonPage()
+        pageSize.setPageName("Size(example long page)")
+        pageSize.setObjectName("pageSize")
+        ribbon.addPage(pageSize)
+        self.createPageSize(pageSize)
 
-        # # pageContext created after page
-        # self.createPageContext1()
-        # self.createPageContext2()
+        # pageContext created after page
+        self.createPageContext1()
+        self.createPageContext2()
 
         quickAccessBar = ribbon.quickAccessBar()
         self.createQuickAccessBar(quickAccessBar)
         rightBar = ribbon.rightButtonGroup()
         self.createRightButtonGroup(rightBar)
 
-        # ribbon.raisePage(pageMain)
-
         self.setMinimumWidth(500)
-        # self.showMaximized()
+        self.showMaximized()
         self.setWindowIcon(QIcon('res/logo.png'))
 
     def createPageMain(self, page: RibbonPage):

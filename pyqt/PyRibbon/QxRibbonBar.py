@@ -74,7 +74,6 @@ class RibbonBar(QMenuBar):
         super().__init__(parent)
         self.m_iconRightBorderPosition: int = 1
         self.m_minimumPageButton: RibbonControlButton = None
-        self.m_minimumPageAction: QAction = None
         self.m_rightButtonGroup: RibbonButtonGroup = None
         self.m_ribbonStyle = RibbonBar.OfficeStyle
         self.m_lastShowStyle = RibbonBar.OfficeStyle
@@ -379,10 +378,7 @@ class RibbonBar(QMenuBar):
     def showMinimumButton(self, shown: bool = True):
         if shown:
             self.activeRightButtonGroup()
-            """ FIXME: add m_minimumPageAction to fix the following error:
-                "RuntimeError: wrapped C/C++ object of type RibbonControlButton has been deleted"
-            see also the actionEvent of RibbonButtonGroup """
-            if not self.m_minimumPageAction:
+            if not self.m_minimumPageButton:
                 self.m_minimumPageButton = RibbonControlButton(self)
                 self.m_minimumPageButton.setAutoRaise(False)
                 self.m_minimumPageButton.setObjectName('RibbonBarHideGroupButton')
@@ -398,12 +394,13 @@ class RibbonBar(QMenuBar):
                                                              QStyle.SP_TitleBarShadeButton, None))
                 ))
                 self.m_minimumPageButton.setDefaultAction(action)
-                self.m_minimumPageAction = self.m_rightButtonGroup.addWidget(self.m_minimumPageButton)
+                self.m_rightButtonGroup.addWidget(self.m_minimumPageButton)
                 self.update()
+            else:
+                self.m_minimumPageButton.show()
         else:
-            if self.m_minimumPageAction:
-                self.m_rightButtonGroup.hideWidget(self.m_minimumPageAction)
-                self.m_minimumPageAction = None
+            if self.m_minimumPageButton:
+                self.m_minimumPageButton.hide()
         QApplication.sendEvent(self, QResizeEvent(self.size(), self.size()))
 
     def tabBarHeight(self) -> int:

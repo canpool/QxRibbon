@@ -119,9 +119,13 @@ class RibbonButtonGroup(QFrame):
                 item.action.setParent(self)
                 widgetAction: QWidgetAction = item.action
                 """here widgetAction.requestWidget(self) is not widgetAction.defaultWidget()
-                if using requestWidget will cause defaultWidget was deleted by python garbage collect"""
-                item.widget = widgetAction.requestWidget(self)
+                if using requestWidget will cause defaultWidget was deleted by python garbage collect
+                see QWidgetAction source code, using defaultWidget() and set widget parent as self.
+                """
+                # item.widget = widgetAction.requestWidget(self)
+                item.widget = widgetAction.defaultWidget()
                 if item.widget:
+                    item.widget.setParent(self)
                     item.widget.setAttribute(Qt.WA_LayoutUsesWidgetRect)
                     item.widget.show()
                     item.customWidget = True

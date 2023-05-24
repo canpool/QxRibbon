@@ -496,8 +496,10 @@ class RibbonGroupLayout(QLayout):
             return None
         if isinstance(action, QWidgetAction):
             widgetAction: QWidgetAction = action
-            widget = widgetAction.requestWidget(group)
+            # widget = widgetAction.requestWidget(group)
+            widget = widgetAction.defaultWidget()
             if widget:
+                widget.setParent(group)
                 widget.setAttribute(Qt.WA_LayoutUsesWidgetRect)
                 customWidget = True
         elif action.isSeparator():
