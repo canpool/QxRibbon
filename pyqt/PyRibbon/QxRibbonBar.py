@@ -134,16 +134,18 @@ class RibbonBar(QMenuBar):
         return self.m_applicationButton
 
     def setApplicationButton(self, btn: QAbstractButton):
-        if not btn:
-            return
-        if btn.parent() != self:
-            btn.setParent(self)
-        btn.move(0, self.titleBarHeight())
-        self.m_applicationButton = btn
-        self.m_applicationButton.clicked.connect(self.applitionButtonClicked)
-        if not btn.objectName():
-            btn.setObjectName('RibbonApplicationButton')
-        btn.setVisible(True)
+        if self.m_applicationButton:
+            self.m_applicationButton.deleteLater()
+            self.m_applicationButton = None
+        if btn:
+            if btn.parent() != self:
+                btn.setParent(self)
+            btn.move(0, self.titleBarHeight())
+            self.m_applicationButton = btn
+            self.m_applicationButton.clicked.connect(self.applicationButtonClicked)
+            if not btn.objectName():
+                btn.setObjectName('RibbonApplicationButton')
+            btn.setVisible(True)
         QApplication.postEvent(self, QResizeEvent(self.size(), self.size()))
 
     def ribbonTabBar(self) -> RibbonTabBar:

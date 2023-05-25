@@ -661,13 +661,13 @@ class MainWindow(RibbonWindow):
     def onActionUseQssTriggered(self):
         f = QFile("ribbon.qss")
         if not f.exists():
-            f_path = QFileDialog.getOpenFileName(self, "select qss file")
+            f_path = QFileDialog.getOpenFileName(self, "select qss file", "", "Qss Files(*.qss *.css)")[0]
             if not f_path:
                 return
             f.setFileName(f_path)
         if not f.open(QIODevice.ReadWrite):
             return
-        qss = f.readAll()
+        qss = str(f.readAll(), encoding='utf-8')
         self.m_edit.setText(qss)
         self.ribbonBar().setStyleSheet(qss)
 

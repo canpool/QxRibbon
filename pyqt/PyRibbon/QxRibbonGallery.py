@@ -272,7 +272,9 @@ class RibbonGalleryGroup(QListView):
         if self.getGridMaximumWidth() > 0:
             if w > self.getGridMaximumWidth():
                 w = self.getGridMaximumWidth()
-        self.setGridSize(QSize(int(w), int(h)))
+        w = round(w)
+        h = round(h)
+        self.setGridSize(QSize(w, h))
         shiftpix = 4
         t = self.getGalleryGroupStyle()
         spacing = self.spacing()
@@ -280,7 +282,7 @@ class RibbonGalleryGroup(QListView):
             textHeight = self.fontMetrics().lineSpacing()
             iconHeight = h - textHeight - 2 * spacing - shiftpix
             if iconHeight > 0:
-                self.setIconSize(QSize(int(w - 2 * spacing - shiftpix), int(iconHeight)))
+                self.setIconSize(QSize(w - 2 * spacing - shiftpix, iconHeight))
             else:
                 self.setIconSize(QSize(w - 2 * spacing - shiftpix, h - 2 * spacing - shiftpix))
         elif t == RibbonGalleryGroup.IconWithWordWrapText:
