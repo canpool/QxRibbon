@@ -23,7 +23,7 @@ RibbonControlButton *RibbonFactory::createHideGroupButton(RibbonBar *parent)
     btn->setAutoRaise(false);
     btn->setObjectName(QStringLiteral("RibbonBarHideGroupButton"));
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btn->setFixedSize(parent->tabBarHeight() - 4, parent->tabBarHeight() - 4);
+    btn->setFixedSize(parent->tabBarHeight() - 1, parent->tabBarHeight() - 1);
     return (btn);
 }
 

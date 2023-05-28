@@ -26,6 +26,8 @@
 #include <QEventLoop>
 #include <QMouseEvent>
 
+const int tabBarBaseLineHeight = 1;
+
 #define HELP_DRAW_RECT(p, rect)                                                                                        \
     do {                                                                                                               \
         p.save();                                                                                                      \
@@ -415,7 +417,7 @@ void RibbonBarPrivate::paintBackground(QPainter &painter)
     QPen pen(m_tabBarBaseLineColor);
     QMargins border = q->contentsMargins();
 
-    pen.setWidth(1);
+    pen.setWidth(tabBarBaseLineHeight);
     pen.setStyle(Qt::SolidLine);
     painter.setPen(pen);
     painter.drawLine(QPoint(border.left(), lineY), QPoint(q->width() - border.right() - 1, lineY));
@@ -483,6 +485,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
     // cornerWidget - TopLeftCorner
     const int validTitleBarHeight = q->titleBarHeight();
     const int tabH = q->tabBarHeight();
+    const int otherH = tabH - tabBarBaseLineHeight;
 
     x += m_iconRightBorderPosition + 5;
     QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner);
@@ -509,7 +512,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
     y += validTitleBarHeight;
     // applicationButton 定位
     if (m_applicationButton && m_applicationButton->isVisible()) {
-        m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
+        m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), otherH);
         x = m_applicationButton->geometry().right();
     }
     // top right是一定要配置的，对于多文档窗口，子窗口的缩放等按钮就是通过这个窗口实现，
@@ -525,7 +528,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
             int detal = (tabH - connerSize.height()) / 2;
             connerW->setGeometry(endX, y + detal, connerSize.width(), connerSize.height());
         } else {
-            connerW->setGeometry(endX, y, connerSize.width(), tabH);
+            connerW->setGeometry(endX, y, connerSize.width(), otherH);
         }
     }
     // applicationButton和TopRightCorner完成定位，才可以定位tab bar
@@ -535,7 +538,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
     if (m_rightButtonGroup && m_rightButtonGroup->isVisible()) {
         QSize wSize = m_rightButtonGroup->sizeHint();
         endX -= wSize.width();
-        m_rightButtonGroup->setGeometry(endX, y, wSize.width(), tabH);
+        m_rightButtonGroup->setGeometry(endX, y, wSize.width(), otherH);
     }
     // 最后确定tabbar宽度
     int tabBarWidth = endX - x;
