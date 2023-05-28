@@ -303,14 +303,17 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
                 pageContextPos.setY(contextTitleRect.right());
             }
         }
+#ifdef QX_DRAW_CONTEXT_PAGE_BORDER
         if (indexs.contains(m_tabBar->currentIndex())) {
             QPen pen;
             pen.setColor(clr);
             pen.setWidth(1);
             p.setPen(pen);
             p.setBrush(Qt::NoBrush);
+            p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
             p.drawRect(m_stack->geometry());
         }
+#endif
     }
     p.restore();
     //! 显示标题等
@@ -371,14 +374,17 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
             // 绘制
             paintPageContextTab(p, QString(), contextTitleRect, clr);
         }
+#ifdef QX_DRAW_CONTEXT_PAGE_BORDER
         if (indexs.contains(m_tabBar->currentIndex())) {
             QPen pen;
             pen.setColor(clr);
             pen.setWidth(1);
             p.setPen(pen);
             p.setBrush(Qt::NoBrush);
+            p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
             p.drawRect(m_stack->geometry());
         }
+#endif
     }
     p.restore();
     //! 显示标题等
