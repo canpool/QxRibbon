@@ -292,7 +292,7 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
             contextTitleRect.setRight(endRect.right());
             contextTitleRect.translate(m_tabBar->x(), m_tabBar->y());
             contextTitleRect.setHeight(m_tabBar->height() - 1);   // 减1像素，避免tabbar基线覆盖
-            contextTitleRect -= m_tabBar->tabMargin();
+            contextTitleRect -= m_tabBar->tabMargin() / 2;
             // 把区域顶部扩展到窗口顶部
             contextTitleRect.setTop(border.top());
             // 绘制
@@ -370,7 +370,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
             contextTitleRect.setRight(endRect.right());
             contextTitleRect.translate(m_tabBar->x(), m_tabBar->y());
             contextTitleRect.setHeight(m_tabBar->height() - 1);
-            contextTitleRect -= m_tabBar->tabMargin();
+            contextTitleRect -= m_tabBar->tabMargin() / 2;
             // 把区域顶部扩展到窗口顶部
             contextTitleRect.setTop(border.top());
             // 绘制
