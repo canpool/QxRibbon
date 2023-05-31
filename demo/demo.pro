@@ -30,3 +30,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     demo.qrc
+
+RC_FILE = demo.rc
