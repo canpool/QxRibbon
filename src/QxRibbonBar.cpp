@@ -255,7 +255,7 @@ void RibbonBarPrivate::updatePageContextManagerData()
 
 void RibbonBarPrivate::updateRibbonElementGeometry()
 {
-    // 根据样式调整 RibbonPag e的布局形式
+    // 根据样式调整 RibbonPage 的布局形式
     QList<RibbonPage *> pages = q->pages();
     for (RibbonPage *page : pages) {
         page->setGroupLayoutMode(isTwoRowStyle() ? RibbonGroup::TwoRowMode : RibbonGroup::ThreeRowMode);
@@ -1459,7 +1459,13 @@ void RibbonBar::setWindowButtonsSize(const QSize &size)
  */
 void RibbonBar::updateRibbonGeometry()
 {
-    d->updateRibbonElementGeometry();
+    // d->updateRibbonElementGeometry();
+    // updateRibbonElementGeometry() 中会调用 page->setGroupLayoutMode(..)
+    // 如果 mode 变换，page 内部会调用 updateItemGeomery，与下面的 page->updateItemGeometry() 重复
+    // 所以此处不调用 updateRibbonElementGeometry，而是单独更新高度
+    if (!isMinimized()) {
+        setFixedHeight(d->mainBarHeight());
+    }
     QList<RibbonPage *> pages = this->pages();
     for (RibbonPage *page : pages) {
         page->updateItemGeometry();

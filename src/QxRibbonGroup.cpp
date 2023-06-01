@@ -539,8 +539,13 @@ void RibbonGroup::setGroupLayoutMode(RibbonGroup::GroupLayoutMode mode)
         return;
     }
     d->m_groupLayoutMode = mode;
+    updateItemGeometry();
+}
+
+void RibbonGroup::updateItemGeometry()
+{
     // reset layout
-    layout()->setSpacing(RibbonGroup::TwoRowMode == mode ? 4 : 2);
+    layout()->setSpacing(RibbonGroup::TwoRowMode == d->m_groupLayoutMode ? 4 : 2);
     updateGeometry();
 
     d->resetLargeToolButtonStyle();

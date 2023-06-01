@@ -113,6 +113,7 @@ signals:
     void actionTriggered(QAction *action);
 protected:
     void setGroupLayoutMode(GroupLayoutMode mode);
+    void updateItemGeometry();
 protected:
     virtual void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

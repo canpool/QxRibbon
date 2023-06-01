@@ -735,7 +735,7 @@ void RibbonPage::updateItemGeometry()
 {
     QList<RibbonGroup *> groups = groupList();
     for (RibbonGroup *group : groups) {
-        group->updateGeometry();
+        group->updateItemGeometry();
     }
     d->updateItemGeometry();
 }
