@@ -22,7 +22,11 @@ public:
 
 RibbonStyleOptionPrivate::RibbonStyleOptionPrivate()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     int lineSpacing = QApplication::fontMetrics().lineSpacing();
+#else
+    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
+#endif
 
     m_titleBarHeight = lineSpacing * 1.8;
     m_tabBarHeight = lineSpacing * 1.5;
@@ -76,9 +80,14 @@ void RibbonStyleOption::recalc()
 
 int RibbonStyleOption::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    int lineSpacing = QApplication::fontMetrics().lineSpacing();
+#else
+    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
+#endif
     switch (s) {
     case RibbonBar::OfficeStyle:
-        return titleBarHeight() + tabBarHeight() + (QApplication::fontMetrics().lineSpacing() * 1.5) * 3 +
+        return titleBarHeight() + tabBarHeight() + (lineSpacing * 1.5) * 3 +
                RibbonGroupLayout::groupContentsMargins().top() + RibbonGroupLayout::groupContentsMargins().bottom() +
                RibbonGroup::groupTitleHeight();
     case RibbonBar::WpsLiteStyle:
@@ -97,7 +106,12 @@ QDebug operator<<(QDebug debug, const RibbonStyleOption &c)
 {
     QDebugStateSaver saver(debug);
     Q_UNUSED(saver);
-    debug.nospace() << "fontMetrics.lineSpacing=" << QApplication::fontMetrics().lineSpacing()
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    int lineSpacing = QApplication::fontMetrics().lineSpacing();
+#else
+    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
+#endif
+    debug.nospace() << "fontMetrics.lineSpacing=" << lineSpacing
                     << ",RibbonStyleOption(titleBarHeight=" << c.titleBarHeight()
                     << ",tabBarHeight=" << c.tabBarHeight()
                     << "\n,ribbonBarHeight(OfficeStyle)=" << c.ribbonBarHeight(RibbonBar::OfficeStyle)

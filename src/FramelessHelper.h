@@ -4,7 +4,13 @@
 
 #ifdef Q_OS_WINDOWS
 #include <QAbstractNativeEventFilter>
-#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#define QTRESULT qintptr
+#else
+#define QTRESULT long
+#endif // QTRESULT
+#endif // Q_OS_WINDOWS
 
 class QWidget;
 class FramelessHelperPrivate;
@@ -45,7 +51,7 @@ protected:
     // 事件过滤，进行移动、缩放等
     virtual bool eventFilter(QObject *obj, QEvent *event);
 #ifdef Q_OS_WINDOWS
-    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, QTRESULT *result);
 #endif
 private:
     FramelessHelperPrivate *d;

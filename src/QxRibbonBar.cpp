@@ -752,8 +752,14 @@ void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
             m_tabBar->clearFocus();
             if (!m_stack->isVisible() && m_stack->isPopup()) {
                 // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
                 QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
                                 m_tabBar->mapToGlobal(QCursor::pos()));
+#else
+                QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToParent(QCursor::pos()),
+                                m_tabBar->mapToGlobal(QCursor::pos()),
+                                m_tabBar->mapToGlobal(QCursor::pos()));
+#endif
                 QApplication::sendEvent(m_tabBar, &ehl);
                 resizeStackedWidget();
                 m_stack->setFocus();
@@ -783,8 +789,14 @@ void RibbonBarPrivate::onCurrentRibbonTabClicked(int index)
     if (m_minimized) {
         if (!m_stack->isVisible() && m_stack->isPopup()) {
             // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
             QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
                             m_tabBar->mapToGlobal(QCursor::pos()));
+#else
+            QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToParent(QCursor::pos()),
+                            m_tabBar->mapToGlobal(QCursor::pos()),
+                            m_tabBar->mapToGlobal(QCursor::pos()));
+#endif
             QApplication::sendEvent(m_tabBar, &ehl);
             // 弹出前都调整一下位置，避免移动后位置异常
             resizeStackedWidget();
@@ -1524,12 +1536,19 @@ bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
             if ((QEvent::MouseButtonPress == e->type()) || (QEvent::MouseButtonDblClick == e->type())) {
                 if (d->m_stack->isPopup()) {
                     QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-                    if (!d->m_stack->rect().contains(mouseEvent->pos())) {
-                        QWidget *clickedWidget = QApplication::widgetAt(mouseEvent->globalPos());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                    QPoint pos = mouseEvent->pos();
+                    QPoint globalPos = mouseEvent->globalPos();
+#else
+                    QPoint pos = mouseEvent->position().toPoint();
+                    QPoint globalPos = mouseEvent->globalPosition().toPoint();
+#endif
+                    if (!d->m_stack->rect().contains(pos)) {
+                        QWidget *clickedWidget = QApplication::widgetAt(globalPos);
                         if (clickedWidget == d->m_tabBar) {
-                            const QPoint targetPoint = clickedWidget->mapFromGlobal(mouseEvent->globalPos());
+                            const QPoint targetPoint = clickedWidget->mapFromGlobal(globalPos);
                             QMouseEvent *evPress =
-                                new QMouseEvent(mouseEvent->type(), targetPoint, mouseEvent->globalPos(),
+                                new QMouseEvent(mouseEvent->type(), targetPoint, globalPos,
                                                 mouseEvent->button(), mouseEvent->buttons(), mouseEvent->modifiers());
                             QApplication::postEvent(clickedWidget, evPress);
                             return (true);

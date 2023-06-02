@@ -509,7 +509,7 @@ bool FramelessHelper::eventFilter(QObject *obj, QEvent *event)
 }
 
 #ifdef Q_OS_WINDOWS
-bool FramelessHelper::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+bool FramelessHelper::nativeEventFilter(const QByteArray &eventType, void *message, QTRESULT *result)
 {
     if (eventType == "windows_generic_MSG") {
         MSG *msg = reinterpret_cast<MSG *>(message);
