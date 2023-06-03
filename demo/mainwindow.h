@@ -53,6 +53,7 @@ private slots:
     void onActionFontSmallerTriggered();
     void onActionwordWrapIn2rowTriggered(bool b);
     void onButtonGroupActionTriggered(QAction *act);
+    void onApplicationButtonClicked();
 private:
     RibbonPageContext *m_pageContext;
     RibbonPageContext *m_pageContext2;

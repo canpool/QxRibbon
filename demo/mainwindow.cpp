@@ -35,6 +35,7 @@
 #include <QTextEdit>
 #include <QTextStream>
 #include <QXmlStreamWriter>
+#include <QDialog>
 
 QX_USE_NAMESPACE
 
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *par)
     // 设置applicationButton
     PRINT_COST("setCentralWidget & setWindowTitle");
     ribbon->applicationButton()->setText(("File"));
+    connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
 
     // 添加主标签页 - 通过addPage工厂函数添加
     RibbonPage *pageMain = ribbon->addPage(tr("Main"));
@@ -296,6 +298,16 @@ void MainWindow::onButtonGroupActionTriggered(QAction *act)
         ribbonBar()->setWindowTitleAligment(al);
         ribbonBar()->repaint();
     }
+}
+
+void MainWindow::onApplicationButtonClicked()
+{
+    // 使用QWidget且setWindowModality(Qt::ApplicationModal)未阻塞，所以用QDialog
+    QDialog w;
+    w.setWindowFlags(Qt::Popup);
+    w.resize(200, 100);
+    w.move(mapToGlobal(ribbonBar()->applicationButton()->geometry().bottomLeft()));
+    w.exec();
 }
 
 void MainWindow::createPageMain(RibbonPage *page)
