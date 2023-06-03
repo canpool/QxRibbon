@@ -45,6 +45,7 @@ HEADERS  += \
     $$PWD/QxRibbonCustomizeDialog.h \
     $$PWD/QxRibbonCustomizeWidget.h \
     $$PWD/QxRibbonFactory.h \
+    $$PWD/QxRibbonGlobal.h \
     $$PWD/QxRibbonGroup.h \
     $$PWD/QxRibbonGroupLayout.h \
     $$PWD/QxRibbonGroupPrivate.h \

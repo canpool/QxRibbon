@@ -198,7 +198,7 @@ signals:
     void currentRibbonTabChanged(int index);
     void ribbonStyleChanged(RibbonStyle nowStyle);
 protected:
-    bool eventFilter(QObject *obj, QEvent *e) override;
+    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
     void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;

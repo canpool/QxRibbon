@@ -15,7 +15,7 @@ class RibbonStackedWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
-    explicit RibbonStackedWidget(QWidget *parent = nullptr);
+    explicit RibbonStackedWidget(QWidget *parent = Q_NULLPTR);
     virtual ~RibbonStackedWidget();
 
     bool isPopup() const;

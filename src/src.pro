@@ -1,3 +1,7 @@
+lessThan(QT_MAJOR_VERSION, 5) {
+    error("don't support qt $${QT_VERSION}")
+}
+
 QT += widgets
 
 OUT_ROOT = $${OUT_PWD}/..

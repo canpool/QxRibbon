@@ -142,10 +142,10 @@ public:
     explicit RibbonActionsManagerModel(RibbonActionsManager *m, QObject *p = Q_NULLPTR);
     ~RibbonActionsManagerModel();
 
-    virtual int rowCount(const QModelIndex &parent) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
-    virtual QVariant data(const QModelIndex &index, int role) const override;
+    virtual int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+    virtual QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     void setFilter(int tag);
     void update();
     void setupActionsManager(RibbonActionsManager *m);

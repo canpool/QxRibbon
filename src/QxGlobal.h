@@ -9,6 +9,14 @@
 #define QX_QUOTE_(x) #x
 #define QX_QUOTE(x) QX_QUOTE_(x)
 
+#ifndef Q_NULLPTR
+#define Q_NULLPTR 0
+#endif
+
+#ifndef Q_DECL_OVERRIDE
+#define Q_DECL_OVERRIDE
+#endif
+
 #define QX_DECLARE_PRIVATE(Class) \
     Class##Private *d_ptr; \
     Q_DECLARE_PRIVATE(Class)

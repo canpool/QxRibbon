@@ -44,7 +44,7 @@ signals:
     void pageRemoved(RibbonPage *page);
 protected:
     QWidget *parentWidget() const;
-    virtual bool eventFilter(QObject *watched, QEvent *e) override;
+    virtual bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
 private:
     RibbonPageContextPrivate *d;
 };
