@@ -13,6 +13,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets REQUIRED)
 set(PROJECT_SOURCES
     mainwindow.h
     mainwindow.cpp
+    aboutdialog.h
+    aboutdialog.cpp
     main.cpp
     demo.qrc
 )

@@ -14,10 +14,12 @@ DESTDIR = $${OUT_ROOT}/bin
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aboutdialog.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    aboutdialog.h \
     mainwindow.h
 
 include($$PWD/../common.pri)

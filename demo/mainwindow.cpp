@@ -37,6 +37,8 @@
 #include <QXmlStreamWriter>
 #include <QDialog>
 
+#include "aboutdialog.h"
+
 QX_USE_NAMESPACE
 
 #define PRINT_COST_START()                                                                                             \
@@ -186,12 +188,15 @@ void MainWindow::onActionCustomizeAndSaveTriggered(bool b)
 
 void MainWindow::onActionHelpTriggered()
 {
-    QMessageBox::information(this, tr("infomation"),
-                             tr("\n ==============="
-                                "\n RibbonBar version: %1"
-                                "\n https://gitee.com/icanpool/QxRibbon"
-                                "\n ===============")
-                                 .arg(getRibbonVersion()));
+    QString url("https://gitee.com/icanpool/QxRibbon");
+
+    AboutDialog ad(QLatin1String(":/icon/res/logo.png"), tr("QxRibbon"), QLatin1String(getRibbonVersion()),
+                   tr(
+"Copyleft (C) 2023 maminjie &lt;canpool@163.com&gt;<br/>"
+"<br/>QxRibbon is a Qt componet like to Microsoft Ribbon style. "
+"For more information, please visit <a href=\"%1\">%1</a>").arg(url)
+                   );
+    ad.exec();
 }
 
 void MainWindow::onActionRemoveAppBtnTriggered(bool b)
