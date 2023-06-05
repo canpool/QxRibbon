@@ -279,7 +279,7 @@ RibbonGalleryGroup::item:selected {
 }
 
 RibbonGalleryGroup::item:hover {
-  border: 2px solid #badffa;
+  border: 1px solid #badffa;
   background-color: #cee7fc;
 }
 

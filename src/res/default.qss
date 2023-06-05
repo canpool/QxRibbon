@@ -240,7 +240,7 @@ RibbonGalleryGroup::item:selected {
   color: black;
 }
 RibbonGalleryGroup::item:hover {
-  border: 2px solid #FDEEB3;
+  border: 1px solid #FDEEB3;
 }
 
 /*RibbonGalleryViewport*/
