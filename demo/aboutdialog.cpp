@@ -61,7 +61,11 @@ AboutDialog::AboutDialog(const QString &softlogo, const QString &softname, const
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
     QString versionString = tr("%1 %2").arg(softname, softver);
+#if QT_VERSION < QT_VERSION_CHECK(5, 8, 0)
     QDateTime dt = QDateTime::fromTime_t((uint)getDateFromMacro(__DATE__));
+#else
+    QDateTime dt = QDateTime::fromMSecsSinceEpoch((qint64)getDateFromMacro(__DATE__) * 1000);
+#endif
     QString buildDateInfo = tr("<br/>Built on %1 %2<br/>").arg(dt.toString("yyyy-MM-dd"), __TIME__);
     QString buildCompatibilityString = tr("Based on Qt %1 (%2, %3 bit)").arg(QLatin1String(qVersion()),
                                                                              compilerString(),
