@@ -27,7 +27,11 @@ QPixmap RibbonDrawHelper::iconToPixmap(const QIcon &icon, QWidget *widget, const
     } else {
         state = QIcon::Off;
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return (icon.pixmap(widget->window()->windowHandle(), icoSize, mode, state));
+#else
+    return (icon.pixmap(icoSize, widget->window()->devicePixelRatio(), mode, state));
+#endif
 }
 
 void RibbonDrawHelper::drawIcon(const QIcon &icon, QPainter *painter, const QStyleOption *opt, int x, int y, int width,

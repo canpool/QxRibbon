@@ -692,9 +692,12 @@ QPixmap RibbonButtonPrivate::createIconPixmap(const QStyleOptionToolButton &opt,
         } else {
             mode = QIcon::Normal;
         }
-        // return (opt.icon.pixmap(q->window()->windowHandle(), opt.rect.size().boundedTo(realConSize), mode,
-        // state));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        // return (opt.icon.pixmap(q->window()->windowHandle(), opt.rect.size().boundedTo(realConSize), mode, state));
         return opt.icon.pixmap(q->window()->windowHandle(), iconsize, mode, state);
+#else
+        return opt.icon.pixmap(iconsize, q->window()->devicePixelRatio(), mode, state);
+#endif
     }
     return QPixmap();
 }
