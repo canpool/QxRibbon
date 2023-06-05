@@ -387,7 +387,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     g->addButton(r, RibbonBar::WpsLiteStyleTwoRow);
 
 //    connect(g, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &MainWindow::onStyleClicked);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(g, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::idClicked), this, &MainWindow::onStyleClicked);
 #else
     connect(g, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked), this,
