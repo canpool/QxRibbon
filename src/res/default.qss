@@ -80,6 +80,7 @@ RibbonTabBar{
     background-color: transparent;
 }
 
+/*
 RibbonTabBar::tab {
     color:#444444;
     border:none;
@@ -96,6 +97,25 @@ RibbonTabBar::tab {
     padding-right:1px;
     padding-top:1px;
     padding-bottom:1px;
+}
+*/
+
+RibbonTabBar::tab {
+    color:#444444;
+    border:none;
+    background: transparent;
+    margin-top: 0em;
+    margin-right: 0pt;
+    margin-left: 0.2em;
+    margin-bottom: 0em;
+    min-width: 3em;
+    /*max-width: 10em;*/
+    min-height: 1.2em;
+    max-height: 1.2em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
 }
 
 RibbonTabBar::tab:selected, RibbonTabBar::tab:hover {

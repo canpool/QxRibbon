@@ -119,7 +119,7 @@ RibbonTabBar::tab {
   max-height: 1.2em;
   padding-left: 0.2em;
   padding-right: 0.2em;
-  padding-top: 0.3em;
+  padding-top: 0.1em;
   padding-bottom: 0.1em;
 }
 
@@ -133,8 +133,6 @@ RibbonTabBar::tab:selected {
   border: 1px solid #c5d2e0;
   background: white;
   border-bottom-color: #FFFFFF;
-  padding-top: 0.3em;
-  padding-bottom: 0.1em;
 }
 
 RibbonTabBar::tab:hover:!selected {
