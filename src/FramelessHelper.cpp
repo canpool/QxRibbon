@@ -335,9 +335,13 @@ bool WidgetData::handleMousePressEvent(QMouseEvent *event)
         m_bLeftButtonTitlePressed = event->pos().y() < m_moveMousePos.m_nTitleHeight;
 
         QRect frameRect = m_pWidget->frameGeometry();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_pressedMousePos.recalculate(event->globalPos(), frameRect);
-
         m_ptDragPos = event->globalPos() - frameRect.topLeft();
+#else
+        m_pressedMousePos.recalculate(event->globalPosition().toPoint(), frameRect);
+        m_ptDragPos = event->globalPosition().toPoint() - frameRect.topLeft();
+#endif
 
         if (m_pressedMousePos.m_bOnEdges) {
             if (m_pWidget->isMaximized()) {
@@ -385,14 +389,22 @@ bool WidgetData::handleMouseMoveEvent(QMouseEvent *event)
                 // 窗口在最大化状态时，点击边界不做任何处理
                 return false;
             }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             resizeWidget(event->globalPos());
+#else
+            resizeWidget(event->globalPosition().toPoint());
+#endif
             return true;
         } else if (d->m_bWidgetMovable && m_bLeftButtonTitlePressed) {
             if (m_pWidget->isMaximized()) {
                 // 先求出窗口到鼠标的相对位置
                 QRect normalGeometry = m_pWidget->normalGeometry();
                 m_pWidget->showNormal();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 QPoint p = event->globalPos();
+#else
+                QPoint p = event->globalPosition().toPoint();
+#endif
                 p.ry() -= 10;
                 p.rx() -= (normalGeometry.width() / 2);
                 m_pWidget->move(p);
@@ -400,12 +412,20 @@ bool WidgetData::handleMouseMoveEvent(QMouseEvent *event)
                 m_ptDragPos = QPoint(normalGeometry.width() / 2, 10);
                 return true;
             }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             moveWidget(event->globalPos());
+#else
+            moveWidget(event->globalPosition().toPoint());
+#endif
             return true;
         }
         return false;
     } else if (d->m_bWidgetResizable) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         updateCursorShape(event->globalPos());
+#else
+        updateCursorShape(event->globalPosition().toPoint());
+#endif
     }
     return false;
 }
@@ -423,7 +443,11 @@ bool WidgetData::handleLeaveEvent(QEvent *event)
 bool WidgetData::handleHoverMoveEvent(QHoverEvent *event)
 {
     if (d->m_bWidgetResizable) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         updateCursorShape(m_pWidget->mapToGlobal(event->pos()));
+#else
+        updateCursorShape(m_pWidget->mapToGlobal(event->position().toPoint()));
+#endif
     }
     return false;
 }
