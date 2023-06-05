@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     qInstallMessageHandler(log_out_put);
     QFont f = a.font();
 
-    f.setFamily("微软雅黑");
+    f.setFamily("Microsoft YaHei");
     a.setFont(f);
 
     QElapsedTimer cost;
