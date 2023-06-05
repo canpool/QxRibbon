@@ -1,4 +1,26 @@
 
+0.5.1
+---
+Feature
+- Support Application Widget
+- Support FrameWindow (native Mainwindow)
+- Support Qt 6.5.1
+- Support PyQt5 (PyRibbon 0.1.0)
+- support linux (openEuler/Ubuntu)
+- Support cmake builder
+
+Bugfix
+- Fix tab text is not centered (#I7AJ9E)
+- Fix RibbonGalleryGroup item border size is too large
+- Fix attribute Qt::AA_EnableHighDpiScaling position error
+- Fix RibbonButton not refreshing in 2row mode (#I79XLL)
+- Fix taskbar is covered when maximized (win10, #I771WR)
+
+Note
+- Don't support Qt 4
+
+
 0.5.0
+---
 - Rename files and class names, and optimize them
 - Powered by SARibbon 846aaa77ec31b3b4b7a58d1538fac1572bb012dc
