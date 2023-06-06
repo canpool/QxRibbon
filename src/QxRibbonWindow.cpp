@@ -149,12 +149,12 @@ void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
 {
     switch (theme) {
     case Office2013Theme:
-        loadTheme(":/theme/res/office2013.qss");
+        loadTheme(":/theme/res/office2013.css");
         break;
     case NormalTheme:
         /* fallthrough */
     default:
-        loadTheme(":/theme/res/default.qss");
+        loadTheme(":/theme/res/default.css");
         break;
     }
     d->m_theme = theme;

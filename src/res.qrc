@@ -13,7 +13,7 @@
         <file>res/Titlebar_Unshade.png</file>
     </qresource>
     <qresource prefix="/theme">
-        <file>res/default.qss</file>
-        <file>res/office2013.qss</file>
+        <file>res/default.css</file>
+        <file>res/office2013.css</file>
     </qresource>
 </RCC>

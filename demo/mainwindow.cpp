@@ -214,7 +214,8 @@ void MainWindow::onActionUseQssTriggered()
 {
     QFile f("ribbon.qss");
     if (!f.exists()) {
-        QString fdir = QFileDialog::getOpenFileName(this, tr("select qss file"));
+        QString fdir = QFileDialog::getOpenFileName(this, tr("select stylesheet file"),
+                                                    "", tr("Files (*.qss *.css)"));
         if (fdir.isEmpty()) {
             return;
         }
