@@ -4,6 +4,7 @@
 #include "QxRibbonWindow.h"
 
 class QTextEdit;
+class QActionGroup;
 
 class RibbonPage;
 class RibbonPageContext;
@@ -31,6 +32,7 @@ private:
     void addSomeOtherAction();
     QAction *createAction(const QString &text, const QString &iconurl, const QString &objName);
     QAction *createAction(const QString &text, const QString &iconurl);
+    QAction *addThemeAction(QAction *action, int themeId);
 private slots:
     void onMenuButtonPopupCheckableTest(bool b);
     void onInstantPopupCheckableTest(bool b);
@@ -47,6 +49,7 @@ private slots:
     void onActionUseQssTriggered();
     void onActionLoadCustomizeXmlFileTriggered();
     void onActionWindowFlagNormalButtonTriggered(bool b);
+    void onActionChangeThemeTriggered();
 
     void onFontComWidgetCurrentFontChanged(const QFont &f);
     void onActionFontLargerTriggered();
@@ -59,6 +62,7 @@ private:
     RibbonPageContext *m_pageContext2;
     RibbonCustomizeWidget *m_customizeWidget;
     QTextEdit *m_edit;
+    QActionGroup *m_themeGroup;
     RibbonActionsManager *m_actMgr;
     int m_actionTagText;
     int m_actionTagWithIcon;

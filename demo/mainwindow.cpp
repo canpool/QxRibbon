@@ -36,6 +36,7 @@
 #include <QTextStream>
 #include <QXmlStreamWriter>
 #include <QDialog>
+#include <QActionGroup>
 
 #include "aboutdialog.h"
 
@@ -63,6 +64,8 @@ MainWindow::MainWindow(QWidget *par)
     m_edit = new QTextEdit(this);
     setCentralWidget(m_edit);
     setStatusBar(new QStatusBar());
+
+    m_themeGroup = new QActionGroup(this);
 
     RibbonBar *ribbon = ribbonBar();
     // 通过setContentsMargins设置ribbon四周的间距
@@ -117,6 +120,12 @@ MainWindow::MainWindow(QWidget *par)
     setMinimumWidth(500);
     showMaximized();
     setWindowIcon(QIcon(":/icon/res/logo.png"));
+
+    // after mainwindow show
+    #define RIBBON_THEME_INDEX  1
+    if (m_themeGroup->actions().count() > RIBBON_THEME_INDEX) {
+        m_themeGroup->actions().at(RIBBON_THEME_INDEX)->trigger();
+    }
 
     qDebug() << RibbonSubElementStyleOpt;
 }
@@ -251,6 +260,15 @@ void MainWindow::onActionWindowFlagNormalButtonTriggered(bool b)
         Qt::WindowFlags f = windowFlags();
         f &= ~Qt::WindowMinMaxButtonsHint & ~Qt::WindowCloseButtonHint;
         updateWindowFlag(f);
+    }
+}
+
+void MainWindow::onActionChangeThemeTriggered()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action) {
+        int theme = action->data().toInt();
+        setRibbonTheme(static_cast<RibbonWindow::RibbonTheme>(theme));
     }
 }
 
@@ -979,6 +997,13 @@ void MainWindow::createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar)
 
 void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
 {
+    QAction *actionTheme = createAction(tr("theme"), ":/icon/res/useqss.svg");
+    RibbonMenu *menu = new RibbonMenu("theme");
+    actionTheme->setMenu(menu);
+    m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Normal")), RibbonWindow::NormalTheme));
+    m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2013")), RibbonWindow::Office2013Theme));
+    rightBar->addAction(actionTheme);
+
     QAction *actionHelp = createAction(tr("help"), ":/icon/res/help.svg");
     connect(actionHelp, &QAction::triggered, this, &MainWindow::onActionHelpTriggered);
     rightBar->addAction(actionHelp);
@@ -1035,6 +1060,15 @@ QAction *MainWindow::createAction(const QString &text, const QString &iconurl)
     act->setIcon(QIcon(iconurl));
     act->setObjectName(text);
     return act;
+}
+
+QAction *MainWindow::addThemeAction(QAction *action, int themeId)
+{
+    action->setCheckable(true);
+    action->setData(QVariant(themeId));
+    connect(action, &QAction::triggered, this, &MainWindow::onActionChangeThemeTriggered);
+
+    return action;
 }
 
 void MainWindow::onMenuButtonPopupCheckableTest(bool b)
