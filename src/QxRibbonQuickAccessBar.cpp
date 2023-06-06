@@ -17,6 +17,7 @@ RibbonQuickAccessBar::RibbonQuickAccessBar(QWidget *parent)
 {
     d->m_buttonGroup = new RibbonButtonGroup(this);
     setWidget(d->m_buttonGroup);
+    setTitleVisible(false);
 }
 
 RibbonQuickAccessBar::~RibbonQuickAccessBar()

@@ -487,7 +487,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
     const int tabH = q->tabBarHeight();
     const int otherH = tabH - tabBarBaseLineHeight;
 
-    x += m_iconRightBorderPosition + 5;
+    x += m_iconRightBorderPosition + 1;
     QWidget *connerL = q->cornerWidget(Qt::TopLeftCorner);
     if (connerL && connerL->isVisible()) {
         QSize connerSize = connerL->sizeHint();
