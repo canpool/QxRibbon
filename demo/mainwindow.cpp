@@ -268,6 +268,11 @@ void MainWindow::onActionChangeThemeTriggered()
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
         int theme = action->data().toInt();
+        if (theme == RibbonWindow::Office2013Theme) {
+            ribbonBar()->setPageContextCoverTab(true);
+        } else {
+            ribbonBar()->setPageContextCoverTab(false);
+        }
         setRibbonTheme(static_cast<RibbonWindow::RibbonTheme>(theme));
     }
 }

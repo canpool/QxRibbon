@@ -124,4 +124,5 @@ public:
     Qt::Alignment m_titleAligment;
     bool m_minimized;
     bool m_titleVisible;
+    bool m_pageContextCoverTab;
 };

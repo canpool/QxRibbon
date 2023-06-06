@@ -148,6 +148,9 @@ public:
     bool isPageContextVisible(RibbonPageContext *context);
     void setPageContextVisible(RibbonPageContext *context, bool visible);
 
+    bool isPageContextCoverTab();
+    void setPageContextCoverTab(bool cover);
+
     QList<RibbonPageContext *> pageContextList() const;
 
     void destroyPageContext(RibbonPageContext *context);

@@ -116,6 +116,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_titleAligment(Qt::AlignCenter)
     , m_minimized(true)
     , m_titleVisible(true)
+    , m_pageContextCoverTab(false)
 {
     q = par;
     m_pageContextColorList << QColor(201, 89, 156)   // 玫红
@@ -461,6 +462,10 @@ void RibbonBarPrivate::paintPageContextTab(QPainter &painter, const QString &tit
 
     // 减去之前的5像素
     contextRect -= QMargins(0, 5, 0, 0);
+    if (!m_pageContextCoverTab) {
+        // 设置底部位置，不覆盖 tab
+        contextRect.setBottom(m_tabBar->geometry().top());
+    }
     painter.fillRect(contextRect, gColor);
 
     // 只有在office模式下才需要绘制标题
@@ -472,6 +477,16 @@ void RibbonBarPrivate::paintPageContextTab(QPainter &painter, const QString &tit
         }
     }
     painter.restore();
+
+    if (!m_pageContextCoverTab) {
+        painter.save();
+        // 绘制 tab 边框
+        painter.setPen(gColor);
+        painter.setBrush(Qt::NoBrush);
+        QRect tabRect(contextRect.bottomLeft(), QPoint(contextRect.bottomRight().x() - 1, m_tabBar->geometry().bottom()));
+        painter.drawRect(tabRect);
+        painter.restore();
+    }
 }
 
 void RibbonBarPrivate::resizeInOfficeStyle()
@@ -1268,6 +1283,16 @@ void RibbonBar::setPageContextVisible(RibbonPageContext *context, bool visible)
     } else {
         hidePageContext(context);
     }
+}
+
+bool RibbonBar::isPageContextCoverTab()
+{
+    return d->m_pageContextCoverTab;
+}
+
+void RibbonBar::setPageContextCoverTab(bool cover)
+{
+    d->m_pageContextCoverTab = cover;
 }
 
 /**
