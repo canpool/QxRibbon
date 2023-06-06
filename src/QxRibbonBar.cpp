@@ -112,7 +112,6 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_lastShowStyle(RibbonBar::OfficeStyle)
     , m_windowButtonsSize(RibbonSubElementStyleOpt.titleBarHeight() * 4, RibbonSubElementStyleOpt.titleBarHeight())
     , m_pageContextColorListIndex(-1)
-    , m_titleTextColor(Qt::black)
     , m_tabBarBaseLineColor(186, 201, 219)
     , m_titleAligment(Qt::AlignCenter)
     , m_minimized(true)
@@ -434,7 +433,7 @@ void RibbonBarPrivate::paintBackground(QPainter &painter)
 void RibbonBarPrivate::paintWindowTitle(QPainter &painter, const QString &title, const QRect &titleRegion)
 {
     painter.save();
-    painter.setPen(m_titleTextColor);
+    painter.setPen(q->palette().color(QPalette::WindowText));
     painter.drawText(titleRegion, m_titleAligment, title);
     painter.restore();
 }
@@ -1482,16 +1481,6 @@ void RibbonBar::updateRibbonGeometry()
     for (RibbonPage *page : pages) {
         page->updateItemGeometry();
     }
-}
-
-QColor RibbonBar::windowTitleTextColor() const
-{
-    return d->m_titleTextColor;
-}
-
-void RibbonBar::setWindowTitleTextColor(const QColor &clr)
-{
-    d->m_titleTextColor = clr;
 }
 
 QColor RibbonBar::tabBarBaseLineColor() const

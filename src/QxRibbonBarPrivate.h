@@ -120,7 +120,6 @@ public:
     QSize m_windowButtonsSize;  ///< 由 RibbonWindow 告诉的 windowbuttons 的尺寸
     QList<QColor> m_pageContextColorList;
     int m_pageContextColorListIndex;
-    QColor m_titleTextColor;
     QColor m_tabBarBaseLineColor;
     Qt::Alignment m_titleAligment;
     bool m_minimized;
