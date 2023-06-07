@@ -151,6 +151,9 @@ void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
     case Office2013Theme:
         loadTheme(":/theme/res/office2013.css");
         break;
+    case WpsdarkTheme:
+        loadTheme(":/theme/res/wpsdark.css");
+        break;
     case NormalTheme:
         /* fallthrough */
     default:
@@ -158,6 +161,10 @@ void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
         break;
     }
     d->m_theme = theme;
+
+    if (d->m_ribbonBar) {
+        d->m_ribbonBar->updateRibbonTheme();
+    }
 }
 
 RibbonWindow::RibbonTheme RibbonWindow::ribbonTheme() const

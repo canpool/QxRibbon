@@ -197,6 +197,18 @@ void RibbonBarPrivate::setMinimizedFlag(bool flag)
     }
 }
 
+void RibbonBarPrivate::updateMinimumButtonIcon()
+{
+    if (m_minimumPageButton) {
+        QAction *action = m_minimumPageButton->defaultAction();
+        if (action) {
+            action->setIcon(q->style()->standardIcon(m_minimized ? QStyle::SP_TitleBarUnshadeButton
+                                                                 : QStyle::SP_TitleBarShadeButton,
+                                                     0, m_minimumPageButton));
+        }
+    }
+}
+
 QColor RibbonBarPrivate::getPageContextColor()
 {
     if (m_pageContextColorList.isEmpty()) {
@@ -1343,6 +1355,7 @@ bool RibbonBar::isMinimized() const
 void RibbonBar::setMinimized(bool flag)
 {
     d->setMinimizedFlag(flag);
+    d->updateMinimumButtonIcon();
     QResizeEvent resizeEvent(size(), size());
     QApplication::sendEvent(this, &resizeEvent);
     emit minimizationChanged(flag);
@@ -1361,19 +1374,14 @@ void RibbonBar::showMinimumButton(bool isShow)
             d->m_minimumPageButton = RibbonSubElementFactory->createHideGroupButton(this);
             d->m_minimumPageButton->ensurePolished();   // 载入样式图标
             QAction *action = new QAction(d->m_minimumPageButton);
-            action->setIcon(style()->standardIcon(isMinimized() ? QStyle::SP_TitleBarUnshadeButton
-                                                                  : QStyle::SP_TitleBarShadeButton,
-                                                  0, d->m_minimumPageButton));
             connect(action, &QAction::triggered, this, [=]() {
                 this->setMinimized(!isMinimized());
-                action->setIcon(style()->standardIcon(isMinimized() ? QStyle::SP_TitleBarUnshadeButton
-                                                                      : QStyle::SP_TitleBarShadeButton,
-                                                      0, d->m_minimumPageButton));
             });
             d->m_minimumPageButton->setDefaultAction(action);
             d->m_rightButtonGroup->addWidget(d->m_minimumPageButton);
             update();
         }
+        d->updateMinimumButtonIcon();
     } else {
         if (Q_NULLPTR != d->m_minimumPageButton) {
             d->m_minimumPageButton->hide();
@@ -1506,6 +1514,11 @@ void RibbonBar::updateRibbonGeometry()
     for (RibbonPage *page : pages) {
         page->updateItemGeometry();
     }
+}
+
+void RibbonBar::updateRibbonTheme()
+{
+    d->updateMinimumButtonIcon();
 }
 
 QColor RibbonBar::tabBarBaseLineColor() const

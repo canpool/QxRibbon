@@ -140,6 +140,8 @@ QxRibbon 组件中关键的类名与其它主流的命名区别如下：
 
 ![](./doc/images/mainwindow_normal.png)
 
+![](./doc/images/mainwindow_dark.png)
+
 - <font size=4>mainwindow demo（openEuler 23.03/X11/GNOME 43.2）</font>
 
 ![](./doc/images/mainwindow_linux.png)

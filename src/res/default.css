@@ -1,5 +1,4 @@
-﻿
-/* start ribbon set*/
+﻿/* start ribbon set*/
 
 RibbonWindow {
   background-color: white;
@@ -8,257 +7,144 @@ RibbonWindow {
 
 /*RibbonBar*/
 
-RibbonBar{
+RibbonBar {
   background-color: #E3E6E8;
   border: solid #707070;
   border-width: 1px 1px 0px 1px;
 }
 
-/*RibbonButtonGroup*/
-RibbonButtonGroup{
-background-color: transparent;
-}
-
-RibbonGroup > RibbonButtonGroup {
-  border: 1px solid #c2d0df;
-}
-
-/*RibbonQuickAccessBar*/
-RibbonQuickAccessBar{
-    background-color: #FF0000;
-}
-
-
-/*RibbonCtrlContainer*/
-RibbonCtrlContainer{
-    background-color: transparent;
-}
-
-/*RibbonPage*/
-RibbonPage:focus{
-  outline: none;
-}
-RibbonPage{
-  background-color: white;
-}
-
-/*RibbonStackedWidget*/
-RibbonStackedWidget{
-  background-color: white;
-  border: 1px solid #c5d2e0;
-  border-top-width: 0px;
-}
-RibbonStackedWidget:focus{
-  outline: none;
-}
-/*RibbonApplicationButton*/
-RibbonApplicationButton{
-  color:white;
-  border: 1px solid #416ABD;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #467FBD, stop:0.5 #2A5FAC,stop:0.51 #1A4088,
-stop:1 #419ACF);
-}
-
-RibbonApplicationButton::hover{
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #7BB2EB, stop:0.5 #477ECD,stop:0.51 #114ECF,
-stop:1 #80E1FF);
-}
-
-RibbonApplicationButton::pressed{
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #467BBB, stop:0.5 #2F63AE,stop:0.51 #1C438A,
-stop:1 #358BC9);
-}
-
-RibbonApplicationButton:focus{
-  outline: none;
-}
-
 /*RibbonTabBar*/
-RibbonTabBar{
-    background-color: transparent;
+
+RibbonTabBar {
+  background-color: transparent;
 }
 
 /*
 RibbonTabBar::tab {
-    color:#444444;
-    border:none;
-    background: transparent;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-left: 6px;
-    margin-bottom: 0px;
-    min-width:60px;
-    max-width:200px;
-    min-height:30px;
-    max-height:30px;
-    padding-left:1px;
-    padding-right:1px;
-    padding-top:1px;
-    padding-bottom:1px;
+  color:#444444;
+  border:none;
+  background: transparent;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-left: 6px;
+  margin-bottom: 0px;
+  min-width:60px;
+  max-width:200px;
+  min-height:30px;
+  max-height:30px;
+  padding-left:1px;
+  padding-right:1px;
+  padding-top:1px;
+  padding-bottom:1px;
 }
 */
 
 RibbonTabBar::tab {
-    color:#444444;
-    border:none;
-    background: transparent;
-    margin-top: 0em;
-    margin-right: 0pt;
-    margin-left: 0.2em;
-    margin-bottom: 0em;
-    min-width: 2em;
-    /*max-width: 10em;*/
-    min-height: 1.2em;
-    max-height: 1.2em;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
+  color: #444444;
+  border: none;
+  background: transparent;
+  margin-top: 0em;
+  margin-right: 0pt;
+  margin-left: 0.2em;
+  margin-bottom: 0em;
+  min-width: 2em;
+  /*max-width: 10em;*/
+  min-height: 1.2em;
+  max-height: 1.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
 }
 
-RibbonTabBar::tab:selected, RibbonTabBar::tab:hover {
+RibbonTabBar::tab:selected,
+RibbonTabBar::tab:hover {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
 
-RibbonTabBar::tab:selected{
-    color:#000000;
-    border: 1px solid #BAC9DB;
-    background: white;
-    border-bottom-color: #FFFFFF;
+RibbonTabBar::tab:selected {
+  color: #000000;
+  border: 1px solid #BAC9DB;
+  background: white;
+  border-bottom-color: #FFFFFF;
 }
 
-RibbonTabBar::tab:hover:!selected{
-    border: 1px solid #ECBC3D;
-    color: #000000;
+RibbonTabBar::tab:hover:!selected {
+  border: 1px solid #ECBC3D;
+  color: #000000;
 }
 
 RibbonTabBar::tab:!selected {
-    margin-top: 0px;
+  margin-top: 0px;
 }
 
-/*RibbonLineEdit*/
-RibbonLineEdit {
-    border: 1px solid #C0C2C4;
-    background: #FFF;
-    selection-background-color: #9BBBF7;
-    selection-color: #000;
+/*RibbonStackedWidget*/
+
+RibbonStackedWidget {
+  background-color: white;
+  border: 1px solid #c5d2e0;
+  border-top-width: 0px;
 }
 
-/*RibbonButton*/
-RibbonButton{
-    border:1px solid transparent;
-    color:#444444;
-    background-color:transparent;
-}
-RibbonButton::pressed{
-    color:#444444;
-    border: 1px solid #FCBF21;
-    background-color: #FCD364;
-}
-RibbonButton::checked{
-    color:#444444;
-    border: 1px solid #FCD364;
-    background-color: #FCD364;
-}
-RibbonButton::hover {
-    color:#000000;
-    border: 1px solid #FCD364;
-    background-color: #FCDE89;
+RibbonStackedWidget:focus {
+  outline: none;
 }
 
-/*RibbonControlButton*/
-RibbonControlButton{
-  background-color:transparent;
-  border: 1px solid transparent;
-  color:#444444;
-}
-RibbonControlButton#RibbonGalleryButtonUp,#RibbonGalleryButtonDown,#RibbonGalleryButtonMore{
-  border: 1px solid #C0C2C4;
-}
-RibbonControlButton#RibbonBarHideGroupButton{
-  border: 1px solid transparent;
-}
-RibbonControlButton::pressed{
-  border: 1px solid #FCD364;
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
-}
-RibbonControlButton::checked{
-  border: 1px solid #FCD364;
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
-}
-RibbonControlButton::hover {
-  border: 1px solid #FCD364;
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
- }
+/*RibbonPage*/
 
+RibbonPage:focus {
+  outline: none;
+}
 
-/*RibbonMenu*/
-RibbonMenu {
-  color:#444444;
-  background-color: #FCFCFC;
-  border: 1px solid #8492A6;
+RibbonPage {
+  background-color: white;
 }
-RibbonMenu::item {
-  padding: 5px 25px 5px 25px;
-  background-color: transparent;
-}
-RibbonMenu::item:selected {
-  background-color: #FCDE89;
-}
-RibbonMenu::item:hover {
-    color:#000;
-    border: 1px solid #FCD364;
-}
-RibbonMenu::icon{
-  margin-left: 1px;
+
+/*RibbonGroup*/
+
+RibbonGroup {
+  background-color: #FFFFFF;
+  border: 0px;
 }
 
 /*RibbonGroupOptionButton*/
+
 RibbonGroupOptionButton {
   background-color: transparent;
-  color:#444444;
+  color: #444444;
 }
 
 RibbonGroupOptionButton::hover {
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
   border: 0px;
 }
 
+RibbonGroupOptionButton {
+  qproperty-icon: url(:/image/res/ribbonGroupOptionButton.png);
+}
 
-RibbonGroup {
-  background-color: #FFFFFF;
-  border: 0px;
-}
-/*RibbonGroup*/
-RibbonGroup {
-  background-color: #FFFFFF;
-  border: 0px;
-}
 /*RibbonGallery*/
+
 RibbonGallery {
   background-color: transparent;
   color: #444444;
 }
 
 /*RibbonGalleryGroup*/
+
 RibbonGalleryGroup {
   show-decoration-selected: 1;
   background-color: transparent;
   color: #444444;
   border: 1px solid #C0C2C4;
 }
+
 RibbonGalleryGroup::item:selected {
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
   color: black;
 }
+
 RibbonGalleryGroup::item:hover {
   border: 1px solid #FDEEB3;
 }
@@ -269,19 +155,177 @@ RibbonGalleryViewport {
   background-color: white;
 }
 
-/*RibbonComboBox*/
-RibbonComboBox {
-  border: 1px solid #C0C2C4;
+/*RibbonButtonGroup*/
 
+RibbonButtonGroup {
+  background-color: transparent;
 }
 
-RibbonComboBox:hover{
+RibbonGroup > RibbonButtonGroup {
+  border: 1px solid #c2d0df;
+}
+
+/*RibbonQuickAccessBar*/
+
+RibbonQuickAccessBar {
+  background-color: #FF0000;
+}
+
+/*RibbonCtrlContainer*/
+
+RibbonCtrlContainer {
+  background-color: transparent;
+}
+
+/*RibbonApplicationButton*/
+
+RibbonApplicationButton {
+  color: white;
+  border: 1px solid #416ABD;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #467FBD, stop:0.5 #2A5FAC, stop:0.51 #1A4088,
+      stop:1 #419ACF);
+}
+
+RibbonApplicationButton::hover {
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #7BB2EB, stop:0.5 #477ECD, stop:0.51 #114ECF,
+      stop:1 #80E1FF);
+}
+
+RibbonApplicationButton::pressed {
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #467BBB, stop:0.5 #2F63AE, stop:0.51 #1C438A,
+      stop:1 #358BC9);
+}
+
+RibbonApplicationButton:focus {
+  outline: none;
+}
+
+/*RibbonButton*/
+
+RibbonButton {
+  border: 1px solid transparent;
+  color: #444444;
+  background-color: transparent;
+}
+
+RibbonButton::pressed {
+  color: #444444;
+  border: 1px solid #FCBF21;
+  background-color: #FCD364;
+}
+
+RibbonButton::checked {
+  color: #444444;
+  border: 1px solid #FCD364;
+  background-color: #FCD364;
+}
+
+RibbonButton::hover {
+  color: #000000;
+  border: 1px solid #FCD364;
+  background-color: #FCDE89;
+}
+
+/*RibbonControlButton*/
+
+RibbonControlButton {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #444444;
+}
+
+RibbonControlButton::pressed {
+  border: 1px solid #FCD364;
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
+}
+
+RibbonControlButton::checked {
+  border: 1px solid #FCD364;
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
+}
+
+RibbonControlButton::hover {
+  border: 1px solid #FCD364;
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
+}
+
+RibbonControlButton#RibbonGalleryButtonUp,
+#RibbonGalleryButtonDown,
+#RibbonGalleryButtonMore {
+  border: 1px solid #C0C2C4;
+}
+
+RibbonControlButton#RibbonGalleryButtonUp {
+  qproperty-icon: url(:/image/res/ArrowUp.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonDown {
+  qproperty-icon: url(:/image/res/ArrowDown.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonMore {
+  qproperty-icon: url(:/image/res/ArrowMore.png);
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  border: 1px solid transparent;
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  titlebar-shade-icon: url(:/image/res/Titlebar_Shade.png);
+  titlebar-unshade-icon: url(:/image/res/Titlebar_Unshade.png);
+}
+
+/*RibbonMenu*/
+
+RibbonMenu {
+  color: #444444;
+  background-color: #FCFCFC;
+  border: 1px solid #8492A6;
+}
+
+RibbonMenu::item {
+  padding: 5px 25px 5px 25px;
+  background-color: transparent;
+}
+
+RibbonMenu::item:selected {
+  background-color: #FCDE89;
+}
+
+RibbonMenu::item:hover {
+  color: #000;
+  border: 1px solid #FCD364;
+}
+
+RibbonMenu::icon {
+  margin-left: 1px;
+}
+
+/*RibbonLineEdit*/
+
+RibbonLineEdit {
+  border: 1px solid #C0C2C4;
+  background: #FFF;
+  selection-background-color: #9BBBF7;
+  selection-color: #000;
+}
+
+/*RibbonComboBox*/
+
+RibbonComboBox {
+  border: 1px solid #C0C2C4;
+}
+
+RibbonComboBox:hover {
   border: 1px solid #FDEEB3;
-  color : #000;
+  color: #000;
 }
 
 RibbonComboBox:editable {
-  color : #000;
+  color: #000;
   background: white;
   selection-background-color: #9BBBF7;
   selection-color: #000;
@@ -298,18 +342,18 @@ RibbonComboBox::drop-down {
 
 RibbonComboBox::drop-down:hover {
   border: 1px solid #FDEEB3;
-  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 #FDEEB3, stop:0.1282 #FDE38A,stop:0.8333
-#FCE58C, stop:1 #FDFDEB);
+  background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
 }
+
 RibbonComboBox::down-arrow {
   image: url(:/image/res/ArrowDown.png);
 }
 
-
 /*RibbonSeparator*/
-RibbonSeparator{
-    /*background-color: transparent;*/
-    background-color: #D3D3D3;
+
+RibbonSeparator {
+  /*background-color: transparent;*/
+  background-color: #D3D3D3;
 }
 
 RibbonPageScrollButton {
@@ -333,48 +377,43 @@ RibbonPageScrollButton::hover {
 
 WindowToolButton {
   background-color: transparent;
-  border:none;
+  border: none;
 }
 
 WindowToolButton:focus {
   outline: none;
 }
 
-#qx_MinimizeWindowButton {
+WindowToolButton#qx_MinimizeWindowButton {
   image: url(:/image/res/Titlebar_Min.png);
 }
 
-#qx_MaximizeWindowButton:checked {
-  image:url(:/image/res/Titlebar_Normal.png);
+WindowToolButton#qx_MaximizeWindowButton:checked {
+  image: url(:/image/res/Titlebar_Normal.png);
 }
 
-#qx_MaximizeWindowButton {
-  image:url(:/image/res/Titlebar_Max.png);
+WindowToolButton#qx_MaximizeWindowButton {
+  image: url(:/image/res/Titlebar_Max.png);
 }
 
-#qx_MinimizeWindowButton:hover,#qx_MaximizeWindowButton:hover {
-  background-color: #e5e5e5;
+WindowToolButton#qx_MinimizeWindowButton:hover,#qx_MaximizeWindowButton:hover {
+  background-color: #cee7fc;
 }
 
-#qx_MinimizeWindowButton:pressed,#qx_MaximizeWindowButton:pressed {
-  background-color: #cacacb;
+WindowToolButton#qx_MinimizeWindowButton:pressed,#qx_MaximizeWindowButton:pressed {
+  background-color: #dbecfa;
 }
 
-#qx_CloseWindowButton {
+WindowToolButton#qx_CloseWindowButton {
   image: url(:/image/res/Titlebar_Close.png);
 }
 
-#qx_CloseWindowButton:hover {
+WindowToolButton#qx_CloseWindowButton:hover {
   background-color: #e81123;
   image: url(:/image/res/Titlebar_Close_Hover.png);
 }
 
-#qx_CloseWindowButton:pressed {
+WindowToolButton#qx_CloseWindowButton:pressed {
   background-color: #f1707a;
   image: url(:/image/res/Titlebar_Close_Hover.png);
-}
-
-#RibbonBarHideGroupButton {
-  titlebar-shade-icon: url(:/image/res/Titlebar_Shade.png);
-  titlebar-unshade-icon: url(:/image/res/Titlebar_Unshade.png);
 }

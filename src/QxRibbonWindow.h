@@ -41,6 +41,8 @@ public:
     enum RibbonTheme {
         NormalTheme,
         Office2013Theme,
+        WpsdarkTheme,
+        CustomTheme,
     };
     Q_ENUMS(RibbonTheme)
 public:

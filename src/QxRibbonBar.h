@@ -182,6 +182,7 @@ public:
     void setWindowButtonsSize(const QSize &size);
 
     void updateRibbonGeometry();
+    void updateRibbonTheme();
 
     QColor tabBarBaseLineColor() const;
     void setTabBarBaseLineColor(const QColor &clr);

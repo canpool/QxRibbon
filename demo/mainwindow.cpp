@@ -203,8 +203,8 @@ void MainWindow::onActionHelpTriggered()
                    tr(
 "Copyleft (C) 2023 maminjie &lt;canpool@163.com&gt;<br/>"
 "<br/>QxRibbon is a Qt componet like to Microsoft Ribbon style. "
-"For more information, please visit <a href=\"%1\">%1</a>").arg(url)
-                   );
+"For more information, please visit <a href=\"%1\">%1</a>").arg(url),
+                   this);
     ad.exec();
 }
 
@@ -268,10 +268,14 @@ void MainWindow::onActionChangeThemeTriggered()
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
         int theme = action->data().toInt();
-        if (theme == RibbonWindow::Office2013Theme) {
-            ribbonBar()->setPageContextCoverTab(true);
-        } else {
+        // 暗色系
+        if (theme == RibbonWindow::WpsdarkTheme) {
             ribbonBar()->setPageContextCoverTab(false);
+            ribbonBar()->setTabBarBaseLineColor(QColor("#456DA4")); // from qss file
+        } else {
+            // 亮色系
+            ribbonBar()->setPageContextCoverTab(true);
+            ribbonBar()->setTabBarBaseLineColor(QColor(186, 201, 219));
         }
         setRibbonTheme(static_cast<RibbonWindow::RibbonTheme>(theme));
     }
@@ -332,7 +336,7 @@ void MainWindow::onButtonGroupActionTriggered(QAction *act)
 void MainWindow::onApplicationButtonClicked()
 {
     // 使用QWidget且setWindowModality(Qt::ApplicationModal)未阻塞，所以用QDialog
-    QDialog w;
+    QDialog w(this);
     w.setWindowFlags(Qt::Popup);
     w.resize(200, 100);
     w.move(mapToGlobal(ribbonBar()->applicationButton()->geometry().bottomLeft()));
@@ -1007,6 +1011,7 @@ void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
     actionTheme->setMenu(menu);
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Normal")), RibbonWindow::NormalTheme));
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2013")), RibbonWindow::Office2013Theme));
+    m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Wpsdark")), RibbonWindow::WpsdarkTheme));
     rightBar->addAction(actionTheme);
 
     QAction *actionHelp = createAction(tr("help"), ":/icon/res/help.svg");

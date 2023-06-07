@@ -13,71 +13,6 @@ RibbonBar {
   border-width: 1px 1px 0px 1px;
 }
 
-/*RibbonButtonGroup*/
-
-RibbonButtonGroup {
-  background-color: transparent;
-}
-
-RibbonGroup > RibbonButtonGroup {
-  border: 1pt solid #c2d0df;
-}
-
-/*RibbonQuickAccessBar*/
-
-RibbonQuickAccessBar {
-  background-color: #cee8fc;
-}
-
-/*RibbonCtrlContainer*/
-
-RibbonCtrlContainer {
-  background-color: transparent;
-}
-
-/*RibbonPage*/
-
-RibbonPage:focus {
-  outline: none;
-}
-
-RibbonPage {
-  background-color: #fcfdfe;
-}
-
-/*RibbonStackedWidget*/
-
-RibbonStackedWidget {
-  background-color: white;
-  border: 1pt solid #c5d2e0;
-  border-top-width: 0px;
-}
-
-RibbonStackedWidget:focus {
-  outline: none;
-}
-
-/*RibbonApplicationButton*/
-
-RibbonApplicationButton {
-  color: white;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  background-color: #2b579a;
-}
-
-RibbonApplicationButton::hover {
-  background-color: #5888d0;
-}
-
-RibbonApplicationButton::pressed {
-  background-color: #3369b9;
-}
-
-RibbonApplicationButton:focus {
-  outline: none;
-}
-
 /*RibbonTabBar*/
 
 RibbonTabBar {
@@ -145,6 +80,127 @@ RibbonTabBar::tab:!selected {
   margin-top: 0px;
 }
 
+/*RibbonStackedWidget*/
+
+RibbonStackedWidget {
+  background-color: white;
+  border: 1pt solid #c5d2e0;
+  border-top-width: 0px;
+}
+
+RibbonStackedWidget:focus {
+  outline: none;
+}
+
+/*RibbonPage*/
+
+RibbonPage:focus {
+  outline: none;
+}
+
+RibbonPage {
+  background-color: #fcfdfe;
+}
+
+/*RibbonGroup*/
+
+RibbonGroup {
+  background-color: white;
+  border: 0px;
+}
+
+/*RibbonGroupOptionButton*/
+
+RibbonGroupOptionButton {
+  background-color: transparent;
+  color: #333;
+}
+
+RibbonGroupOptionButton::hover {
+  background-color: #cee7fc;
+  border: 0px;
+}
+
+RibbonGroupOptionButton {
+  qproperty-icon: url(:/image/res/ribbonGroupOptionButton.png);
+}
+
+/*RibbonGallery*/
+
+RibbonGallery {
+  border: 1px solid #c2d0df;
+  background-color: transparent;
+  color: #333;
+}
+
+/*RibbonGalleryGroup*/
+
+RibbonGalleryGroup {
+  show-decoration-selected: 1;
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #c2d0df;
+}
+
+RibbonGalleryGroup::item:selected {
+  background-color: #9ed2f9;
+  color: black;
+}
+
+RibbonGalleryGroup::item:hover {
+  border: 1px solid #badffa;
+  background-color: #cee7fc;
+}
+
+/*RibbonGalleryViewport*/
+
+RibbonGalleryViewport {
+  background-color: white;
+}
+
+/*RibbonButtonGroup*/
+
+RibbonButtonGroup {
+  background-color: transparent;
+}
+
+RibbonGroup > RibbonButtonGroup {
+  border: 1pt solid #c2d0df;
+}
+
+/*RibbonQuickAccessBar*/
+
+RibbonQuickAccessBar {
+  background-color: #cee8fc;
+}
+
+/*RibbonCtrlContainer*/
+
+RibbonCtrlContainer {
+  background-color: transparent;
+}
+
+/*RibbonApplicationButton*/
+
+RibbonApplicationButton {
+  color: white;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  background-color: #2b579a;
+}
+
+RibbonApplicationButton::hover {
+  background-color: #5888d0;
+}
+
+RibbonApplicationButton::pressed {
+  background-color: #3369b9;
+}
+
+RibbonApplicationButton:focus {
+  outline: none;
+}
+
 /*RibbonButton*/
 
 RibbonButton {
@@ -185,14 +241,6 @@ RibbonControlButton {
   color: #333;
 }
 
-RibbonControlButton#RibbonGalleryButtonUp, #RibbonGalleryButtonDown, #RibbonGalleryButtonMore {
-  border: 1px solid #cee8fc;
-}
-
-RibbonControlButton#RibbonBarHideGroupButton {
-  border: 1px solid transparent;
-}
-
 RibbonControlButton::pressed {
   border: 1px solid #269bf4;
   background-color: #9ed2f9;
@@ -206,6 +254,31 @@ RibbonControlButton::checked {
 RibbonControlButton::hover {
   border: 1px solid #badffa;
   background-color: #cee7fc;
+}
+
+RibbonControlButton#RibbonGalleryButtonUp, #RibbonGalleryButtonDown, #RibbonGalleryButtonMore {
+  border: 1px solid #cee8fc;
+}
+
+RibbonControlButton#RibbonGalleryButtonUp {
+  qproperty-icon: url(:/image/res/ArrowUp.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonDown {
+  qproperty-icon: url(:/image/res/ArrowDown.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonMore {
+  qproperty-icon: url(:/image/res/ArrowMore.png);
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  border: 1px solid transparent;
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  titlebar-shade-icon: url(:/image/res/Titlebar_Shade.png);
+  titlebar-unshade-icon: url(:/image/res/Titlebar_Unshade.png);
 }
 
 /*RibbonMenu*/
@@ -233,58 +306,6 @@ RibbonMenu::item:hover {
 
 RibbonMenu::icon {
   margin-left: 1px;
-}
-
-/*RibbonGroupOptionButton*/
-
-RibbonGroupOptionButton {
-  background-color: transparent;
-  color: #333;
-}
-
-RibbonGroupOptionButton::hover {
-  background-color: #cee7fc;
-  border: 0px;
-}
-
-/*RibbonGroup*/
-
-RibbonGroup {
-  background-color: white;
-  border: 0px;
-}
-
-/*RibbonGallery*/
-
-RibbonGallery {
-  border: 1px solid #c2d0df;
-  background-color: transparent;
-  color: #333;
-}
-
-/*RibbonGalleryGroup*/
-
-RibbonGalleryGroup {
-  show-decoration-selected: 1;
-  background-color: transparent;
-  color: #333;
-  border: 1px solid #c2d0df;
-}
-
-RibbonGalleryGroup::item:selected {
-  background-color: #9ed2f9;
-  color: black;
-}
-
-RibbonGalleryGroup::item:hover {
-  border: 1px solid #badffa;
-  background-color: #cee7fc;
-}
-
-/*RibbonGalleryViewport*/
-
-RibbonGalleryViewport {
-  background-color: white;
 }
 
 /*RibbonLineEdit*/
@@ -360,7 +381,7 @@ RibbonPageScrollButton::hover {
 
 WindowToolButton {
   background-color: transparent;
-  border:none;
+  border: none;
 }
 
 WindowToolButton:focus {
@@ -371,12 +392,12 @@ WindowToolButton#qx_MinimizeWindowButton {
   image: url(:/image/res/Titlebar_Min.png);
 }
 
-WindowToolButton#qx_MaximizeWindowButton:checked {
-  image:url(:/image/res/Titlebar_Normal.png);
+WindowToolButton#qx_MaximizeWindowButton {
+  image: url(:/image/res/Titlebar_Max.png);
 }
 
-WindowToolButton#qx_MaximizeWindowButton {
-  image:url(:/image/res/Titlebar_Max.png);
+WindowToolButton#qx_MaximizeWindowButton:checked {
+  image: url(:/image/res/Titlebar_Normal.png);
 }
 
 WindowToolButton#qx_MinimizeWindowButton:hover,#qx_MaximizeWindowButton:hover {
@@ -399,9 +420,4 @@ WindowToolButton#qx_CloseWindowButton:hover {
 WindowToolButton#qx_CloseWindowButton:pressed {
   background-color: #f1707a;
   image: url(:/image/res/Titlebar_Close_Hover.png);
-}
-
-WindowToolButton#RibbonBarHideGroupButton {
-  titlebar-shade-icon: url(:/image/res/Titlebar_Shade.png);
-  titlebar-unshade-icon: url(:/image/res/Titlebar_Unshade.png);
 }

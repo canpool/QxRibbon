@@ -68,6 +68,7 @@ public:
     bool isContainPageContextInList(RibbonPageContext *pageContext);
 
     void setMinimizedFlag(bool flag);
+    void updateMinimumButtonIcon();
 
     QColor getPageContextColor();
 

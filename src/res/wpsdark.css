@@ -1,0 +1,491 @@
+/* start ribbon set*/
+
+QWidget {
+  color: #EAEBEB;
+}
+
+QPushButton {
+  color: black;
+}
+
+RibbonWindow {
+  background-color: #2D2E30;
+  border: 1px solid #242526;
+}
+
+RibbonWindow > QWidget {
+  color: #EAEBEB;
+  background-color: #242526;
+  border: 1px solid #242526;
+}
+
+RibbonWindow > QStatusBar {
+  background-color: #2D2E30;
+}
+
+/*RibbonBar*/
+
+RibbonBar {
+  background-color: #2D2E30;
+  border: solid #242526;
+  border-width: 1px 1px 0px 1px;
+}
+
+RibbonBar > QWidget {
+  color: #EAEBEB;
+}
+
+/*RibbonTabBar*/
+
+RibbonTabBar {
+  background-color: transparent;
+}
+
+/*
+高清屏幕不能使用px
+RibbonTabBar::tab {
+  color: #5779af;
+  border: none;
+  background: transparent;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-left: 1em;
+  margin-bottom: 0px;
+  min-width: 60px;
+  max-width: 200px;
+  min-height: 25px;
+  max-height: 25px;
+  padding-left: 1px;
+  padding-right: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+*/
+
+RibbonTabBar::tab {
+  color: #EAEBEB;
+  border: none;
+  background: transparent;
+  margin-top: 0em;
+  margin-right: 0pt;
+  margin-left: 0.2em;
+  margin-bottom: 0em;
+  min-width: 3em;
+  /*max-width: 10em;*/
+  min-height: 1.2em;
+  max-height: 1.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+}
+
+RibbonTabBar::tab:selected, RibbonTabBar::tab:hover {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+RibbonTabBar::tab:selected {
+  color: white;
+  border: 1px solid #456DA4;
+  background: #2D2E30;
+  border-bottom-color: #FFFFFF;
+}
+
+RibbonTabBar::tab:hover:!selected {
+  border:1px solid #354356;
+  border-bottom-color: #FFFFFF;
+  color: white;
+}
+
+RibbonTabBar::tab:!selected {
+  margin-top: 0px;
+}
+
+/*RibbonStackedWidget*/
+
+RibbonStackedWidget {
+  background-color: #2D2E30;
+  border: 1pt solid #242526;
+  border-top-width: 0px;
+}
+
+RibbonStackedWidget:focus {
+  outline: none;
+}
+
+/*RibbonPage*/
+
+RibbonPage:focus {
+  outline: none;
+}
+
+RibbonPage {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+}
+
+/*RibbonGroup*/
+
+RibbonGroup {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+  border: 0px;
+}
+
+RibbonGroup > QWidget {
+  color: #EAEBEB;
+}
+
+/*RibbonGroupOptionButton*/
+
+RibbonGroupOptionButton {
+  border: 1px solid transparent;
+  color: #EAEBEB;
+  background-color: #2D2E30;
+}
+
+RibbonGroupOptionButton:focus {
+  border: 1px solid #456DA4;
+  color: #EAEBEB;
+  background-color: #456DA4;
+}
+
+RibbonGroupOptionButton::pressed {
+  color: white;
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonGroupOptionButton::checked {
+  color: #EAEBEB;
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonGroupOptionButton::hover {
+  color: white;
+  border: 1px solid #354356;
+  background-color: #354356;
+}
+
+RibbonGroupOptionButton {
+  qproperty-icon: url(:/image/res/lighter/ribbonGroupOptionButton.png);
+}
+
+/*RibbonGallery*/
+
+RibbonGallery {
+  border: 1px solid #242526;
+  background-color: transparent;
+  color: #EAEBEB;
+}
+
+/*RibbonGalleryGroup*/
+
+RibbonGalleryGroup {
+  show-decoration-selected: 1;
+  background-color: transparent;
+  color: #EAEBEB;
+  border: 1px solid #242526;
+}
+
+RibbonGalleryGroup::item:selected {
+  background-color: #456DA4;
+  color: #EAEBEB;
+}
+
+RibbonGalleryGroup::item:hover {
+  border: 1px solid #354356;
+  background-color: #354356;
+}
+
+/*RibbonGalleryViewport*/
+
+RibbonGalleryViewport {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+}
+
+RibbonGalleryViewport > QWidget {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+}
+
+/*RibbonButtonGroup*/
+
+RibbonButtonGroup {
+  background-color: transparent;
+}
+
+RibbonButtonGroup > QWidget {
+  color: #EAEBEB;
+}
+
+RibbonGroup > RibbonButtonGroup {
+  border: 1pt solid #242526;
+}
+
+/*RibbonQuickAccessBar*/
+
+RibbonQuickAccessBar {
+  background-color: transparent;
+}
+
+/*RibbonCtrlContainer*/
+
+RibbonCtrlContainer {
+  color: #EAEBEB;
+  background-color: transparent;
+}
+
+RibbonCtrlContainer > QWidget {
+  color: #EAEBEB;
+}
+
+/*RibbonApplicationButton*/
+
+RibbonApplicationButton {
+  color: #EAEBEB;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  background-color: #2b579a;
+}
+
+RibbonApplicationButton::hover {
+  background-color: #5888d0;
+}
+
+RibbonApplicationButton::pressed {
+  background-color: #3369b9;
+}
+
+RibbonApplicationButton:focus {
+  outline: none;
+}
+
+/*RibbonButton*/
+
+RibbonButton {
+  border: 1px solid transparent;
+  color: #EAEBEB;
+  /* background-color: #2D2E30; */
+}
+
+RibbonButton:focus {
+  border: 1px solid #456DA4;
+  color: #EAEBEB;
+  background-color: #456DA4;
+}
+
+RibbonButton::pressed {
+  color: white;
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonButton::checked {
+  color: #EAEBEB;
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonButton::hover {
+  color: white;
+  border: 1px solid #354356;
+  background-color: #354356;
+}
+
+/*RibbonControlButton*/
+
+RibbonControlButton {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #EAEBEB;
+}
+
+RibbonControlButton::pressed {
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonControlButton::checked {
+  border: 1px solid #456DA4;
+  background-color: #456DA4;
+}
+
+RibbonControlButton::hover {
+  border: 1px solid #354356;
+  background-color: #354356;
+}
+
+RibbonControlButton#RibbonGalleryButtonUp, #RibbonGalleryButtonDown, #RibbonGalleryButtonMore {
+  border: 1px solid #242526;
+  color: #EAEBEB;
+}
+
+RibbonControlButton#RibbonGalleryButtonUp {
+  qproperty-icon: url(:/image/res/lighter/ArrowUp.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonDown {
+  qproperty-icon: url(:/image/res/lighter/ArrowDown.png);
+}
+
+RibbonControlButton#RibbonGalleryButtonMore {
+  qproperty-icon: url(:/image/res/lighter/ArrowMore.png);
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  border: 1px solid transparent;
+}
+
+RibbonControlButton#RibbonBarHideGroupButton {
+  titlebar-shade-icon: url(:/image/res/lighter/Titlebar_Shade.png);
+  titlebar-unshade-icon: url(:/image/res/lighter/Titlebar_Unshade.png);
+}
+
+/*RibbonMenu*/
+
+RibbonMenu {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+  border: 1px solid #242526;
+}
+
+RibbonMenu::item {
+  padding: 5px 5px 5px 5px;
+  background-color: transparent;
+}
+
+RibbonMenu::item:selected {
+  background-color: #456DA4;
+}
+
+RibbonMenu::item:hover {
+  color: white;
+  background-color: #354356;
+  border: 1px solid #242526;
+}
+
+RibbonMenu::icon {
+  margin-left: 1px;
+}
+
+/*RibbonLineEdit*/
+
+RibbonLineEdit {
+  color: #EAEBEB;
+  border: 1px solid #242526;
+  background-color: #2D2E30;
+  selection-background-color: #242526;
+  selection-color: #000;
+}
+
+/*RibbonComboBox*/
+
+RibbonComboBox {
+  background-color: #2D2E30;
+  border: 1px solid #242526;
+}
+
+RibbonComboBox:hover {
+  border: 1px solid #354356;
+  color: #EAEBEB;
+}
+
+RibbonComboBox:editable {
+  color: #EAEBEB;
+  background-color: #2D2E30;
+  selection-background-color: #242526;
+  selection-color: #000;
+}
+
+RibbonComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  width: 15px;
+  border-left: none;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+RibbonComboBox::drop-down:hover {
+  border: 1px solid #354356;
+  background-color: #354356;
+}
+
+RibbonComboBox::down-arrow {
+  image: url(:/image/res/lighter/ArrowDown.png);
+}
+
+/*RibbonSeparator*/
+
+RibbonSeparator {
+  /*background-color: transparent;*/
+  background-color: #2D2E30;
+}
+
+RibbonPageScrollButton {
+  border: 0px solid #242526;
+  color: #EAEBEB;
+  background-color: #2D2E30;
+}
+
+RibbonPageScrollButton[arrowType="3"] {
+  border-right-width: 1px;
+}
+
+RibbonPageScrollButton[arrowType="4"] {
+  border-left-width: 1px;
+}
+
+RibbonPageScrollButton::hover {
+  color: #EAEBEB;
+  background-color: #354356;
+}
+
+/*WindowToolButton*/
+
+WindowToolButton {
+  background-color: transparent;
+  border: none;
+}
+
+WindowToolButton:focus {
+  outline: none;
+}
+
+WindowToolButton#qx_MinimizeWindowButton {
+  image: url(:/image/res/lighter/Titlebar_Min.png);
+}
+
+WindowToolButton#qx_MaximizeWindowButton {
+  image: url(:/image/res/lighter/Titlebar_Max.png);
+}
+
+WindowToolButton#qx_MaximizeWindowButton:checked {
+  image: url(:/image/res/lighter/Titlebar_Normal.png);
+}
+
+WindowToolButton#qx_MinimizeWindowButton:hover,#qx_MaximizeWindowButton:hover {
+  background-color: #5888d0;
+}
+
+WindowToolButton#qx_MinimizeWindowButton:pressed,#qx_MaximizeWindowButton:pressed {
+  background-color: #3369b9;
+}
+
+WindowToolButton#qx_CloseWindowButton {
+  image: url(:/image/res/lighter/Titlebar_Close.png);
+}
+
+WindowToolButton#qx_CloseWindowButton:hover {
+  background-color: #e81123;
+  image: url(:/image/res/lighter/Titlebar_Close_Hover.png);
+}
+
+WindowToolButton#qx_CloseWindowButton:pressed {
+  background-color: #f1707a;
+  image: url(:/image/res/lighter/Titlebar_Close_Hover.png);
+}
