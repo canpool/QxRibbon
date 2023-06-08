@@ -130,7 +130,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
 
 void RibbonBarPrivate::init()
 {
-    m_applicationButton = new RibbonApplicationButton(q);
+    m_applicationButton = new RibbonApplicationButton(tr("app"), q);
     connect(m_applicationButton, &QAbstractButton::clicked, q, &RibbonBar::applicationButtonClicked);
     m_tabBar = new RibbonTabBar(q);
     m_tabBar->setObjectName(QStringLiteral("qx_RibbonTabBar"));

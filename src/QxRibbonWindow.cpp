@@ -127,6 +127,7 @@ RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
     if (useRibbon) {
         setRibbonTheme(ribbonTheme());
         setMenuWidget(new RibbonBar(this));
+        d->resizeRibbon();
     }
 }
 
