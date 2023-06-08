@@ -288,6 +288,6 @@ void RibbonWindow::loadTheme(const QString &themeFile)
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return;
     }
-    setStyleSheet(file.readAll());
+    setStyleSheet(QString::fromUtf8(file.readAll()));
     file.close();
 }
