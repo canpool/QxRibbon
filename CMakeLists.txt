@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.5)
 
-set(QX_VERSION_RIBBON 0.5.0)
+set(QX_VERSION_RIBBON 0.5.1)
 project(QtRibbon LANGUAGES CXX)
 
 option(BUILD_EXAMPLES "build the examples" ON)
@@ -16,7 +16,6 @@ else()
 endif()
 
 set(QX_RIBBON_BIN_DIR "${CMAKE_BINARY_DIR}/${QX_RIBBON_PLATFORM}")
-set(QX_RIBBON_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 add_subdirectory(src)
 

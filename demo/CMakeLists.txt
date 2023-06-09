@@ -23,8 +23,6 @@ add_executable(${QX_RIBBON_DEMO_NAME}
     ${PROJECT_SOURCES}
 )
 
-target_include_directories(${QX_RIBBON_DEMO_NAME} PRIVATE "${QX_RIBBON_INC_DIR}")
-
 target_link_libraries(${QX_RIBBON_DEMO_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
