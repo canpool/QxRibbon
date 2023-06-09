@@ -77,34 +77,30 @@ void RibbonWindowPrivate::destroyFrameless()
 
 void RibbonWindowPrivate::setFrameless(bool frameless)
 {
-    if (m_useRibbon) {
-        if (frameless) {
-            if (Q_NULLPTR == m_framelessHelper) {
-                m_framelessHelper = new FramelessHelper(q);
-            }
-            m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
-            if (Q_NULLPTR == m_windowButtonGroup) {
-                m_windowButtonGroup = new WindowButtonGroup(q);
-            }
-            QSize s = m_windowButtonGroup->sizeHint();
-            s.setHeight(m_ribbonBar->titleBarHeight());
-            m_windowButtonGroup->setFixedSize(s);
-            m_windowButtonGroup->setWindowStates(q->windowState());
-            // see also parentResize, using move instead of parent resize event when frameless toggled
-            m_windowButtonGroup->move(q->width() - s.width() - 1, 1);
-            m_windowButtonGroup->show();
+    if (m_useRibbon && frameless) {
+        if (Q_NULLPTR == m_framelessHelper) {
+            m_framelessHelper = new FramelessHelper(q);
+        }
+        m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
+        if (Q_NULLPTR == m_windowButtonGroup) {
+            m_windowButtonGroup = new WindowButtonGroup(q);
+        }
+        QSize s = m_windowButtonGroup->sizeHint();
+        s.setHeight(m_ribbonBar->titleBarHeight());
+        m_windowButtonGroup->setFixedSize(s);
+        m_windowButtonGroup->setWindowStates(q->windowState());
+        // see also parentResize, using move instead of parent resize event when frameless toggled
+        m_windowButtonGroup->move(q->width() - s.width() - 1, 1);
+        m_windowButtonGroup->show();
 
 #ifdef Q_OS_UNIX
-            q->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+        q->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 #else
-            q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
+        q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
 #endif
-        } else {
-            destroyFrameless();
-            q->setWindowFlags(q->windowFlags() & ~Qt::FramelessWindowHint);
-        }
     } else {
         destroyFrameless();
+        q->setWindowFlags(q->windowFlags() & ~Qt::FramelessWindowHint);
     }
 }
 
