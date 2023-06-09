@@ -5,27 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDateTime>
-#include <time.h>
-
-static time_t getDateFromMacro(const char *time)
-{
-    char s_month[5];
-    int month, day, year;
-    struct tm t;
-    memset(&t, 0, sizeof(t));
-    static const char month_names[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
-
-    sscanf_s(time, "%s %d %d", s_month, (unsigned int)sizeof(s_month) - 1, &day, &year);
-
-    month = (strstr(month_names, s_month) - month_names) / 3;
-
-    t.tm_mon = month;   // [0,11]
-    t.tm_mday = day;
-    t.tm_year = year - 1900;
-    t.tm_isdst = -1;
-
-    return mktime(&t);
-}
+#include <QLocale>
 
 static QString compilerString()
 {
@@ -61,11 +41,7 @@ AboutDialog::AboutDialog(const QString &softlogo, const QString &softname, const
     layout->setSizeConstraint(QLayout::SetFixedSize);
 
     QString versionString = tr("%1 %2").arg(softname, softver);
-#if QT_VERSION < QT_VERSION_CHECK(5, 8, 0)
-    QDateTime dt = QDateTime::fromTime_t((uint)getDateFromMacro(__DATE__));
-#else
-    QDateTime dt = QDateTime::fromMSecsSinceEpoch((qint64)getDateFromMacro(__DATE__) * 1000);
-#endif
+    QDate dt = QLocale(QLocale::English).toDate(QString(__DATE__).replace("  ", " 0"), "MMM dd yyyy");
     QString buildDateInfo = tr("<br/>Built on %1 %2<br/>").arg(dt.toString("yyyy-MM-dd"), __TIME__);
     QString buildCompatibilityString = tr("Based on Qt %1 (%2, %3 bit)").arg(QLatin1String(qVersion()),
                                                                              compilerString(),
