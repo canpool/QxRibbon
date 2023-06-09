@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2023 maminjie <canpool@163.com>
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-3.0
 
 from PyQt5.QtCore import Qt, QSize, QRect
 from PyQt5.QtGui import QPixmap, QIcon, QPainter
