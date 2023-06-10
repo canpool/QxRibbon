@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(QxRibbon LANGUAGES CXX VERSION ${QX_VERSION_RIBBON})
-set(QX_RIBBON_LIB_NAME QxRibbon)
+set(QX_RIBBON_LIB_NAME QxRibbon${PROJECT_VERSION_MAJOR})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -78,6 +78,7 @@ set(QX_RIBBON_RESOURCES
 )
 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+add_definitions(-DQX_VERSION_RIBBON=${PROJECT_VERSION})
 
 add_library(${QX_RIBBON_LIB_NAME} SHARED
     ${QX_RIBBON_PUBLIC_HEADERS}

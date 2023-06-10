@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(RibbonDemo VERSION ${VERSION_SHORT})
+project(RibbonDemo)
 
 set(QX_RIBBON_DEMO_NAME RibbonDemo)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -29,8 +29,9 @@ target_link_libraries(${QX_RIBBON_DEMO_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
-find_library(QxRibbon NAMES QxRibbon)
-target_link_libraries(${QX_RIBBON_DEMO_NAME} PRIVATE QxRibbon)
+set(QX_RIBBON_LIB_NAME QxRibbon${QX_VERSION_RIBBON_MAJOR})
+find_library(QxRibbon NAMES "${QX_RIBBON_LIB_NAME}")
+target_link_libraries(${QX_RIBBON_DEMO_NAME} PRIVATE "${QX_RIBBON_LIB_NAME}")
 
 set_target_properties(${QX_RIBBON_DEMO_NAME} PROPERTIES
     AUTOMOC ON
