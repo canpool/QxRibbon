@@ -988,7 +988,7 @@ void MainWindow::createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar)
     quickAccessBar->addAction(createAction("undo", ":/icon/res/undo.svg"));
     quickAccessBar->addAction(createAction("redo", ":/icon/res/redo.svg"));
     quickAccessBar->addSeparator();
-    QMenu *m = new QMenu("Presentation File", this);
+    RibbonMenu *m = new RibbonMenu("Presentation File", this);
     m->setIcon(QIcon(":/icon/res/presentationFile.svg"));
     for (int i = 0; i < 10; ++i) {
         m->addAction(createAction(QString("file%1").arg(i + 1), ":/icon/res/file.svg"));
@@ -1007,7 +1007,7 @@ void MainWindow::createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar)
 void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
 {
     QAction *actionTheme = createAction(tr("theme"), ":/icon/res/useqss.svg");
-    RibbonMenu *menu = new RibbonMenu("theme");
+    RibbonMenu *menu = new RibbonMenu("theme", this);
     actionTheme->setMenu(menu);
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Normal")), RibbonWindow::NormalTheme));
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2013")), RibbonWindow::Office2013Theme));
