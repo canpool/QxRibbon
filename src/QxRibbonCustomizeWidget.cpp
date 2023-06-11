@@ -486,7 +486,7 @@ void RibbonCustomizeWidgetPrivate::updateModel()
                 QStandardItem *ii = new QStandardItem();
                 if (i->customWidget) {
                     // 如果是自定义窗口
-                    if (i->widget()->windowTitle().isEmpty() && i->widget()->windowIcon().isNull()) {
+                    if (i->widget()->windowTitle().isEmpty()/* && i->widget()->windowIcon().isNull()*/) {
                         delete ii;
                         continue;   // 如果窗口啥也没有，就跳过
                     }
@@ -915,7 +915,7 @@ void RibbonCustomizeWidget::fromXml(const QString &xmlpath)
  */
 bool RibbonCustomizeWidget::fromXml(QXmlStreamReader *xml, RibbonWindow *w, RibbonActionsManager *mgr)
 {
-    // 先找到sa-ribbon-customize标签
+    // 先找到qx-ribbon-customize标签
     QList<RibbonCustomizeData> cds = ribbon_customize_datas_from_xml(xml, mgr);
 
     return (ribbon_customize_datas_apply(cds, w) > 0);

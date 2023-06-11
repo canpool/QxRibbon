@@ -388,6 +388,7 @@ void MainWindow::createPageMain(RibbonPage *page)
 
     QRadioButton *r = new QRadioButton();
     r->setText(tr("use office style"));
+    r->setWindowTitle(r->text());
     r->setObjectName(("use office style"));
     r->setChecked(true);
     groupStyle->addSmallWidget(r);
@@ -396,6 +397,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     r = new QRadioButton();
     r->setObjectName(("use wps style"));
     r->setText(tr("use wps style"));
+    r->setWindowTitle(r->text());
     r->setChecked(false);
     groupStyle->addSmallWidget(r);
     g->addButton(r, RibbonBar::WpsLiteStyle);
@@ -403,6 +405,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     r = new QRadioButton();
     r->setObjectName(("use office 2row style"));
     r->setText(tr("use office 2 row style"));
+    r->setWindowTitle(r->text());
     r->setChecked(false);
     groupStyle->addSmallWidget(r);
     g->addButton(r, RibbonBar::OfficeStyleTwoRow);
@@ -410,6 +413,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     r = new QRadioButton();
     r->setObjectName(("use wps 2row style"));
     r->setText(tr("use wps 2row style"));
+    r->setWindowTitle(r->text());
     r->setChecked(false);
     groupStyle->addSmallWidget(r);
     g->addButton(r, RibbonBar::WpsLiteStyleTwoRow);
@@ -425,6 +429,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     QCheckBox *cb = new QCheckBox();
     cb->setObjectName(QStringLiteral("use frameless"));
     cb->setText(tr("use frameless"));
+    cb->setWindowTitle(cb->text());
     cb->setChecked(isFrameless());
     groupStyle->addSmallWidget(cb);
     connect(cb, &QCheckBox::clicked, this, [this](bool checked) {
@@ -551,8 +556,8 @@ void MainWindow::createPageMain(RibbonPage *page)
     RibbonLineEdit *lineEdit = new RibbonLineEdit(this);
 
     lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lineEdit->setWindowTitle("Line Edit");
-    lineEdit->setText("RibbonLineEdit");
+    lineEdit->setText(tr("RibbonLineEdit"));
+    lineEdit->setWindowTitle(lineEdit->text());
     groupWidgetTest->addSmallWidget(lineEdit);
     QWidget *w = lineEdit->parentWidget();
 
@@ -563,6 +568,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     RibbonCheckBox *checkBox = new RibbonCheckBox(this);
 
     checkBox->setText(tr("checkBox"));
+    checkBox->setWindowTitle(checkBox->text());
     groupWidgetTest->addSmallWidget(checkBox);
     groupWidgetTest->addSeparator();
 
