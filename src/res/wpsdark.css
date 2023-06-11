@@ -1,4 +1,4 @@
-/* start ribbon set*/
+/* qt standard controls */
 
 QWidget {
   color: #EAEBEB;
@@ -7,6 +7,99 @@ QWidget {
 QPushButton {
   color: black;
 }
+
+QScrollBar::sub-page, QScrollBar::add-page {
+  width:15px;
+  background: #505050;
+}
+
+QScrollBar:vertical {
+  width: 15px;
+  background-color: rgba(0,0,0,0%);
+}
+
+QScrollBar:horizontal {
+  height: 15px;
+  background-color: rgba(0,0,0,0%);
+}
+
+QScrollArea {
+  border: 0px;
+}
+
+QTreeView, QListView, QTableView, QTabWidget::pane {
+  border: 1px solid #303030;
+  selection-background-color: #636363;
+  selection-color: #232524;
+  alternate-background-color: rgba(221,224,231,200);
+  gridline-color: #D8D8D8;
+}
+
+QTreeView, QListView, QTableView, QTabWidget {
+  show-decoration-selected: 1;
+  alternate-background-color: rgb(245, 245, 0);
+}
+
+QTreeView, QListView, QTableView, QSplitter::handle {
+  background: #2e2f30;
+}
+
+QTableView::item:selected, QListView::item:selected, QTreeView::item:selected {
+  color: white;
+  background: #19191a;
+}
+
+QTableView::item:hover, QListView::item:hover, QTreeView::item:hover {
+  color: white;
+  background: #595b5d;
+}
+
+QTableView::item, QListView::item, QTreeView::item {
+  padding: 0px;
+  margin: 0px;
+}
+
+QHeaderView {
+  background: #404244;
+}
+
+QHeaderView::section, QTableCornerButton:section {
+  padding: 2px;
+  margin: 0px;
+  color: #FFFFFF;
+  border: 1px solid #575757;
+  border-left-width: 0px;
+  border-right-width: 1px;
+  border-top-width: 0px;
+  border-bottom-width: 1px;
+  background: #404244;
+}
+
+QHeaderView::section::checked {
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+}
+
+QTreeView::branch:closed:has-children:has-siblings {
+}
+
+QTreeView::branch:has-children:!has-siblings:closed {
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+}
+
+QTreeView::branch:open:has-children:has-siblings {
+}
+
+QTreeView::branch:open:has-children:!has-siblings {
+}
+
+/* start ribbon set*/
 
 RibbonWindow {
   background-color: #2D2E30;
@@ -374,7 +467,7 @@ RibbonMenu::icon {
 
 /*RibbonLineEdit*/
 
-RibbonLineEdit {
+QLineEdit {
   color: #EAEBEB;
   border: 1px solid #242526;
   background-color: #2D2E30;
@@ -384,24 +477,24 @@ RibbonLineEdit {
 
 /*RibbonComboBox*/
 
-RibbonComboBox {
+QComboBox {
   background-color: #2D2E30;
   border: 1px solid #242526;
 }
 
-RibbonComboBox:hover {
+QComboBox:hover {
   border: 1px solid #354356;
   color: #EAEBEB;
 }
 
-RibbonComboBox:editable {
+QComboBox:editable {
   color: #EAEBEB;
   background-color: #2D2E30;
   selection-background-color: #242526;
   selection-color: #000;
 }
 
-RibbonComboBox::drop-down {
+QComboBox::drop-down {
   subcontrol-origin: padding;
   subcontrol-position: top right;
   width: 15px;
@@ -410,12 +503,12 @@ RibbonComboBox::drop-down {
   border-bottom-right-radius: 0px;
 }
 
-RibbonComboBox::drop-down:hover {
+QComboBox::drop-down:hover {
   border: 1px solid #354356;
   background-color: #354356;
 }
 
-RibbonComboBox::down-arrow {
+QComboBox::down-arrow {
   image: url(:/image/res/lighter/ArrowDown.png);
 }
 

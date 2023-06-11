@@ -164,7 +164,7 @@ void MainWindow::onActionCustomizeTriggered(bool b)
 void MainWindow::onActionCustomizeAndSaveTriggered(bool b)
 {
     Q_UNUSED(b);
-    RibbonCustomizeDialog dlg(this);
+    RibbonCustomizeDialog dlg(this, this);
     dlg.setupActionsManager(m_actMgr);
     dlg.fromXml("customize.xml");
     if (RibbonCustomizeDialog::Accepted == dlg.exec()) {
