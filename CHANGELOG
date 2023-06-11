@@ -1,4 +1,19 @@
 
+0.5.2
+---
+Feature
+- Support dark theme
+- Only customize widgets with title
+
+Interface
+- Add isPageContextCoverTab, setPageContextCoverTab for RibbonBar
+- Remove windowTitleTextColor, setWindowTitleTextColor for RibbonBar
+
+Bugfix
+- Fix abnormal show of app button after RibbonWindow init (#I7C31M)
+- Fix frameless show after setting standard QMenuBar (#I7CDUT)
+
+
 0.5.1
 ---
 Feature
