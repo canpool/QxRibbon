@@ -5,7 +5,6 @@
 #include "QxRibbonWindow.h"
 #include "FramelessHelper.h"
 #include "QxRibbonBar.h"
-#include "QxRibbonManager.h"
 #include "QxWindowButtonGroup.h"
 
 #include <QApplication>
@@ -106,6 +105,9 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
 
 void RibbonWindowPrivate::resizeRibbon()
 {
+    if (m_ribbonBar == Q_NULLPTR) {
+        return;
+    }
     if (m_windowButtonGroup) {
         m_ribbonBar->setWindowButtonsSize(m_windowButtonGroup->size());
     } else {

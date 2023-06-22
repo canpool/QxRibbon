@@ -393,7 +393,6 @@ QList<QAction *> RibbonActionsManager::search(const QString &text)
     if (kws.isEmpty()) {
         kws.append(text);
     }
-    QList<QAction *> acts = d->m_actionToKey.keys();
 
     for (const QString &k : kws) {
         for (auto i = d->m_actionToKey.begin(); i != d->m_actionToKey.end(); ++i) {

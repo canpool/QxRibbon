@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonContainers.h"
-#include "QxRibbonDrawHelper.h"
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QLabel>

@@ -10,7 +10,6 @@
 #include "QxRibbonManager.h"
 #include "QxRibbonQuickAccessBar.h"
 #include "QxRibbonTabBar.h"
-#include "QxWindowButtonGroup.h"
 
 #include <QAction>
 #include <QApplication>

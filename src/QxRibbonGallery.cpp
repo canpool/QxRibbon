@@ -4,7 +4,6 @@
 **/
 #include "QxRibbonGallery.h"
 #include "QxRibbonControls.h"
-#include "QxRibbonManager.h"
 
 #include <QApplication>
 #include <QIcon>

@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonButton.h"
-#include "QxRibbonDrawHelper.h"
-#include "QxRibbonManager.h"
+#include "QxRibbonGroup.h"
 
 #include <QCursor>
 #include <QAction>

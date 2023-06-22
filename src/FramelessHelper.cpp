@@ -197,7 +197,7 @@ bool WidgetData::handleWidgetEvent(QEvent *event)
     case QEvent::MouseMove:
         return handleMouseMoveEvent(static_cast<QMouseEvent *>(event));
     case QEvent::Leave:
-        return handleLeaveEvent(static_cast<QMouseEvent *>(event));
+        return handleLeaveEvent(event);
     case QEvent::HoverMove:
         return handleHoverMoveEvent(static_cast<QHoverEvent *>(event));
     case QEvent::MouseButtonDblClick:
