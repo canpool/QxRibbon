@@ -15,6 +15,8 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     aboutdialog.h
     aboutdialog.cpp
+    editablecontainer.h
+    editablecontainer.cpp
     main.cpp
     demo.qrc
 )

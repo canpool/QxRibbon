@@ -39,6 +39,7 @@
 #include <QActionGroup>
 
 #include "aboutdialog.h"
+#include "editablecontainer.h"
 
 QX_USE_NAMESPACE
 
@@ -62,7 +63,9 @@ MainWindow::MainWindow(QWidget *par)
     PRINT_COST_START();
     setWindowTitle(("ribbon mainwindow demo"));
     m_edit = new QTextEdit(this);
-    setCentralWidget(m_edit);
+    EditableContainer *ec = new EditableContainer(this);
+    ec->setWidget(m_edit);
+    setCentralWidget(ec);
     setStatusBar(new QStatusBar());
 
     m_themeGroup = new QActionGroup(this);

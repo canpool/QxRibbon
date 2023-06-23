@@ -15,11 +15,13 @@ DESTDIR = $${OUT_ROOT}/bin
 
 SOURCES += \
     aboutdialog.cpp \
+    editablecontainer.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     aboutdialog.h \
+    editablecontainer.h \
     mainwindow.h
 
 include($$PWD/../common.pri)
