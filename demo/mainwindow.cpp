@@ -234,6 +234,7 @@ void MainWindow::onActionUseQssTriggered()
         return;
     }
     QString qss(f.readAll());
+    f.close();
     m_edit->setText(qss);
     this->ribbonBar()->setStyleSheet(qss);
 }
