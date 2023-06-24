@@ -574,6 +574,11 @@ void MainWindow::createPageMain(RibbonPage *page)
     checkBox->setText(tr("checkBox"));
     checkBox->setWindowTitle(checkBox->text());
     groupWidgetTest->addSmallWidget(checkBox);
+
+    QSpinBox *spinBox = new QSpinBox(this);
+    spinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    groupWidgetTest->addSmallWidget(spinBox);
+
     groupWidgetTest->addSeparator();
 
     QCalendarWidget *calendarWidget = new QCalendarWidget(this);

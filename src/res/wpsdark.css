@@ -185,12 +185,12 @@ QTreeView::branch:open:has-children:!has-siblings {
 QTabWidget::tab-bar {
   alignment: left;
 }
-/*
+
 QTabWidget::pane {
    position: absolute;
    top: -0.2em;
 }
-
+/*
 QTabBar::tab {
   border: 1px solid #303030;
   padding: 3px 8px 3px 8px;
@@ -362,7 +362,7 @@ QLineEdit[echoMode="2"] {
 }
 
 QLineEdit {
-  min-height: 22px;
+  min-height: 18px;
 }
 
 QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover,
@@ -391,7 +391,7 @@ QTimeEdit[calendarPopup="true"]::down-arrow, QDateTimeEdit[calendarPopup="true"]
 }
 
 QComboBox, QDateEdit, QTimeEdit, QDateTimeEdit, QSpinBox, QDoubleSpinBox {
-  height: 22px;
+  min-height: 18px;
 }
 
 QComboBox::drop-down, QDateEdit::drop-down, QTimeEdit::drop-down, QDateTimeEdit::drop-down {
@@ -467,8 +467,8 @@ QToolButton#qt_calendar_monthbutton,
 QToolButton#qt_calendar_yearbutton {
   border: 0px solid #000000;
   border-radius: 0px;
-  margin: 3px 3px 3px 3px;
-  padding: 3px;
+  /* margin: 3px 3px 3px 3px;
+  padding: 3px; */
   background-color: #00000000;
 }
 
@@ -494,7 +494,7 @@ QDateTimeEdit QCalendarWidget QSpinBox#qt_calendar_yearedit {
 }
 
 QCalendarWidget QToolButton::menu-indicator{
-  image:None;
+  image: None;
 }
 
 QCalendarWidget QTableView {
@@ -533,7 +533,7 @@ QDockWidget {
 
 RibbonBar {
   background-color: #404244;
-  border: solid #242526;
+  border: solid #303030;
   border-width: 1px 1px 0px 1px;
 }
 
@@ -606,7 +606,7 @@ RibbonTabBar::tab:!selected {
 
 RibbonStackedWidget {
   background-color: #404244;
-  border: 1pt solid #242526;
+  border: 1pt solid #303030;
   border-top-width: 0px;
 }
 
@@ -669,7 +669,7 @@ RibbonGroupOptionButton {
 /*RibbonGallery*/
 
 RibbonGallery {
-  border: 1px solid #242526;
+  border: 1px solid #303030;
   background-color: transparent;
 }
 
@@ -712,7 +712,7 @@ RibbonButtonGroup QAbstractButton {
 }
 
 RibbonGroup > RibbonButtonGroup {
-  border: 1pt solid #242526;
+  border: 1pt solid #303030;
 }
 
 /*RibbonQuickAccessBar*/
@@ -721,13 +721,13 @@ RibbonQuickAccessBar {
   background-color: transparent;
 }
 
-/*RibbonCtrlContainer*/
-
-RibbonCtrlContainer {
+RibbonQuickAccessBar QWidget {
   background-color: transparent;
 }
 
-RibbonCtrlContainer QWidget {
+/*RibbonCtrlContainer*/
+
+RibbonCtrlContainer {
   background-color: transparent;
 }
 
@@ -755,6 +755,10 @@ RibbonApplicationButton:focus {
 
 RibbonButton {
   border: 1px solid transparent;
+}
+
+RibbonButton[popupMode="1"] {
+  padding-right: 0px;
 }
 
 RibbonButton:focus {
@@ -799,7 +803,7 @@ RibbonControlButton:hover {
 }
 
 RibbonControlButton#RibbonGalleryButtonUp, #RibbonGalleryButtonDown, #RibbonGalleryButtonMore {
-  border: 1px solid #242526;
+  border: 1px solid #303030;
 }
 
 RibbonControlButton#RibbonGalleryButtonUp {
@@ -827,7 +831,7 @@ RibbonControlButton#RibbonBarHideGroupButton {
 
 RibbonMenu {
   background-color: #404244;
-  border: 1px solid #242526;
+  border: 1px solid #303030;
 }
 
 RibbonMenu::item {
@@ -843,7 +847,7 @@ RibbonMenu::item:selected {
 RibbonMenu::item:hover {
   color: #ffffff;
   background-color: #595b5d;
-  border: 1px solid #242526;
+  border: 1px solid #303030;
 }
 
 RibbonMenu::icon {
@@ -853,27 +857,27 @@ RibbonMenu::icon {
 /*RibbonLineEdit*/
 
 QLineEdit {
-  border: 1px solid #242526;
+  border: 1px solid #303030;
   background-color: #404244;
-  selection-background-color: #242526;
-  selection-color: #000;
+  selection-background-color: #19191a;
+  selection-color: #ffffff;
 }
 
 /*RibbonComboBox*/
 
 QComboBox {
   background-color: #404244;
-  border: 1px solid #242526;
+  border: 1px solid #303030;
 }
 
 QComboBox:hover {
-  border: 1px solid #595b5d;
+  border: 1px solid #0075d1;
 }
 
 QComboBox:editable {
   background-color: #404244;
-  selection-background-color: #242526;
-  selection-color: #000;
+  selection-background-color: #19191a;
+  selection-color: #ffffff;
 }
 
 QComboBox::drop-down {
