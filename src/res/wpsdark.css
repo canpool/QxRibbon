@@ -43,13 +43,9 @@ QWidget:disabled {
   border: 1px solid #303030;
 }
 
-/* QPushButton, QToolButton{
-  border-style: none;
-  padding: 3px;
-} */
-
 QPushButton, QToolButton {
   background: #505050;
+  min-height: 18px;
 }
 
 QToolButton::menu-indicator,
@@ -361,10 +357,6 @@ QLineEdit[echoMode="2"] {
   font-size: 10px;
 }
 
-QLineEdit {
-  min-height: 18px;
-}
-
 QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover,
 QTimeEdit:hover, QDateEdit:hover, QDateTimeEdit:hover {
   border: 1px solid #0075d1;
@@ -390,7 +382,7 @@ QComboBox::down-arrow, QDateEdit[calendarPopup="true"]::down-arrow,
 QTimeEdit[calendarPopup="true"]::down-arrow, QDateTimeEdit[calendarPopup="true"]::down-arrow{
 }
 
-QComboBox, QDateEdit, QTimeEdit, QDateTimeEdit, QSpinBox, QDoubleSpinBox {
+QLineEdit, QComboBox, QDateEdit, QTimeEdit, QDateTimeEdit, QSpinBox, QDoubleSpinBox {
   min-height: 18px;
 }
 
@@ -404,7 +396,7 @@ QComboBox::down-arrow {
 }
 
 QComboBox {
-  border: 0px solid #303030;
+  border: 1px solid #303030;
 }
 
 QComboBox:editable {
@@ -425,6 +417,10 @@ QComboBox QAbstractItemView {
 QComboBox QAbstractItemView::item {
   font-size: 15px;
   height: 40px;
+}
+
+QStatusBar {
+  background: #404244;
 }
 
 QStatusBar::item {
@@ -469,7 +465,7 @@ QToolButton#qt_calendar_yearbutton {
   border-radius: 0px;
   /* margin: 3px 3px 3px 3px;
   padding: 3px; */
-  background-color: #00000000;
+  background-color: transparent;
 }
 
 QToolButton#qt_calendar_prevmonth:hover,
@@ -678,7 +674,7 @@ RibbonGallery {
 RibbonGalleryGroup {
   show-decoration-selected: 1;
   background-color: transparent;
-  border: 0px solid #303030;
+  border: 1px solid #303030;
 }
 
 RibbonGalleryGroup::item:selected {
