@@ -116,7 +116,7 @@ RibbonGroupOptionButton {
   color: #333;
 }
 
-RibbonGroupOptionButton::hover {
+RibbonGroupOptionButton:hover {
   background-color: #cee7fc;
   border: 0px;
 }
@@ -189,11 +189,11 @@ RibbonApplicationButton {
   background-color: #2b579a;
 }
 
-RibbonApplicationButton::hover {
+RibbonApplicationButton:hover {
   background-color: #5888d0;
 }
 
-RibbonApplicationButton::pressed {
+RibbonApplicationButton:pressed {
   background-color: #3369b9;
 }
 
@@ -215,19 +215,19 @@ RibbonButton:focus {
   background-color: #fcfdfe;
 }
 
-RibbonButton::pressed {
+RibbonButton:pressed {
   color: #000;
   border: 1px solid#269bf4;
   background-color: #9ed2f9;
 }
 
-RibbonButton::checked {
+RibbonButton:checked {
   color: #333;
   border: 1px solid #b9defa;
   background-color: #cee8fc;
 }
 
-RibbonButton::hover {
+RibbonButton:hover {
   color: #000;
   border: 1px solid #badffa;
   background-color: #cee7fc;
@@ -241,17 +241,17 @@ RibbonControlButton {
   color: #333;
 }
 
-RibbonControlButton::pressed {
+RibbonControlButton:pressed {
   border: 1px solid #269bf4;
   background-color: #9ed2f9;
 }
 
-RibbonControlButton::checked {
+RibbonControlButton:checked {
   border: 1px solid #b9defa;
   background-color: #cee8fc;
 }
 
-RibbonControlButton::hover {
+RibbonControlButton:hover {
   border: 1px solid #badffa;
   background-color: #cee7fc;
 }
@@ -374,7 +374,7 @@ RibbonPageScrollButton[arrowType="4"] {
   border-left-width: 1px;
 }
 
-RibbonPageScrollButton::hover {
+RibbonPageScrollButton:hover {
   color: #000000;
   background-color: #cee7fc;
 }

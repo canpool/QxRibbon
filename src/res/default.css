@@ -115,7 +115,7 @@ RibbonGroupOptionButton {
   color: #444444;
 }
 
-RibbonGroupOptionButton::hover {
+RibbonGroupOptionButton:hover {
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
   border: 0px;
 }
@@ -188,12 +188,12 @@ RibbonApplicationButton {
       stop:1 #419ACF);
 }
 
-RibbonApplicationButton::hover {
+RibbonApplicationButton:hover {
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #7BB2EB, stop:0.5 #477ECD, stop:0.51 #114ECF,
       stop:1 #80E1FF);
 }
 
-RibbonApplicationButton::pressed {
+RibbonApplicationButton:pressed {
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #467BBB, stop:0.5 #2F63AE, stop:0.51 #1C438A,
       stop:1 #358BC9);
 }
@@ -210,19 +210,19 @@ RibbonButton {
   background-color: transparent;
 }
 
-RibbonButton::pressed {
+RibbonButton:pressed {
   color: #444444;
   border: 1px solid #FCBF21;
   background-color: #FCD364;
 }
 
-RibbonButton::checked {
+RibbonButton:checked {
   color: #444444;
   border: 1px solid #FCD364;
   background-color: #FCD364;
 }
 
-RibbonButton::hover {
+RibbonButton:hover {
   color: #000000;
   border: 1px solid #FCD364;
   background-color: #FCDE89;
@@ -236,17 +236,17 @@ RibbonControlButton {
   color: #444444;
 }
 
-RibbonControlButton::pressed {
+RibbonControlButton:pressed {
   border: 1px solid #FCD364;
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
 }
 
-RibbonControlButton::checked {
+RibbonControlButton:checked {
   border: 1px solid #FCD364;
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
 }
 
-RibbonControlButton::hover {
+RibbonControlButton:hover {
   border: 1px solid #FCD364;
   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FDEEB3, stop:0.1282 #FDE38A, stop:0.8333 #FCE58C, stop:1 #FDFDEB);
 }
@@ -370,7 +370,7 @@ RibbonPageScrollButton[arrowType="4"] {
   border-left-width: 1px;
 }
 
-RibbonPageScrollButton::hover {
+RibbonPageScrollButton:hover {
   color: #000000;
   background-color: #cee7fc;
 }
