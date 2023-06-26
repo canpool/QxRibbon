@@ -36,7 +36,7 @@ class RibbonBar;
 class QX_RIBBON_EXPORT RibbonWindow : public QMainWindow
 {
     Q_OBJECT
-    Q_PROPERTY(RibbonTheme ribbonTheme READ ribbonTheme WRITE setRibbonTheme)
+    Q_PROPERTY(int ribbonTheme READ ribbonTheme WRITE setRibbonTheme)
 public:
     enum RibbonTheme {
         NormalTheme,
@@ -52,8 +52,8 @@ public:
     const RibbonBar *ribbonBar() const;
     RibbonBar *ribbonBar();
 
-    void setRibbonTheme(RibbonTheme theme);
-    RibbonTheme ribbonTheme() const;
+    void setRibbonTheme(int theme);
+    int ribbonTheme() const;
 
     bool isUseRibbon() const;
 

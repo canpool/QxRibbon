@@ -24,7 +24,7 @@ public:
 public:
     RibbonWindow *q;
     RibbonBar *m_ribbonBar;
-    RibbonWindow::RibbonTheme m_theme;
+    int m_theme;
     WindowButtonGroup *m_windowButtonGroup;
     FramelessHelper *m_framelessHelper;
     bool m_useRibbon;
@@ -144,7 +144,7 @@ RibbonBar *RibbonWindow::ribbonBar()
     return d->m_ribbonBar;
 }
 
-void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
+void RibbonWindow::setRibbonTheme(int theme)
 {
     switch (theme) {
     case Office2013Theme:
@@ -154,9 +154,9 @@ void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
         loadTheme(":/theme/res/wpsdark.css");
         break;
     case NormalTheme:
-        /* fallthrough */
-    default:
         loadTheme(":/theme/res/default.css");
+        break;
+    default:
         break;
     }
     d->m_theme = theme;
@@ -166,7 +166,7 @@ void RibbonWindow::setRibbonTheme(RibbonWindow::RibbonTheme theme)
     }
 }
 
-RibbonWindow::RibbonTheme RibbonWindow::ribbonTheme() const
+int RibbonWindow::ribbonTheme() const
 {
     return d->m_theme;
 }

@@ -1412,6 +1412,7 @@ void RibbonBar::activeRightButtonGroup()
 {
     if (Q_NULLPTR == d->m_rightButtonGroup) {
         d->m_rightButtonGroup = new RibbonButtonGroup(this);
+        d->m_rightButtonGroup->setObjectName(QStringLiteral("qx_RibbonButtonGroup"));
         d->m_rightButtonGroup->setFrameShape(QFrame::NoFrame);
     }
     d->m_rightButtonGroup->show();

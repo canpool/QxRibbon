@@ -17,7 +17,12 @@ class MainWindow : public RibbonWindow
 {
     Q_OBJECT
 public:
+    enum RibbonThemeCustom {
+        Office2016BlueTheme = CustomTheme + 1,
+    };
+public:
     MainWindow(QWidget *par = nullptr);
+    void setRibbonTheme(int theme);
 private:
     void createPageMain(RibbonPage *page);
     void createPageOther(RibbonPage *page);

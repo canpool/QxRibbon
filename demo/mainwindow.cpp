@@ -72,10 +72,11 @@ MainWindow::MainWindow(QWidget *par)
 
     RibbonBar *ribbon = ribbonBar();
     // 通过setContentsMargins设置ribbon四周的间距
-    ribbon->setContentsMargins(5, 0, 5, 0);
+    ribbon->setContentsMargins(2, 0, 2, 0);
     // 设置applicationButton
     PRINT_COST("setCentralWidget & setWindowTitle");
     ribbon->applicationButton()->setText(("File"));
+    ribbon->applicationButton()->setCheckable(true);
     connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
 
     // 添加主标签页 - 通过addPage工厂函数添加
@@ -128,9 +129,23 @@ MainWindow::MainWindow(QWidget *par)
     #define RIBBON_THEME_INDEX  1
     if (m_themeGroup->actions().count() > RIBBON_THEME_INDEX) {
         m_themeGroup->actions().at(RIBBON_THEME_INDEX)->trigger();
+    } else {
+        m_themeGroup->actions().at(0)->trigger();
     }
 
     qDebug() << RibbonSubElementStyleOpt;
+}
+
+void MainWindow::setRibbonTheme(int theme)
+{
+    switch (theme) {
+    case Office2016BlueTheme:
+        loadTheme(":/theme/res/office2016blue.css");
+        break;
+    default:
+        break;
+    }
+    RibbonWindow::setRibbonTheme(theme);
 }
 
 void MainWindow::onShowContextPage(bool on)
@@ -273,7 +288,7 @@ void MainWindow::onActionChangeThemeTriggered()
     if (action) {
         int theme = action->data().toInt();
         // 暗色系
-        if (theme == RibbonWindow::WpsdarkTheme) {
+        if (theme == RibbonWindow::WpsdarkTheme || theme == MainWindow::Office2016BlueTheme) {
             ribbonBar()->setPageContextCoverTab(false);
             ribbonBar()->setTabBarBaseLineColor(QColor("#456DA4")); // from qss file
         } else {
@@ -281,7 +296,7 @@ void MainWindow::onActionChangeThemeTriggered()
             ribbonBar()->setPageContextCoverTab(true);
             ribbonBar()->setTabBarBaseLineColor(QColor(186, 201, 219));
         }
-        setRibbonTheme(static_cast<RibbonWindow::RibbonTheme>(theme));
+        setRibbonTheme(theme);
     }
 }
 
@@ -345,6 +360,7 @@ void MainWindow::onApplicationButtonClicked()
     w.resize(200, 100);
     w.move(mapToGlobal(ribbonBar()->applicationButton()->geometry().bottomLeft()));
     w.exec();
+    ribbonBar()->applicationButton()->setChecked(false);
 }
 
 void MainWindow::createPageMain(RibbonPage *page)
@@ -1027,6 +1043,7 @@ void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Normal")), RibbonWindow::NormalTheme));
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2013")), RibbonWindow::Office2013Theme));
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Wpsdark")), RibbonWindow::WpsdarkTheme));
+    m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2016Blue")), MainWindow::Office2016BlueTheme));
     rightBar->addAction(actionTheme);
 
     QAction *actionHelp = createAction(tr("help"), ":/icon/res/help.svg");

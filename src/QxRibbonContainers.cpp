@@ -35,7 +35,7 @@ RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate(RibbonCtrlContainer *p)
 {
     q = p;
     m_layout = new QHBoxLayout(p);
-    m_layout->setSpacing(1);
+    m_layout->setSpacing(2);
     m_layout->setObjectName(QString::fromUtf8("layout"));
     m_layout->setContentsMargins(0, 0, 0, 0);
 

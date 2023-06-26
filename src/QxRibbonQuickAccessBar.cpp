@@ -16,6 +16,7 @@ RibbonQuickAccessBar::RibbonQuickAccessBar(QWidget *parent)
     , d(new RibbonQuickAccessBarPrivate)
 {
     d->m_buttonGroup = new RibbonButtonGroup(this);
+    d->m_buttonGroup->setObjectName(QStringLiteral("qx_RibbonButtonGroup"));
     setWidget(d->m_buttonGroup);
     setTitleVisible(false);
 }
