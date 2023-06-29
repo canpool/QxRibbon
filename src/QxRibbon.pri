@@ -18,6 +18,7 @@ SOURCES += \
     $$PWD/QxRibbonCustomizeDialog.cpp \
     $$PWD/QxRibbonCustomizeWidget.cpp \
     $$PWD/QxRibbonFactory.cpp \
+    $$PWD/QxRibbonGlobal.cpp \
     $$PWD/QxRibbonGroup.cpp \
     $$PWD/QxRibbonGroupLayout.cpp \
     $$PWD/QxRibbonManager.cpp \

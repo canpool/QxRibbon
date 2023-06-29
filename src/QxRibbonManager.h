@@ -32,9 +32,3 @@ private:
 #define RibbonSubElementStyleOpt RibbonSubElementFactory->getRibbonStyleOption()
 #endif
 
-
-QX_BEGIN_NAMESPACE
-
-QX_RIBBON_EXPORT const char *getRibbonVersion();
-
-QX_END_NAMESPACE

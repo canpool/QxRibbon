@@ -37,14 +37,3 @@ void RibbonManager::setupFactory(RibbonFactory *factory)
     }
     m_factory = factory;
 }
-
-QX_BEGIN_NAMESPACE
-
-#define QX_VERSION_RIBBON_STR QX_QUOTE(QX_VERSION_RIBBON)
-
-const char *getRibbonVersion(void)
-{
-    return QX_VERSION_RIBBON_STR;
-}
-
-QX_END_NAMESPACE
