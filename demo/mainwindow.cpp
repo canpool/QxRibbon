@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *par)
     , m_customizeWidget(nullptr)
 {
     PRINT_COST_START();
-    setWindowTitle(("ribbon mainwindow demo"));
+    setWindowTitle(tr("ribbon mainwindow demo"));
     m_edit = new QTextEdit(this);
     EditableContainer *ec = new EditableContainer(this);
     ec->setWidget(m_edit);
@@ -75,12 +75,12 @@ MainWindow::MainWindow(QWidget *par)
     ribbon->setContentsMargins(2, 0, 2, 0);
     // 设置applicationButton
     PRINT_COST("setCentralWidget & setWindowTitle");
-    ribbon->applicationButton()->setText(("File"));
+    ribbon->applicationButton()->setText(tr("&File"));
     ribbon->applicationButton()->setCheckable(true);
     connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
 
     // 添加主标签页 - 通过addPage工厂函数添加
-    RibbonPage *pageMain = ribbon->addPage(tr("Main"));
+    RibbonPage *pageMain = ribbon->addPage(tr("&Main"));
     pageMain->setObjectName(("pageMain"));
     createPageMain(pageMain);
     PRINT_COST("new main page");
@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *par)
     // 添加删除标签页
     RibbonPage *pageDelete = new RibbonPage();
 
-    pageDelete->setPageName(("Delete"));
+    pageDelete->setPageName(tr("&Delete"));
     pageDelete->setObjectName(("pageDelete"));
     ribbon->addPage(pageDelete);
     createPageDelete(pageDelete);
@@ -104,7 +104,7 @@ MainWindow::MainWindow(QWidget *par)
     // 添加尺寸标签页
     RibbonPage *pageSize = new RibbonPage();
 
-    pageSize->setPageName(("Size(example long page)"));
+    pageSize->setPageName(tr("Size(example long page)"));
     pageSize->setObjectName(("pageSize"));
     ribbon->addPage(pageSize);
     createPageSize(pageSize);
@@ -456,7 +456,7 @@ void MainWindow::createPageMain(RibbonPage *page)
         this->setFrameless(checked);
     });
 
-    RibbonGroup *groupToolButtonStyle = page->addGroup(("ribbon toolbutton style"));
+    RibbonGroup *groupToolButtonStyle = page->addGroup(tr("ribbon toolbutton style"));
 
     RibbonButton *btn;
     RibbonMenu *menu = new RibbonMenu(this);
@@ -530,7 +530,7 @@ void MainWindow::createPageMain(RibbonPage *page)
     //! 2
     //! group 2 start
     //!
-    RibbonGroup *group2 = page->addGroup(("group 2"));
+    RibbonGroup *group2 = page->addGroup(tr("group 2"));
 
     QAction *actShowContext = createAction(tr("show Context"), ":/icon/res/showContext.svg");
     actShowContext->setCheckable(true);
@@ -567,7 +567,7 @@ void MainWindow::createPageMain(RibbonPage *page)
 
     com = new RibbonComboBox(this);
     com->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    com->setWindowTitle("ComboBox Editable");
+    com->setWindowTitle(tr("ComboBox Editable"));
     for (int i = 0; i < 40; ++i) {
         com->addItem(QString("item %1").arg(i + 1));
     }
@@ -643,35 +643,32 @@ void MainWindow::createPageOther(RibbonPage *page)
         QAction *act = this->createAction(text, iconurl);
         this->connect(act, &QAction::triggered, this, [this, text]() {
             if (this->m_edit) {
-                this->m_edit->append(QString("%1 triggered").arg(text));
+                this->m_edit->append(tr("%1 triggered").arg(text));
             }
         });
         return act;
     };
-    galleryActions.append(lambdaCreateGalleryAction("Document File", ":/gallery-icon/res/gallery/Document-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Download File", ":/gallery-icon/res/gallery/Download-File.svg"));
-    galleryActions.append(
-        lambdaCreateGalleryAction("Drive File Four Word", ":/gallery-icon/res/gallery/Drive-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Dropbox File", ":/gallery-icon/res/gallery/Dropbox-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Email File", ":/gallery-icon/res/gallery/Email-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Encode File", ":/gallery-icon/res/gallery/Encode-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Favorit File", ":/gallery-icon/res/gallery/Favorit-File.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("File Error", ":/gallery-icon/res/gallery/File-Error.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("File Read Only", ":/gallery-icon/res/gallery/File-Readonly.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("File Settings", ":/gallery-icon/res/gallery/File-Settings.svg"));
-    galleryActions.append(
-        lambdaCreateGalleryAction("Presentation File", ":/gallery-icon/res/gallery/Presentation-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Document File"), ":/gallery-icon/res/gallery/Document-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Download File"), ":/gallery-icon/res/gallery/Download-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Drive File Four Word"), ":/gallery-icon/res/gallery/Drive-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Dropbox File"), ":/gallery-icon/res/gallery/Dropbox-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Email File"), ":/gallery-icon/res/gallery/Email-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Encode File"), ":/gallery-icon/res/gallery/Encode-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Favorit File"), ":/gallery-icon/res/gallery/Favorit-File.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("File Error"), ":/gallery-icon/res/gallery/File-Error.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("File Read Only"), ":/gallery-icon/res/gallery/File-Readonly.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("File Settings"), ":/gallery-icon/res/gallery/File-Settings.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Presentation File"), ":/gallery-icon/res/gallery/Presentation-File.svg"));
     RibbonGalleryGroup *galleryGroup1 = gallery->addCategoryActions(tr("Files"), galleryActions);
     galleryGroup1->setGalleryGroupStyle(RibbonGalleryGroup::IconWithWordWrapText);
     galleryGroup1->setGridMinimumWidth(80);
     galleryActions.clear();
-    galleryActions.append(lambdaCreateGalleryAction("Photoshop", ":/gallery-icon/res/gallery/Photoshop.svg"));
-    galleryActions.append(
-        lambdaCreateGalleryAction("Internet-Explorer", ":/gallery-icon/res/gallery/Internet-Explorer.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Illustrator", ":/gallery-icon/res/gallery/Illustrator.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Google-Maps", ":/gallery-icon/res/gallery/Google-Maps.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Adobe", ":/gallery-icon/res/gallery/Adobe.svg"));
-    galleryActions.append(lambdaCreateGalleryAction("Word", ":/gallery-icon/res/gallery/Word.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Photoshop"), ":/gallery-icon/res/gallery/Photoshop.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Internet-Explorer"), ":/gallery-icon/res/gallery/Internet-Explorer.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Illustrator"), ":/gallery-icon/res/gallery/Illustrator.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Google-Maps"), ":/gallery-icon/res/gallery/Google-Maps.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Adobe"), ":/gallery-icon/res/gallery/Adobe.svg"));
+    galleryActions.append(lambdaCreateGalleryAction(tr("Word"), ":/gallery-icon/res/gallery/Word.svg"));
     RibbonGalleryGroup *galleryGroup2 = gallery->addCategoryActions(tr("Apps"), galleryActions);
     galleryGroup2->setGridMinimumWidth(80);
     gallery->setCurrentViewGroup(galleryGroup1);
@@ -733,15 +730,15 @@ void MainWindow::createPageOther(RibbonPage *page)
         }
     });
 
-    RibbonGroup *groupContextPage = new RibbonGroup(("Context Page"));
+    RibbonGroup *groupContextPage = new RibbonGroup(tr("Context Page"));
     page->addGroup(groupContextPage);
-    QAction *a1 = createAction("Context Page 1", ":/icon/res/ContextPage.svg");
+    QAction *a1 = createAction(tr("Context Page 1"), ":/icon/res/ContextPage.svg");
     a1->setCheckable(true);
     connect(a1, &QAction::triggered, this, [this](bool c) {
         this->ribbonBar()->setPageContextVisible(m_pageContext, c);
     });
 
-    QAction *a2 = createAction("Context Page 2", ":/icon/res/ContextPage.svg");
+    QAction *a2 = createAction(tr("Context Page 2"), ":/icon/res/ContextPage.svg");
     a2->setCheckable(true);
     connect(a2, &QAction::triggered, this, [this](bool c) {
         this->ribbonBar()->setPageContextVisible(m_pageContext2, c);
@@ -752,8 +749,8 @@ void MainWindow::createPageOther(RibbonPage *page)
 
 void MainWindow::createPageDelete(RibbonPage *page)
 {
-    RibbonGroup *group1 = new RibbonGroup(("group 1"));
-    RibbonGroup *group2 = new RibbonGroup(("group 2"));
+    RibbonGroup *group1 = new RibbonGroup(tr("group 1"));
+    RibbonGroup *group2 = new RibbonGroup(tr("group 2"));
 
     QAction *actionRemovePanne = createAction(tr("remove group"), ":/icon/res/remove.svg");
 
@@ -799,13 +796,13 @@ void MainWindow::createPageSize(RibbonPage *page)
 
     RibbonButtonGroup *group2 = new RibbonButtonGroup(group);
     group2->setObjectName(QStringLiteral(u"group2"));
-    group2->addAction(createAction("Bold", ":/icon/res/bold.svg"));
-    group2->addAction(createAction("Italic", ":/icon/res/Italic.svg"));
+    group2->addAction(createAction(tr("Bold"), ":/icon/res/bold.svg"));
+    group2->addAction(createAction(tr("Italic"), ":/icon/res/Italic.svg"));
     group2->addSeparator();
-    group2->addAction(createAction("left alignment", ":/icon/res/al-left.svg"));
-    group2->addAction(createAction("center alignment", ":/icon/res/al-center.svg"));
-    group2->addAction(createAction("right alignment", ":/icon/res/al-right.svg"));
-    group2->addAction(createAction("line up on both sides", ":/icon/res/al-bothside.svg"));
+    group2->addAction(createAction(tr("left alignment"), ":/icon/res/al-left.svg"));
+    group2->addAction(createAction(tr("center alignment"), ":/icon/res/al-center.svg"));
+    group2->addAction(createAction(tr("right alignment"), ":/icon/res/al-right.svg"));
+    group2->addAction(createAction(tr("line up on both sides"), ":/icon/res/al-bothside.svg"));
     act = group->addWidget(group2, RibbonGroup::Medium);
     act->setObjectName(group2->objectName());
 
@@ -840,16 +837,16 @@ void MainWindow::createPageContext1()
 void MainWindow::createPageContext2()
 {
     RibbonBar *ribbon = ribbonBar();
-    m_pageContext2 = ribbon->addPageContext(("context2"), QColor(), 2);
-    m_pageContext2->addPage(("context2 Page1"));
-    m_pageContext2->addPage(("context2 Page2"));
+    m_pageContext2 = ribbon->addPageContext(tr("context2"), QColor(), 2);
+    m_pageContext2->addPage(tr("context2 Page1"));
+    m_pageContext2->addPage(tr("context2 Page2"));
 }
 
 void MainWindow::createPageContext1(RibbonPage *page)
 {
     RibbonGroup *group = page->addGroup(tr("show and hide test"));
 
-    QAction *actionHideGroup = createAction("hide group", ":/icon/res/hideGroup.svg");
+    QAction *actionHideGroup = createAction(tr("hide group"), ":/icon/res/hideGroup.svg");
     actionHideGroup->setCheckable(true);
     group->addLargeAction(actionHideGroup);
 
@@ -868,10 +865,10 @@ void MainWindow::createPageContext1(RibbonPage *page)
     connect(actionUnlock, &QAction::triggered, this, [actionDisable](bool b) {
         Q_UNUSED(b);
         actionDisable->setEnabled(true);
-        actionDisable->setText(("Enabled"));
+        actionDisable->setText(tr("Enabled"));
     });
 
-    QAction *actionSetTextTest = createAction("set text", ":/icon/res/setText.svg");
+    QAction *actionSetTextTest = createAction(tr("set text"), ":/icon/res/setText.svg");
 
     actionSetTextTest->setCheckable(true);
     actionSetTextTest->setShortcut(QKeySequence(QLatin1String("Ctrl+D")));
@@ -885,7 +882,7 @@ void MainWindow::createPageContext1(RibbonPage *page)
         }
     });
     // 隐藏group
-    QAction *actionShowTest = createAction("show beside group", ":/icon/res/show.svg");
+    QAction *actionShowTest = createAction(tr("show beside group"), ":/icon/res/show.svg");
 
     actionShowTest->setCheckable(true);
     group->addLargeAction(actionShowTest);
@@ -904,17 +901,17 @@ void MainWindow::createPageContext1(RibbonPage *page)
         ribbonBar()->repaint();
     });
 
-    RibbonGroup *group3 = page->addGroup(("show/hide action test"));
+    RibbonGroup *group3 = page->addGroup(tr("show/hide action test"));
 
-    QAction *actionHideAction2 = createAction("hide action 2", ":/icon/res/action.svg");
-    QAction *actionHideAction4 = createAction("hide action 4", ":/icon/res/action.svg");
+    QAction *actionHideAction2 = createAction(tr("hide action 2"), ":/icon/res/action.svg");
+    QAction *actionHideAction4 = createAction(tr("hide action 4"), ":/icon/res/action.svg");
     actionHideAction2->setCheckable(true);
     actionHideAction2->setChecked(true);
     actionHideAction4->setCheckable(true);
     actionHideAction4->setChecked(true);
-    QAction *act2 = createAction("action2", ":/icon/res/action2.svg");
-    QAction *act3 = createAction("action3", ":/icon/res/action3.svg");
-    QAction *act4 = createAction("action4", ":/icon/res/action4.svg");
+    QAction *act2 = createAction(tr("action2"), ":/icon/res/action2.svg");
+    QAction *act3 = createAction(tr("action3"), ":/icon/res/action3.svg");
+    QAction *act4 = createAction(tr("action4"), ":/icon/res/action4.svg");
     group3->addLargeAction(actionHideAction2);
     group3->addLargeAction(actionHideAction4);
     group3->addSmallAction(act2);
@@ -939,7 +936,7 @@ void MainWindow::createPageContext1(RibbonPage *page)
         }
     });
     //
-    RibbonGroup *group4 = page->addGroup(("widget"));
+    RibbonGroup *group4 = page->addGroup(tr("widget"));
     QSpinBox *spinbox = new QSpinBox(this);
     RibbonCtrlContainer *ctrlContainer1 = new RibbonCtrlContainer(group4);
     ctrlContainer1->setWidget(spinbox);
@@ -959,7 +956,7 @@ void MainWindow::createPageContext2(RibbonPage *page)
 {
     RibbonGroup *group1 = page->addGroup(QStringLiteral(u"删除PagePage测试"));
 
-    QAction *actionDeleteThisPage = createAction("delete this page", ":/icon/res/delete.svg");
+    QAction *actionDeleteThisPage = createAction(tr("delete this page"), ":/icon/res/delete.svg");
     group1->addLargeAction(actionDeleteThisPage);
     connect(actionDeleteThisPage, &QAction::triggered, this, [this, page]() {
         this->ribbonBar()->removePage(page);
@@ -967,70 +964,70 @@ void MainWindow::createPageContext2(RibbonPage *page)
     });
     RibbonGroup *groupLayout = page->addGroup(QStringLiteral(u"特殊布局"));
 
-    groupLayout->addAction(createAction("Large", ":/icon/res/layout.svg", "@Large1"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Large"), ":/icon/res/layout.svg", "@Large1"), QToolButton::InstantPopup,
                            RibbonGroup::Large);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small1"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small1"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small2"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small2"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
     groupLayout->addSeparator();
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small3"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small3"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small4"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small4"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small5"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small5"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small6"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small6"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
     groupLayout->addSeparator();
-    groupLayout->addAction(createAction("Large", ":/icon/res/layout.svg", "@Large2"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Large"), ":/icon/res/layout.svg", "@Large2"), QToolButton::InstantPopup,
                            RibbonGroup::Large);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium1"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium1"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium2"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium2"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small7"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small7"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium3"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium3"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Large", ":/icon/res/layout.svg", "@Large3"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Large"), ":/icon/res/layout.svg", "@Large3"), QToolButton::InstantPopup,
                            RibbonGroup::Large);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium4"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium4"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium5"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium5"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Large", ":/icon/res/layout.svg", "@Large4"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Large"), ":/icon/res/layout.svg", "@Large4"), QToolButton::InstantPopup,
                            RibbonGroup::Large);
     groupLayout->addSeparator();
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium6"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium6"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Large", ":/icon/res/layout.svg", "@Large5"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Large"), ":/icon/res/layout.svg", "@Large5"), QToolButton::InstantPopup,
                            RibbonGroup::Large);
-    groupLayout->addAction(createAction("Medium", ":/icon/res/layout.svg", "@Medium7"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Medium"), ":/icon/res/layout.svg", "@Medium7"), QToolButton::InstantPopup,
                            RibbonGroup::Medium);
-    groupLayout->addAction(createAction("Small", ":/icon/res/layout.svg", "@Small8"), QToolButton::InstantPopup,
+    groupLayout->addAction(createAction(tr("Small"), ":/icon/res/layout.svg", "@Small8"), QToolButton::InstantPopup,
                            RibbonGroup::Small);
 }
 
 void MainWindow::createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar)
 {
-    quickAccessBar->addAction(createAction("save", ":/icon/res/save.svg", "save-quickbar"));
+    quickAccessBar->addAction(createAction(tr("save"), ":/icon/res/save.svg", "save-quickbar"));
     quickAccessBar->addSeparator();
-    quickAccessBar->addAction(createAction("undo", ":/icon/res/undo.svg"));
-    quickAccessBar->addAction(createAction("redo", ":/icon/res/redo.svg"));
+    quickAccessBar->addAction(createAction(tr("undo"), ":/icon/res/undo.svg"));
+    quickAccessBar->addAction(createAction(tr("redo"), ":/icon/res/redo.svg"));
     quickAccessBar->addSeparator();
-    RibbonMenu *m = new RibbonMenu("Presentation File", this);
+    RibbonMenu *m = new RibbonMenu(tr("Presentation File"), this);
     m->setIcon(QIcon(":/icon/res/presentationFile.svg"));
     for (int i = 0; i < 10; ++i) {
-        m->addAction(createAction(QString("file%1").arg(i + 1), ":/icon/res/file.svg"));
+        m->addAction(createAction(tr("file%1").arg(i + 1), ":/icon/res/file.svg"));
     }
     quickAccessBar->addMenu(m);
 
-    QAction *customize = createAction("customize", ":/icon/res/customize0.svg", "customize2");
+    QAction *customize = createAction(tr("customize"), ":/icon/res/customize0.svg", "customize2");
     quickAccessBar->addAction(customize);
     connect(customize, &QAction::triggered, this, &MainWindow::onActionCustomizeTriggered);
 
-    QAction *actionCustomizeAndSave = createAction("customize and save", ":/icon/res/customize.svg");
+    QAction *actionCustomizeAndSave = createAction(tr("customize and save"), ":/icon/res/customize.svg");
     quickAccessBar->addAction(actionCustomizeAndSave);
     connect(actionCustomizeAndSave, &QAction::triggered, this, &MainWindow::onActionCustomizeAndSaveTriggered);
 }
@@ -1038,7 +1035,7 @@ void MainWindow::createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar)
 void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
 {
     QAction *actionTheme = createAction(tr("theme"), ":/icon/res/useqss.svg");
-    RibbonMenu *menu = new RibbonMenu("theme", this);
+    RibbonMenu *menu = new RibbonMenu(tr("theme"), this);
     actionTheme->setMenu(menu);
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Normal")), RibbonWindow::NormalTheme));
     m_themeGroup->addAction(addThemeAction(menu->addAction(tr("Office2013")), RibbonWindow::Office2013Theme));
@@ -1054,13 +1051,13 @@ void MainWindow::createRightButtonGroup(RibbonButtonGroup *rightBar)
 void MainWindow::addSomeOtherAction()
 {
     // 添加其他的action，这些action并不在ribbon管理范围，主要用于RibbonCustomizeWidget自定义用
-    QAction *acttext1 = new QAction(("text action1"), this);
-    QAction *acttext2 = new QAction(("text action2"), this);
-    QAction *acttext3 = new QAction(("text action3"), this);
-    QAction *acttext4 = new QAction(("text action4"), this);
-    QAction *acttext5 = new QAction(("text action5"), this);
+    QAction *acttext1 = new QAction(tr("text action1"), this);
+    QAction *acttext2 = new QAction(tr("text action2"), this);
+    QAction *acttext3 = new QAction(tr("text action3"), this);
+    QAction *acttext4 = new QAction(tr("text action4"), this);
+    QAction *acttext5 = new QAction(tr("text action5"), this);
 
-    QAction *actIcon1 = new QAction(QIcon(":/icon/res/layout.svg"), ("action with icon"), this);
+    QAction *actIcon1 = new QAction(QIcon(":/icon/res/layout.svg"), tr("action with icon"), this);
 
     m_actionTagText = RibbonActionsManager::UserDefineActionTag + 1;
     m_actionTagWithIcon = RibbonActionsManager::UserDefineActionTag + 2;
