@@ -6,9 +6,6 @@
 
 #include <QtCore/qglobal.h>
 
-#define QX_QUOTE_(x) #x
-#define QX_QUOTE(x) QX_QUOTE_(x)
-
 #ifndef Q_NULLPTR
 #define Q_NULLPTR 0
 #endif
@@ -16,6 +13,9 @@
 #ifndef Q_DECL_OVERRIDE
 #define Q_DECL_OVERRIDE
 #endif
+
+#define QX_VERSION_JOIN2(major, minor, patch) major##.##minor##.##patch
+#define QX_VERSION_JOIN(major, minor, patch) QX_VERSION_JOIN2(major, minor, patch)
 
 #define QX_DECLARE_PRIVATE(Class) \
     Class##Private *d_ptr; \

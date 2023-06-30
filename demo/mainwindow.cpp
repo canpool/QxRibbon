@@ -217,7 +217,7 @@ void MainWindow::onActionHelpTriggered()
 {
     QString url("https://gitee.com/icanpool/QxRibbon");
 
-    AboutDialog ad(QLatin1String(":/icon/res/logo.png"), tr("QxRibbon"), QLatin1String(getRibbonVersion()),
+    AboutDialog ad(QLatin1String(":/icon/res/logo.png"), tr("QxRibbon"), QLatin1String(QX_RIBBON_VERSION_STR),
                    tr(
 "Copyleft (C) 2023 maminjie &lt;canpool@163.com&gt;<br/>"
 "<br/>QxRibbon is a Qt componet like to Microsoft Ribbon style. "

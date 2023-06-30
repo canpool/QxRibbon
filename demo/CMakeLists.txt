@@ -31,7 +31,7 @@ target_link_libraries(${QX_RIBBON_DEMO_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
-set(QX_RIBBON_LIB_NAME QxRibbon${QX_VERSION_RIBBON_MAJOR})
+set(QX_RIBBON_LIB_NAME QxRibbon${QX_RIBBON_VERSION_MAJOR})
 find_library(QxRibbon NAMES "${QX_RIBBON_LIB_NAME}")
 target_link_libraries(${QX_RIBBON_DEMO_NAME} PRIVATE "${QX_RIBBON_LIB_NAME}")
 

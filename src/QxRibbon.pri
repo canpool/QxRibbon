@@ -3,7 +3,6 @@ VERSION = 0.5.3
 QT += widgets
 
 DEFINES += QX_RIBBON_LIBRARY
-DEFINES += QX_VERSION_RIBBON=$$VERSION
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
@@ -18,7 +17,6 @@ SOURCES += \
     $$PWD/QxRibbonCustomizeDialog.cpp \
     $$PWD/QxRibbonCustomizeWidget.cpp \
     $$PWD/QxRibbonFactory.cpp \
-    $$PWD/QxRibbonGlobal.cpp \
     $$PWD/QxRibbonGroup.cpp \
     $$PWD/QxRibbonGroupLayout.cpp \
     $$PWD/QxRibbonManager.cpp \
