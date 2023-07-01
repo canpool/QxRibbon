@@ -11,6 +11,8 @@ class RibbonStyleOptionPrivate
 {
 public:
     RibbonStyleOptionPrivate();
+    void calc();
+    int calcRibbonBarHeight(RibbonBar::RibbonStyle s) const;
 public:
     int m_tabBarHeight;
     int m_titleBarHeight;
@@ -32,10 +34,42 @@ RibbonStyleOptionPrivate::RibbonStyleOptionPrivate()
     m_tabBarHeight = lineSpacing * 1.5;
 }
 
+void RibbonStyleOptionPrivate::calc()
+{
+    m_ribbonBarHeightOfficeStyleThreeRow = calcRibbonBarHeight(RibbonBar::OfficeStyle);
+    m_ribbonBarHeightWpsLiteStyleThreeRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyle);
+    m_ribbonBarHeightOfficeStyleTwoRow = calcRibbonBarHeight(RibbonBar::OfficeStyleTwoRow);
+    m_ribbonBarHeightWpsLiteStyleTwoRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyleTwoRow);
+}
+
+int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    int lineSpacing = QApplication::fontMetrics().lineSpacing();
+#else
+    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
+#endif
+    switch (s) {
+    case RibbonBar::OfficeStyle:
+        return m_titleBarHeight + m_tabBarHeight + (lineSpacing * 1.5) * 3 +
+               RibbonGroupLayout::groupContentsMargins().top() + RibbonGroupLayout::groupContentsMargins().bottom() +
+               RibbonGroup::groupTitleHeight();
+    case RibbonBar::WpsLiteStyle:
+        return m_ribbonBarHeightOfficeStyleThreeRow - m_tabBarHeight;
+    case RibbonBar::WpsLiteStyleTwoRow:
+        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - m_tabBarHeight - RibbonGroup::groupTitleHeight();
+    case RibbonBar::OfficeStyleTwoRow:
+        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - RibbonGroup::groupTitleHeight();
+    default:
+        break;
+    }
+    return m_ribbonBarHeightOfficeStyleThreeRow;
+}
+
 RibbonStyleOption::RibbonStyleOption()
     : d(new RibbonStyleOptionPrivate)
 {
-    recalc();
+    d->calc();
 }
 
 RibbonStyleOption::~RibbonStyleOption()
@@ -80,26 +114,7 @@ void RibbonStyleOption::recalc()
 
 int RibbonStyleOption::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int lineSpacing = QApplication::fontMetrics().lineSpacing();
-#else
-    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
-#endif
-    switch (s) {
-    case RibbonBar::OfficeStyle:
-        return titleBarHeight() + tabBarHeight() + (lineSpacing * 1.5) * 3 +
-               RibbonGroupLayout::groupContentsMargins().top() + RibbonGroupLayout::groupContentsMargins().bottom() +
-               RibbonGroup::groupTitleHeight();
-    case RibbonBar::WpsLiteStyle:
-        return d->m_ribbonBarHeightOfficeStyleThreeRow - tabBarHeight();
-    case RibbonBar::WpsLiteStyleTwoRow:
-        return d->m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - tabBarHeight() - RibbonGroup::groupTitleHeight();
-    case RibbonBar::OfficeStyleTwoRow:
-        return d->m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - RibbonGroup::groupTitleHeight();
-    default:
-        break;
-    }
-    return d->m_ribbonBarHeightOfficeStyleThreeRow;
+    return d->calcRibbonBarHeight(s);
 }
 
 QDebug operator<<(QDebug debug, const RibbonStyleOption &c)
