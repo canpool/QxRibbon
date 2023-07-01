@@ -62,8 +62,8 @@ public:
 };
 
 RibbonButtonGroupPrivate::RibbonButtonGroupPrivate(RibbonButtonGroup *p)
+    : q(p)
 {
-    q = p;
 }
 
 void RibbonButtonGroupPrivate::init()
@@ -106,8 +106,10 @@ QAction *RibbonButtonGroup::addAction(const QString &text, const QIcon &icon,
     QAction *a = new QAction(icon, text, this);
 
     addAction(a);
-    RibbonButton *btn = qobject_cast<RibbonButton *>(d->m_items.back().widget);
-    btn->setPopupMode(popMode);
+    RibbonButton *btn = qobject_cast<RibbonButton *>(d->m_items.last().widget);
+    if (btn) {
+        btn->setPopupMode(popMode);
+    }
     return a;
 }
 
@@ -116,8 +118,10 @@ QAction *RibbonButtonGroup::addMenu(QMenu *menu, QToolButton::ToolButtonPopupMod
     QAction *a = menu->menuAction();
 
     addAction(a);
-    RibbonButton *btn = qobject_cast<RibbonButton *>(d->m_items.back().widget);
-    btn->setPopupMode(popMode);
+    RibbonButton *btn = qobject_cast<RibbonButton *>(d->m_items.last().widget);
+    if (btn) {
+        btn->setPopupMode(popMode);
+    }
     return a;
 }
 
