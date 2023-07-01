@@ -87,7 +87,7 @@ MainWindow::MainWindow(QWidget *par)
 
     // 添加其他标签页 - 直接new RibbonPage添加
     RibbonPage *pageOther = new RibbonPage();
-    pageOther->setPageName(tr("Other"));
+    pageOther->setPageName(tr("&Other"));
     pageOther->setObjectName(("pageOther"));
     createPageOther(pageOther);
     ribbon->addPage(pageOther);
@@ -104,7 +104,7 @@ MainWindow::MainWindow(QWidget *par)
     // 添加尺寸标签页
     RibbonPage *pageSize = new RibbonPage();
 
-    pageSize->setPageName(tr("Size(example long page)"));
+    pageSize->setPageName(tr("&Size(example long page)"));
     pageSize->setObjectName(("pageSize"));
     ribbon->addPage(pageSize);
     createPageSize(pageSize);
