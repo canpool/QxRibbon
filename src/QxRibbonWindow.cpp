@@ -134,12 +134,7 @@ RibbonWindow::~RibbonWindow()
     delete d;
 }
 
-const RibbonBar *RibbonWindow::ribbonBar() const
-{
-    return d->m_ribbonBar;
-}
-
-RibbonBar *RibbonWindow::ribbonBar()
+RibbonBar *RibbonWindow::ribbonBar() const
 {
     return d->m_ribbonBar;
 }

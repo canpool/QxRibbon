@@ -44,13 +44,12 @@ public:
         WpsdarkTheme,
         CustomTheme,
     };
-    Q_ENUMS(RibbonTheme)
+    Q_ENUM(RibbonTheme)
 public:
     RibbonWindow(QWidget *parent = Q_NULLPTR, bool useRibbon = true);
     ~RibbonWindow() Q_DECL_OVERRIDE;
 
-    const RibbonBar *ribbonBar() const;
-    RibbonBar *ribbonBar();
+    RibbonBar *ribbonBar() const;
 
     void setRibbonTheme(int theme);
     int ribbonTheme() const;
