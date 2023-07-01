@@ -27,15 +27,16 @@ public:
     void setTitleVisible(bool b);
 
     void setIcon(const QIcon &i);
-    QIcon getIcon() const;
+    QIcon icon() const;
+
+    void setIconSize(const QSize &size);
+    QSize iconSize() const;
 
     void setText(const QString &t);
-    QString getText() const;
+    QString text() const;
 
-    bool hasWidget() const;
     void setWidget(QWidget *w);
-    QWidget *getWidget();
-    const QWidget *getWidget() const;
+    QWidget *widget() const;
 private:
     RibbonCtrlContainerPrivate *d;
 };

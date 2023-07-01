@@ -63,8 +63,7 @@ void RibbonCtrlContainerPrivate::setWidget(QWidget *w)
     if (w->parent() != q) {
         w->setParent(q);
     }
-    // wight always on the right side
-    m_layout->insertWidget(m_layout->count(), w);
+    m_layout->addWidget(w);
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     sizePolicy.setHorizontalStretch(0);
     sizePolicy.setVerticalStretch(0);
@@ -91,16 +90,6 @@ RibbonCtrlContainer::~RibbonCtrlContainer()
     delete d;
 }
 
-QWidget *RibbonCtrlContainer::getWidget()
-{
-    return d->m_widget;
-}
-
-const QWidget *RibbonCtrlContainer::getWidget() const
-{
-    return d->m_widget;
-}
-
 void RibbonCtrlContainer::setIconVisible(bool b)
 {
     d->m_labelPixmap->setVisible(b);
@@ -111,20 +100,26 @@ void RibbonCtrlContainer::setTitleVisible(bool b)
     d->m_labelText->setVisible(b);
 }
 
-bool RibbonCtrlContainer::hasWidget() const
-{
-    return (d->m_widget != Q_NULLPTR);
-}
-
 void RibbonCtrlContainer::setIcon(const QIcon &i)
 {
     d->m_icon = i;
     d->m_labelPixmap->setPixmap(i.pixmap(d->m_iconSize));
 }
 
-QIcon RibbonCtrlContainer::getIcon() const
+QIcon RibbonCtrlContainer::icon() const
 {
     return d->m_icon;
+}
+
+void RibbonCtrlContainer::setIconSize(const QSize &size)
+{
+    d->m_iconSize = size;
+    setIcon(icon());
+}
+
+QSize RibbonCtrlContainer::iconSize() const
+{
+    return d->m_iconSize;
 }
 
 void RibbonCtrlContainer::setText(const QString &t)
@@ -132,7 +127,7 @@ void RibbonCtrlContainer::setText(const QString &t)
     d->m_labelText->setText(t);
 }
 
-QString RibbonCtrlContainer::getText() const
+QString RibbonCtrlContainer::text() const
 {
     return d->m_labelText->text();
 }
@@ -140,4 +135,9 @@ QString RibbonCtrlContainer::getText() const
 void RibbonCtrlContainer::setWidget(QWidget *w)
 {
     d->setWidget(w);
+}
+
+QWidget *RibbonCtrlContainer::widget() const
+{
+    return d->m_widget;
 }
