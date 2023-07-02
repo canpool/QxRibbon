@@ -614,7 +614,8 @@ void RibbonButtonPrivate::calcIconAndTextRect(const QStyleOptionToolButton &opt)
     }
 
     // 纯文本的文字位置
-    if ((Qt::ToolButtonTextOnly == q->toolButtonStyle()) || q->icon().isNull()) {
+    bool hasArrow = opt.features & QStyleOptionToolButton::Arrow;
+    if ((Qt::ToolButtonTextOnly == opt.toolButtonStyle) || (q->icon().isNull() && !hasArrow)) {
         m_textRect = opt.rect.adjusted(m_iconAndTextSpace, m_iconAndTextSpace,
                                         -m_iconAndTextSpace, -m_iconAndTextSpace);
     }

@@ -526,6 +526,10 @@ void MainWindow::createPageMain(RibbonPage *page)
     act->setEnabled(false);
     groupToolButtonStyle->addLargeAction(act);
 
+    act = new QAction(tr("arrow button"), this);
+    btn = groupToolButtonStyle->addLargeAction(act);
+    btn->setArrowType(Qt::DownArrow);
+
     QAction *optAct = new QAction(this);
     connect(optAct, &QAction::triggered, this, [this](bool on) {
         Q_UNUSED(on);
