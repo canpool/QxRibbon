@@ -18,12 +18,12 @@ class RibbonButtonPrivate;
 class QX_RIBBON_EXPORT RibbonButton : public QToolButton
 {
     Q_OBJECT
-    Q_ENUMS(RibbonButtonType)
 public:
     enum RibbonButtonType {
         LargeButton,
         SmallButton
     };
+    Q_ENUM(RibbonButtonType)
 
     enum LargeButtonType {
         Normal, ///< icon占大按钮的一半区域, 箭头在按钮最下方，文字可以换一行，对应于office的菜单按钮，下箭头在按钮最下方(默认)
@@ -31,11 +31,11 @@ public:
     };
 public:
     explicit RibbonButton(QWidget *parent = Q_NULLPTR);
-    RibbonButton(QAction *defaultAction, QWidget *parent = Q_NULLPTR);
+    explicit RibbonButton(QAction *defaultAction, QWidget *parent = Q_NULLPTR);
     ~RibbonButton();
 
     RibbonButtonType buttonType() const;
-    void setButtonType(const RibbonButtonType &buttonType);
+    void setButtonType(RibbonButtonType type);
 
     void setLargeButtonType(LargeButtonType type);
     LargeButtonType largeButtonType() const;
