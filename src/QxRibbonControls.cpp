@@ -35,9 +35,8 @@ RibbonLineEdit::RibbonLineEdit(QWidget *parent) : QLineEdit(parent)
 
 /* RibbonMenu */
 RibbonMenu::RibbonMenu(QWidget *parent)
-    : QMenu(parent)
+    : RibbonMenu(QString(), parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 RibbonMenu::RibbonMenu(const QString &title, QWidget *parent)
@@ -76,11 +75,9 @@ QAction *RibbonMenu::addWidget(QWidget *w)
 
 /* RibbonSeparator */
 RibbonSeparator::RibbonSeparator(int height, QWidget *parent)
-    : QWidget(parent)
-    , m_topMargin(4)
-    , m_bottomMargin(4)
+    : RibbonSeparator(parent)
 {
-    setFixedSize(6, height);
+    setFixedHeight(height);
 }
 
 RibbonSeparator::RibbonSeparator(QWidget *parent)
@@ -111,5 +108,6 @@ void RibbonSeparator::paintEvent(QPaintEvent *event)
     painter.setPen(palette().window().color().darker(114));
     int x1 = rect().center().x();
 
-    painter.drawLine(QPoint(x1, rect().top() + m_topMargin), QPoint(x1, rect().bottom() - m_bottomMargin));
+    painter.drawLine(QPoint(x1, rect().top() + m_topMargin),
+                     QPoint(x1, rect().bottom() - m_bottomMargin));
 }

@@ -74,8 +74,8 @@ class QX_RIBBON_EXPORT RibbonSeparator : public QWidget
 public:
     RibbonSeparator(int height, QWidget *parent = Q_NULLPTR);
     RibbonSeparator(QWidget *parent = Q_NULLPTR);
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
     void setTopBottomMargins(int top, int bottom);
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
