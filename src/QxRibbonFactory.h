@@ -5,12 +5,10 @@
 #pragma once
 
 #include "QxRibbonGlobal.h"
-#include "QxRibbonBar.h"
 #include "QxRibbonStyleOption.h"
 
 #include <QScopedPointer>
 
-class RibbonBar;
 class RibbonControlButton;
 
 class QX_RIBBON_EXPORT RibbonFactory
@@ -19,7 +17,7 @@ public:
     RibbonFactory();
     virtual ~RibbonFactory();
 
-    virtual RibbonControlButton *createHideGroupButton(RibbonBar *parent);
+    virtual RibbonControlButton *createHideGroupButton(QWidget *parent);
 
     RibbonStyleOption &getRibbonStyleOption();
     void setRibbonStyleOption(RibbonStyleOption *opt);
