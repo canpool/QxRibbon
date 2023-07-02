@@ -1521,6 +1521,11 @@ void RibbonBar::updateRibbonTheme()
     d->updateMinimumButtonIcon();
 }
 
+void RibbonBar::resizeRibbon()
+{
+    QApplication::postEvent(this, new QResizeEvent(this->size(), this->size()));
+}
+
 QColor RibbonBar::tabBarBaseLineColor() const
 {
     return d->m_tabBarBaseLineColor;

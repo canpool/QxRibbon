@@ -21,6 +21,9 @@ public:
 public:
     void addSeparator();
     void addAction(QAction *act);
+    void insertAction(QAction *before, QAction *action);
+    void insertActions(QAction *before, QList<QAction *> actions);
+    void removeAction(QAction *action);
     void addWidget(QWidget *w);
     void addMenu(QMenu *m, QToolButton::ToolButtonPopupMode popMode = QToolButton::InstantPopup);
 private:

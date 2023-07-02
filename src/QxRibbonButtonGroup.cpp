@@ -191,18 +191,25 @@ void RibbonButtonGroup::actionEvent(QActionEvent *e)
         layout()->invalidate();
     } break;
     case QEvent::ActionRemoved: {
+        // FIXME: QWidget sends the QActionEvent event after handling
+        // addAction/removeAction, so whether to release the action?
         item.action->disconnect(this);
-        auto i = d->m_items.begin();
-        for (; i != d->m_items.end();) {
+        auto i = d->m_items.constBegin();
+        for (; i != d->m_items.constEnd(); ++i) {
+            if (i->action != item.action) {
+                continue;
+            }
+            layout()->removeWidget(i->widget);
             QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(i->action);
-            if ((widgetAction != 0) && i->customWidget) {
+            if (widgetAction && i->customWidget) {
                 widgetAction->releaseWidget(i->widget);
             } else {
-                // destroy the QToolButton/QToolBarSeparator
+                // destroy the RibbonButton/RibbonSeparator
                 i->widget->hide();
                 i->widget->deleteLater();
             }
-            i = d->m_items.erase(i);
+            d->m_items.erase(i);
+            break;
         }
         layout()->invalidate();
     } break;

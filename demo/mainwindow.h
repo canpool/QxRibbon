@@ -27,6 +27,7 @@ private:
     void createPageMain(RibbonPage *page);
     void createPageOther(RibbonPage *page);
     void createPageDelete(RibbonPage *page);
+    void createPageCustom(RibbonPage *page);
     void createPageSize(RibbonPage *page);
     void createPageContext1();
     void createPageContext2();

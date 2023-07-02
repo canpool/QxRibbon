@@ -113,8 +113,7 @@ void RibbonWindowPrivate::resizeRibbon()
     } else {
         m_ribbonBar->setWindowButtonsSize(QSize(0, 0));
     }
-    QApplication::postEvent(m_ribbonBar, new QResizeEvent(m_ribbonBar->size(),
-                                                          m_ribbonBar->size()));
+    m_ribbonBar->resizeRibbon();
 }
 
 RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)

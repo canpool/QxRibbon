@@ -183,6 +183,7 @@ public:
 
     void updateRibbonGeometry();
     void updateRibbonTheme();
+    void resizeRibbon();
 
     QColor tabBarBaseLineColor() const;
     void setTabBarBaseLineColor(const QColor &clr);

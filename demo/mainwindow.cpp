@@ -95,15 +95,20 @@ MainWindow::MainWindow(QWidget *par)
 
     // 添加删除标签页
     RibbonPage *pageDelete = new RibbonPage();
-
     pageDelete->setPageName(tr("&Delete"));
     pageDelete->setObjectName(("pageDelete"));
     ribbon->addPage(pageDelete);
     createPageDelete(pageDelete);
     PRINT_COST("add page delete page");
+    // 添加自定义标签页
+    RibbonPage *pageCustom = new RibbonPage();
+    pageCustom->setPageName(tr("&Custom"));
+    pageCustom->setObjectName(("pageCustom"));
+    createPageCustom(pageCustom);
+    ribbon->addPage(pageCustom);
+    PRINT_COST("add custom page");
     // 添加尺寸标签页
     RibbonPage *pageSize = new RibbonPage();
-
     pageSize->setPageName(tr("&Size(example long page)"));
     pageSize->setObjectName(("pageSize"));
     ribbon->addPage(pageSize);
@@ -624,6 +629,7 @@ void MainWindow::createPageOther(RibbonPage *page)
     btnGroup1->addAction(createAction(tr("Wrap Image Left"), ":/icon/res/Wrap-Image Left.svg"));
     btnGroup1->addAction(createAction(tr("Wrap Image Right"), ":/icon/res/Wrap-Image Right.svg"));
     group1->addWidget(btnGroup1, RibbonGroup::Medium);
+
     RibbonButtonGroup *btnGroup2 = new RibbonButtonGroup(group1);
     QAction *titleAlgnment = createAction(tr("Align Right"), ":/icon/res/Align-Right.svg");
     titleAlgnment->setProperty("align", (int)Qt::AlignRight | Qt::AlignVCenter);
@@ -636,6 +642,7 @@ void MainWindow::createPageOther(RibbonPage *page)
     btnGroup2->addAction(titleAlgnment);
     group1->addWidget(btnGroup2, RibbonGroup::Medium);
     connect(btnGroup2, &RibbonButtonGroup::actionTriggered, this, &MainWindow::onButtonGroupActionTriggered);
+
     // Gallery
     RibbonGallery *gallery = group1->addGallery();
     QList<QAction *> galleryActions;
@@ -771,6 +778,30 @@ void MainWindow::createPageDelete(RibbonPage *page)
 
     page->addGroup(group1);
     page->addGroup(group2);
+}
+
+void MainWindow::createPageCustom(RibbonPage *page)
+{
+    RibbonGroup *group1 = new RibbonGroup(tr("quick access bar"));
+    QAction *addAct = createAction(tr("add"), ":/icon/res/action2.svg");
+    QAction *removeAct = createAction(tr("remove"), ":/icon/res/action4.svg");
+    group1->addLargeAction(addAct);
+    group1->addLargeAction(removeAct);
+    removeAct->setDisabled(true);
+    QAction *testAct = createAction(tr("test"), ":/icon/res/action2.svg");
+    connect(addAct, &QAction::triggered, this, [this, addAct, removeAct, testAct]() {
+        this->ribbonBar()->quickAccessBar()->addAction(testAct);
+        this->ribbonBar()->resizeRibbon();
+        addAct->setDisabled(true);
+        removeAct->setDisabled(false);
+    });
+    connect(removeAct, &QAction::triggered, this, [this, addAct, removeAct, testAct]() {
+        this->ribbonBar()->quickAccessBar()->removeAction(testAct);
+        this->ribbonBar()->resizeRibbon();
+        addAct->setDisabled(false);
+        removeAct->setDisabled(true);
+    });
+    page->addGroup(group1);
 }
 
 /**
