@@ -194,8 +194,11 @@ void RibbonButtonGroup::actionEvent(QActionEvent *e)
         // FIXME: QWidget sends the QActionEvent event after handling
         // addAction/removeAction, so whether to release the action?
         item.action->disconnect(this);
-        auto i = d->m_items.constBegin();
-        for (; i != d->m_items.constEnd(); ++i) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        for (auto i = d->m_items.begin(); i != d->m_items.end(); ++i) {
+#else
+        for (auto i = d->m_items.constBegin(); i != d->m_items.constEnd(); ++i) {
+#endif
             if (i->action != item.action) {
                 continue;
             }
