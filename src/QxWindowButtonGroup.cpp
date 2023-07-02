@@ -60,7 +60,7 @@ void WindowButtonGroupPrivate::setupMinimizeButton(bool on)
         }
         m_minimizeButton = new WindowToolButton(par);
         m_minimizeButton->setObjectName(QStringLiteral("qx_MinimizeWindowButton"));
-        m_minimizeButton->setFixedSize(MIN_BUTTON_WIDTH, RibbonSubElementStyleOpt.titleBarHeight());
+        m_minimizeButton->setFixedSize(MIN_BUTTON_WIDTH, RibbonElementStyleOpt.titleBarHeight());
         m_minimizeButton->setFocusPolicy(Qt::NoFocus);
         m_minimizeButton->setIconSize(m_minimizeButton->size() * m_iconScale);
         m_minimizeButton->show();
@@ -85,7 +85,7 @@ void WindowButtonGroupPrivate::setupMaximizeButton(bool on)
         }
         m_maximizeButton = new WindowToolButton(par);
         m_maximizeButton->setObjectName(QStringLiteral("qx_MaximizeWindowButton"));
-        m_maximizeButton->setFixedSize(MAX_BUTTON_WIDTH, RibbonSubElementStyleOpt.titleBarHeight());
+        m_maximizeButton->setFixedSize(MAX_BUTTON_WIDTH, RibbonElementStyleOpt.titleBarHeight());
         m_maximizeButton->setCheckable(true);
         m_maximizeButton->setFocusPolicy(Qt::NoFocus);
         m_maximizeButton->setIconSize(m_maximizeButton->size() * m_iconScale);
@@ -111,7 +111,7 @@ void WindowButtonGroupPrivate::setupCloseButton(bool on)
         }
         m_closeButton = new WindowToolButton(par);
         m_closeButton->setObjectName(QStringLiteral("qx_CloseWindowButton"));
-        m_closeButton->setFixedSize(CLS_BUTTON_WIDTH, RibbonSubElementStyleOpt.titleBarHeight());
+        m_closeButton->setFixedSize(CLS_BUTTON_WIDTH, RibbonElementStyleOpt.titleBarHeight());
         m_closeButton->setFocusPolicy(Qt::NoFocus);
         // m_closeButton->setFlat(true);
         par->connect(m_closeButton, &QAbstractButton::clicked, par, &WindowButtonGroup::closeWindow);
@@ -187,7 +187,7 @@ void WindowButtonGroupPrivate::resize(QSize size)
 QSize WindowButtonGroupPrivate::sizeHint() const
 {
     int width = 0;
-    int height = RibbonSubElementStyleOpt.titleBarHeight();
+    int height = RibbonElementStyleOpt.titleBarHeight();
 
     if (m_closeButton) {
         width += CLS_BUTTON_WIDTH;

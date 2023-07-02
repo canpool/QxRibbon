@@ -138,7 +138,7 @@ MainWindow::MainWindow(QWidget *par)
         m_themeGroup->actions().at(0)->trigger();
     }
 
-    qDebug() << RibbonSubElementStyleOpt;
+    qDebug() << RibbonElementStyleOpt;
 }
 
 void MainWindow::setRibbonTheme(int theme)
@@ -334,7 +334,7 @@ void MainWindow::onActionwordWrapIn2rowTriggered(bool b)
 {
     RibbonButton::setLiteStyleEnableWordWrap(b);   // 设置是否允许2行模式下文字换行，换行的话图标会较小
     // 换行设定后需要重新计算样式尺寸
-    RibbonSubElementStyleOpt.recalc();
+    RibbonElementStyleOpt.recalc();
     // 通过setRibbonStyle来让ribbonbar重绘
     // 由于关键尺寸变化了，需要重新布局
     ribbonBar()->updateRibbonGeometry();

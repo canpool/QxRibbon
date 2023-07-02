@@ -5,9 +5,8 @@
 #include "QxRibbonManager.h"
 
 RibbonManager::RibbonManager()
-    : m_factory(Q_NULLPTR)
+    : m_factory(new RibbonFactory())
 {
-    m_factory = new RibbonFactory();
 }
 
 RibbonManager::~RibbonManager()
@@ -22,12 +21,12 @@ RibbonManager *RibbonManager::instance()
 {
     static RibbonManager s_instance;
 
-    return (&(s_instance));
+    return &s_instance;
 }
 
 RibbonFactory *RibbonManager::factory()
 {
-    return (m_factory);
+    return m_factory;
 }
 
 void RibbonManager::setupFactory(RibbonFactory *factory)

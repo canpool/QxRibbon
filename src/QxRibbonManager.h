@@ -20,15 +20,14 @@ private:
     RibbonFactory *m_factory;
 };
 
-#ifndef RibbonSubElementMgr
-#define RibbonSubElementMgr RibbonManager::instance()
+#ifndef RibbonElementMgr
+#define RibbonElementMgr RibbonManager::instance()
 #endif
 
-#ifndef RibbonSubElementFactory
-#define RibbonSubElementFactory RibbonManager::instance()->factory()
+#ifndef RibbonElementFactory
+#define RibbonElementFactory RibbonElementMgr->factory()
 #endif
 
-#ifndef RibbonSubElementStyleOpt
-#define RibbonSubElementStyleOpt RibbonSubElementFactory->getRibbonStyleOption()
+#ifndef RibbonElementStyleOpt
+#define RibbonElementStyleOpt RibbonElementFactory->getRibbonStyleOption()
 #endif
-

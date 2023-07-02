@@ -109,7 +109,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_rightButtonGroup(Q_NULLPTR)
     , m_ribbonStyle(RibbonBar::OfficeStyle)
     , m_lastShowStyle(RibbonBar::OfficeStyle)
-    , m_windowButtonsSize(RibbonSubElementStyleOpt.titleBarHeight() * 4, RibbonSubElementStyleOpt.titleBarHeight())
+    , m_windowButtonsSize(RibbonElementStyleOpt.titleBarHeight() * 4, RibbonElementStyleOpt.titleBarHeight())
     , m_pageContextColorListIndex(-1)
     , m_tabBarBaseLineColor(186, 201, 219)
     , m_titleAligment(Qt::AlignCenter)
@@ -691,7 +691,7 @@ int RibbonBarPrivate::calcMinTabBarWidth() const
  */
 int RibbonBarPrivate::mainBarHeight() const
 {
-    return RibbonSubElementStyleOpt.ribbonBarHeight(m_ribbonStyle);
+    return RibbonElementStyleOpt.ribbonBarHeight(m_ribbonStyle);
 }
 
 /**
@@ -1370,7 +1370,7 @@ void RibbonBar::showMinimumButton(bool isShow)
     if (isShow) {
         activeRightButtonGroup();
         if (Q_NULLPTR == d->m_minimumPageButton) {
-            d->m_minimumPageButton = RibbonSubElementFactory->createHideGroupButton(this);
+            d->m_minimumPageButton = RibbonElementFactory->createHideGroupButton(this);
             d->m_minimumPageButton->ensurePolished();   // 载入样式图标
             QAction *action = new QAction(d->m_minimumPageButton);
             connect(action, &QAction::triggered, this, [=]() {
@@ -1394,12 +1394,12 @@ void RibbonBar::showMinimumButton(bool isShow)
 
 int RibbonBar::tabBarHeight() const
 {
-    return RibbonSubElementStyleOpt.tabBarHeight();
+    return RibbonElementStyleOpt.tabBarHeight();
 }
 
 int RibbonBar::titleBarHeight() const
 {
-    return RibbonSubElementStyleOpt.titleBarHeight();
+    return RibbonElementStyleOpt.titleBarHeight();
 }
 
 RibbonButtonGroup *RibbonBar::rightButtonGroup()
