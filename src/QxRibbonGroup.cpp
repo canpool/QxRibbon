@@ -66,7 +66,7 @@ RibbonGroupPrivate::RibbonGroupPrivate(RibbonGroup *p)
     m_layout->setContentsMargins(2, 2, 2, 2);
 }
 
-RibbonButton *RibbonGroupPrivate::lastAddActionButton()
+RibbonButton *RibbonGroupPrivate::lastAddedButton()
 {
     QWidget *w = m_layout->lastWidget();
 
@@ -205,7 +205,7 @@ RibbonButton *RibbonGroup::addAction(QAction *action, RibbonGroup::RowProportion
     setActionRowProportionProperty(action, rp);
     QWidget::addAction(action);
 
-    return d->lastAddActionButton();
+    return d->lastAddedButton();
 }
 
 /**
@@ -255,8 +255,7 @@ void RibbonGroup::addAction(QAction *act, QToolButton::ToolButtonPopupMode popMo
     }
     setActionRowProportionProperty(act, rp);
     QWidget::addAction(act);
-    RibbonButton *btn = d->lastAddActionButton();
-
+    RibbonButton *btn = d->lastAddedButton();
     if (btn) {
         btn->setPopupMode(popMode);
     }
@@ -300,9 +299,10 @@ RibbonButton *RibbonGroup::addMenu(QMenu *menu, RibbonGroup::RowProportion rp,
     QAction *action = menu->menuAction();
 
     addAction(action, rp);
-    RibbonButton *btn = d->lastAddActionButton();
-
-    btn->setPopupMode(popMode);
+    RibbonButton *btn = d->lastAddedButton();
+    if (btn) {
+        btn->setPopupMode(popMode);
+    }
     return btn;
 }
 
@@ -423,7 +423,6 @@ QAction *RibbonGroup::addSeparator(int top, int bottom)
     QWidget::addAction(action);
     QWidget *w = d->m_layout->lastWidget();
     RibbonSeparator *sep = qobject_cast<RibbonSeparator *>(w);
-
     if (sep) {
         sep->setTopBottomMargins(top, bottom);
     }
@@ -445,8 +444,9 @@ RibbonButton *RibbonGroup::ribbonButtonForAction(QAction *action)
             return Q_NULLPTR;
         }
         QLayoutItem *item = lay->takeAt(index);
-        RibbonButton *btn = qobject_cast<RibbonButton *>(item ? item->widget() : Q_NULLPTR);
-        return btn;
+        if (item) {
+            return qobject_cast<RibbonButton *>(item->widget());
+        }
     }
     return Q_NULLPTR;
 }
@@ -473,7 +473,7 @@ QList<RibbonButton *> RibbonGroup::ribbonButtons() const
  * @brief 判断是否存在OptionAction
  * @return 存在返回true
  */
-bool RibbonGroup::isHaveOptionAction() const
+bool RibbonGroup::hasOptionAction() const
 {
     return (d->m_optionActionButton != Q_NULLPTR);
 }
@@ -601,11 +601,11 @@ bool RibbonGroup::isExpanding() const
 
 /**
  * @brief 把group设置为扩展模式，此时会撑大水平区域
- * @param isExpanding
+ * @param expanding
  */
-void RibbonGroup::setExpanding(bool isExpanding)
+void RibbonGroup::setExpanding(bool expanding)
 {
-    setSizePolicy(isExpanding ? QSizePolicy::Expanding : QSizePolicy::Preferred, QSizePolicy::Fixed);
+    setSizePolicy(expanding ? QSizePolicy::Expanding : QSizePolicy::Preferred, QSizePolicy::Fixed);
 }
 
 /**
@@ -645,7 +645,7 @@ int RibbonGroup::titleHeight() const
 }
 
 /**
- * @brief 定义所有的group的标题栏高度，有别于@sa titleHeight 此函数是静态函数，获取的是全局的高度
+ * @brief 定义所有的 group 的标题栏高度，有别于 @sa titleHeight 此函数是静态函数，获取的是全局的高度
  * 而 @sa titleHeight 函数会根据当前的行情况返回标题栏高度，在2行情况下返回0
  *
  * @return
@@ -656,10 +656,9 @@ int RibbonGroup::groupTitleHeight()
 }
 
 /**
- * @brief 设置group的全局高度，此函数是个全局的影响
- * @note RibbonStyleOption会用到此函数，调用设置函数后需要手动重新计算RibbonStyleOption的内容,@sa
- * RibbonStyleOption::recalc
- * @sa RibbonStyleOption
+ * @brief 设置 group 的全局高度，此函数是个全局的影响
+ * @note RibbonStyleOption 会用到 groupTitleHeight ，调用设置函数后需要手动重新计算 RibbonStyleOption 的内容,
+ * @sa RibbonStyleOption::recalc
  * @param h
  */
 void RibbonGroup::setGroupTitleHeight(int h)
@@ -680,20 +679,16 @@ void RibbonGroup::paintEvent(QPaintEvent *event)
         QFont f = font();
         f.setPixelSize(th * 0.6);
         p.setFont(f);
+        QRect r;
         if (d->m_optionActionButton) {
-            p.drawText(1, height() - th, width() - d->m_optionActionButton->width() - 4, th, Qt::AlignCenter,
-                       windowTitle());
-#ifdef QX_RIBBON_DEBUG_HELP_DRAW
-            QRect r = QRect(1, height() - th, width() - d->m_optionActionButton->width() - 4, th - 2);
-            HELP_DRAW_RECT(p, r);
-#endif
+            r = QRect(1, height() - th, width() - d->m_optionActionButton->width() - 4, th);
         } else {
-            p.drawText(1, height() - th, width(), th, Qt::AlignCenter, windowTitle());
-#ifdef QX_RIBBON_DEBUG_HELP_DRAW
-            QRect r = QRect(1, height() - th, width(), th);
-            HELP_DRAW_RECT(p, r);
-#endif
+            r = QRect(1, height() - th, width(), th);
         }
+        p.drawText(r, Qt::AlignCenter, windowTitle());
+#ifdef QX_RIBBON_DEBUG_HELP_DRAW
+        HELP_DRAW_RECT(p, r);
+#endif
     }
 
     QWidget::paintEvent(event);

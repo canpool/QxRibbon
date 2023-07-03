@@ -496,7 +496,7 @@ void RibbonGroupLayoutPrivate::updateGeomArray(const QRect &setrect)
     }
     // 在有optionButton情况下，的2行模式，需要调整totalWidth
     if (group->isTwoRow()) {
-        if (group->isHaveOptionAction()) {
+        if (group->hasOptionAction()) {
             totalWidth += group->optionActionButtonSize().width();
         }
     }

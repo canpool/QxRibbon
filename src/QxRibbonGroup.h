@@ -42,8 +42,8 @@ public:
         Small,  ///< 小占比，占RibbonGroup的一行，Medium在不满足条件时也会变为Small，但不会变为Large
     };
 public:
-    RibbonGroup(QWidget *parent = Q_NULLPTR);
-    RibbonGroup(const QString &name, QWidget *parent = Q_NULLPTR);
+    explicit RibbonGroup(QWidget *parent = Q_NULLPTR);
+    explicit RibbonGroup(const QString &name, QWidget *parent = Q_NULLPTR);
     ~RibbonGroup() Q_DECL_OVERRIDE;
 
     QString groupName() const;
@@ -84,7 +84,7 @@ public:
     RibbonButton *ribbonButtonForAction(QAction *action);
     QList<RibbonButton *> ribbonButtons() const;
 
-    bool isHaveOptionAction() const;
+    bool hasOptionAction() const;
     void addOptionAction(QAction *action);
 
     int actionIndex(QAction *act) const;
@@ -99,7 +99,7 @@ public:
     virtual QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
     bool isExpanding() const;
-    void setExpanding(bool isExpanding = true);
+    void setExpanding(bool expanding = true);
 
     bool isCanCustomize() const;
     void setCanCustomize(bool b);

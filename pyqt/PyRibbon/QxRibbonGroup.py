@@ -90,7 +90,7 @@ class RibbonGroup(QWidget):
             action: QAction = args[0]
             RibbonGroup.setActionRowProportionProperty(action, args[1])
             super().addAction(action)
-            return self._lastAddActionButton()
+            return self._lastAddedButton()
         elif arg_len >= 3:
             if isinstance(args[0], QAction):
                 action: QAction = args[0]
@@ -98,7 +98,7 @@ class RibbonGroup(QWidget):
                 rp = args[2]
                 RibbonGroup.setActionRowProportionProperty(action, rp)
                 super().addAction(action)
-                btn: RibbonButton = self._lastAddActionButton()
+                btn: RibbonButton = self._lastAddedButton()
                 if btn:
                     btn.setPopupMode(popMode)
                 return None
@@ -123,7 +123,7 @@ class RibbonGroup(QWidget):
     def addMenu(self, menu: QMenu, rp: int, pop_mode=QToolButton.InstantPopup) -> RibbonButton:
         action: QAction = menu.menuAction()
         self.addAction(action, rp)
-        btn: RibbonButton = self._lastAddActionButton()
+        btn: RibbonButton = self._lastAddedButton()
         if btn:
             btn.setPopupMode(pop_mode)
         return btn
@@ -200,7 +200,7 @@ class RibbonGroup(QWidget):
                 res.append(o)
         return res
 
-    def isHaveOptionAction(self) -> bool:
+    def hasOptionAction(self) -> bool:
         return self.m_optionActionButton is not None
 
     def addOptionAction(self, action: QAction):
@@ -334,7 +334,7 @@ class RibbonGroup(QWidget):
             if self.parentWidget():
                 QApplication.postEvent(self.parentWidget(), QEvent(QEvent.LayoutRequest))
 
-    def _lastAddActionButton(self) -> RibbonButton:
+    def _lastAddedButton(self) -> RibbonButton:
         w = self.m_layout.lastWidget()
         return w if isinstance(w, RibbonButton) else None
 
@@ -718,7 +718,7 @@ class RibbonGroupLayout(QLayout):
                 self.m_columnCount = column + 1
                 totalWidth = x + columnMaxWidth + spacing + m.right()
         if group.isTwoRow():
-            if group.isHaveOptionAction():
+            if group.hasOptionAction():
                 totalWidth += group.optionActionButtonSize().width()
         if totalWidth < rect.width():
             self._recalcExpandGeomArray(rect)

@@ -39,7 +39,7 @@ public:
     void resetLargeToolButtonStyle();
 
     // 返回最后一个添加的action对应的button，前提是最后一个是toolbutton，否则返回Q_NULLPTR
-    RibbonButton *lastAddActionButton();
+    RibbonButton *lastAddedButton();
 
     const QList<RibbonGroupItem *> &ribbonGroupItems() const;
 public:
