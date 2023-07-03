@@ -233,7 +233,7 @@ void RibbonPagePrivate::updateItemGeometry()
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
     qDebug() << "\r\n\r\n============================================="
              << "\r\nRibbonPagePrivate::updateItemGeometry"
-             << "\r\ngroup name:" << page->windowTitle() << "\r\n height:" << height
+             << "\r\ngroup name:" << page->windowTitle()
              << "\r\n first total:" << total << "\r\n y:" << y << "\r\n expandWidth:" << expandWidth;
 #endif
     if (total <= contentSize.width()) {

@@ -1608,9 +1608,9 @@ void RibbonBar::paintEvent(QPaintEvent *e)
         d->paintInWpsLiteStyle(p);
     }
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
-    HELP_DRAW_RECT(p, d->quickAccessBar->geometry());
-    HELP_DRAW_RECT(p, d->ribbonTabBar->geometry());
-    HELP_DRAW_RECT(p, d->stackedContainerWidget->geometry());
+    HELP_DRAW_RECT(p, d->m_quickAccessBar->geometry());
+    HELP_DRAW_RECT(p, d->m_tabBar->geometry());
+    HELP_DRAW_RECT(p, d->m_stack->geometry());
 #endif
 }
 
