@@ -28,9 +28,9 @@ public:
 
     short rowIndex;             ///< 记录当前item属于第几行，hide模式下为-1
     int columnIndex;            ///< 记录当前item属于第几列，hide模式下为-1
-    QRect itemWillSetGeometry;  ///< 在调用RibbonGroupLayout::updateGeomArray会更新这个此处，
-                                ///< 实际设置的时候会QWidgetItem::setGeometry设置Geometry
-    QAction *action;            /// < 记录action，参考QToolBarLayoutItem
+    QRect willGeometry;         ///< 在调用RibbonGroupLayout::updateGeomArray会更新该成员，
+                                ///< 实际设置的时候会传给QWidgetItem::setGeometry设置Geometry
+    QAction *action;            ///< 记录action，参考QToolBarLayoutItem
     bool customWidget;          ///< 对于没有窗口的action，实际也会有一个RibbonButton，在销毁时要delete掉
     RibbonGroup::RowProportion rowProportion; ///< 行的占比，ribbon中有large，medium和small三种占比,见@ref RowProportion
 };

@@ -371,7 +371,7 @@ class RibbonGroupItem(QWidgetItem):
         self.customWidget = False
         self.rowIndex = 0
         self.columnIndex = 0
-        self.itemWillSetGeometry = QRect()
+        self.willGeometry = QRect()
         self.rowProportion = RibbonGroup.ThreeRowMode
 
     def isEmpty(self) -> bool:
@@ -528,7 +528,7 @@ class RibbonGroupLayout(QLayout):
         maximum = -1
         for item in self.m_items:
             if not item.isEmpty() and item.columnIndex == col_index:
-                width = max(width, item.itemWillSetGeometry.width())
+                width = max(width, item.willGeometry.width())
                 maximum = max(maximum, item.widget().maximumWidth())
         return width, maximum
 
@@ -571,11 +571,11 @@ class RibbonGroupLayout(QLayout):
                     continue
                 if item.columnIndex == k:
                     if item in v.expandItems:
-                        item.itemWillSetGeometry.setWidth(v.columnExpandedWidth)
+                        item.willGeometry.setWidth(v.columnExpandedWidth)
                     else:
                         continue
                 else:
-                    item.itemWillSetGeometry.moveLeft(item.itemWillSetGeometry.x() + moveXLen)
+                    item.willGeometry.moveLeft(item.willGeometry.x() + moveXLen)
 
     def _updateGeomArray(self, rect: QRect):
         group: RibbonGroup = self.parentWidget()
@@ -623,7 +623,7 @@ class RibbonGroupLayout(QLayout):
                     column += 1
                 item.rowIndex = 0
                 item.columnIndex = column
-                item.itemWillSetGeometry = QRect(x, m.top(), hint.width(), largeHeight)
+                item.willGeometry = QRect(x, m.top(), hint.width(), largeHeight)
                 columnMaxWidth = hint.width()
                 x += columnMaxWidth + spacing
                 row = 0
@@ -634,14 +634,14 @@ class RibbonGroupLayout(QLayout):
                     if row == 0:
                         item.rowIndex = 0
                         item.columnIndex = column
-                        item.itemWillSetGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
                         thisColumnRP0 = RibbonGroup.Medium
                         columnMaxWidth = hint.width()
                         row = 1
                     else:
                         item.rowIndex = 1
                         item.columnIndex = column
-                        item.itemWillSetGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
                         columnMaxWidth = max(columnMaxWidth, hint.width())
                         x += columnMaxWidth + spacing
                         row = 0
@@ -651,14 +651,14 @@ class RibbonGroupLayout(QLayout):
                     if row == 0:
                         item.rowIndex = 0
                         item.columnIndex = column
-                        item.itemWillSetGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
                         thisColumnRP0 = RibbonGroup.Medium
                         columnMaxWidth = hint.width()
                         row = 1
                     elif row == 1:
                         item.rowIndex = 1
                         item.columnIndex = column
-                        item.itemWillSetGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
                         columnMaxWidth = max(columnMaxWidth, hint.width())
                         x += columnMaxWidth + spacing
                         row = 0
@@ -669,7 +669,7 @@ class RibbonGroupLayout(QLayout):
                         column += 1
                         item.rowIndex = 0
                         item.columnIndex = column
-                        item.itemWillSetGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow0, hint.width(), smallHeight)
                         thisColumnRP0 = RibbonGroup.Medium
                         columnMaxWidth = hint.width()
                         row = 1
@@ -677,16 +677,16 @@ class RibbonGroupLayout(QLayout):
                 if row == 0:
                     item.rowIndex = 0
                     item.columnIndex = column
-                    item.itemWillSetGeometry = QRect(x, ySmallRow0, hint.width(), smallHeight)
+                    item.willGeometry = QRect(x, ySmallRow0, hint.width(), smallHeight)
                     thisColumnRP0 = RibbonGroup.Small
                     columnMaxWidth = hint.width()
                     row = 1
                 elif row == 1:
                     item.rowIndex = 1
                     item.columnIndex = column
-                    item.itemWillSetGeometry = QRect(x, ySmallRow1, hint.width(), smallHeight)
+                    item.willGeometry = QRect(x, ySmallRow1, hint.width(), smallHeight)
                     if rowCount == 3 and thisColumnRP0 == RibbonGroup.Medium:
-                        item.itemWillSetGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
+                        item.willGeometry = QRect(x, yMediumRow1, hint.width(), smallHeight)
                     columnMaxWidth = max(columnMaxWidth, hint.width())
                     if rowCount == 2:
                         x += columnMaxWidth + spacing
@@ -703,7 +703,7 @@ class RibbonGroupLayout(QLayout):
                 else:
                     item.rowIndex = 2
                     item.columnIndex = column
-                    item.itemWillSetGeometry = QRect(x, ySmallRow2, hint.width(), smallHeight)
+                    item.willGeometry = QRect(x, ySmallRow2, hint.width(), smallHeight)
                     columnMaxWidth = max(columnMaxWidth, hint.width())
                     x += columnMaxWidth + spacing
                     row = 0
@@ -733,7 +733,7 @@ class RibbonGroupLayout(QLayout):
             if item.isEmpty():
                 hideWidgets.append(item.widget())
             else:
-                item.setGeometry(item.itemWillSetGeometry)
+                item.setGeometry(item.willGeometry)
                 showWidgets.append(item.widget())
         for w in showWidgets:
             w.show()
