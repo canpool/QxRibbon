@@ -16,8 +16,8 @@ class RibbonPageItem:
     def __init__(self):
         self.m_group: RibbonGroup = None
         self.m_separator: RibbonSeparator = None
-        self.m_willSetGroupGeometry = QRect()
-        self.m_willSetSeparatorGeometry = QRect()
+        self.m_groupWillGeometry = QRect()
+        self.m_separatorWillGeometry = QRect()
 
     def isEmpty(self) -> bool:
         if self.m_group:
@@ -284,8 +284,8 @@ class RibbonPage(QWidget):
             if item.isEmpty():
                 if item.m_separator:
                     item.m_separator.hide()
-                item.m_willSetGroupGeometry = QRect(0, 0, 0, 0)
-                item.m_willSetSeparatorGeometry = QRect(0, 0, 0, 0)
+                item.m_groupWillGeometry = QRect(0, 0, 0, 0)
+                item.m_separatorWillGeometry = QRect(0, 0, 0, 0)
                 continue
             group = item.m_group
             if not group:
@@ -298,11 +298,11 @@ class RibbonPage(QWidget):
             if group.isExpanding():
                 groupSize.setWidth(groupSize.width() + expandWidth)
             w = groupSize.width()
-            item.m_willSetGroupGeometry = QRect(x, y, w, contentSize.height())
+            item.m_groupWillGeometry = QRect(x, y, w, contentSize.height())
             x += w
             total += w
             w = separatorSize.width()
-            item.m_willSetSeparatorGeometry = QRect(x, y, w, contentSize.height())
+            item.m_separatorWillGeometry = QRect(x, y, w, contentSize.height())
             x += w
             total += w
         self.m_totalWidth = total
@@ -338,10 +338,10 @@ class RibbonPage(QWidget):
                 if item.m_separator:
                     hideWidgets.append(item.m_separator)
             else:
-                item.m_group.setGeometry(item.m_willSetGroupGeometry)
+                item.m_group.setGeometry(item.m_groupWillGeometry)
                 showWidgets.append(item.m_group)
                 if item.m_separator:
-                    item.m_separator.setGeometry(item.m_willSetSeparatorGeometry)
+                    item.m_separator.setGeometry(item.m_separatorWillGeometry)
                     showWidgets.append(item.m_separator)
         self.m_rightScrollBtn.setVisible(self.m_isRightScrollBtnShow)
         self.m_leftScrollBtn.setVisible(self.m_isLeftScrollBtnShow)

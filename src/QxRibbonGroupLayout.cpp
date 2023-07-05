@@ -574,8 +574,9 @@ void RibbonGroupLayout::addItem(QLayoutItem *item)
  */
 void RibbonGroupLayout::insertAction(int index, QAction *act, RibbonGroup::RowProportion rp)
 {
-    index = qMax(0, index);
-    index = qMin(d->m_items.count(), index);
+    if (index < 0 || index > d->m_items.count()) {
+        index = d->m_items.count();
+    }
     RibbonGroupItem *item = d->createItem(act, rp);
 
     if (item) {
@@ -694,14 +695,18 @@ QWidget *RibbonGroupLayout::lastWidget() const
  */
 void RibbonGroupLayout::move(int from, int to)
 {
-    if (from == to) {
+    int c = count();
+    if (c <= 0) {
         return;
     }
-    if (to < 0) {
-        to = 0;
+    if (from < 0 || from >= c) {
+        from = c - 1;
     }
-    if (to >= count()) {
-        to = count() - 1;
+    if (to < 0 || to >= c) {
+        to = c - 1;
+    }
+    if (from == to) {
+        return;
     }
     d->m_items.move(from, to);
     invalidate();

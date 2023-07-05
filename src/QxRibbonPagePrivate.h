@@ -36,8 +36,8 @@ public:
 public:
     RibbonGroup *m_group;
     RibbonSeparator *m_separator;
-    QRect m_willSetGroupGeometry;
-    QRect m_willSetSeparatorGeometry;
+    QRect m_groupWillGeometry;
+    QRect m_separatorWillGeometry;
 };
 
 
@@ -69,8 +69,6 @@ public:
     QList<RibbonGroup *> groupList();
 
     void setGroupLayoutMode(RibbonGroup::GroupLayoutMode m);
-
-    void setBackgroundBrush(const QBrush &brush);
 
     int totalSizeHintWidth() const;
 
