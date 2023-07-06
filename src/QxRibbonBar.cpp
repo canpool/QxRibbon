@@ -130,6 +130,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
 void RibbonBarPrivate::init()
 {
     m_applicationButton = new RibbonApplicationButton(tr("app"), q);
+    m_applicationButton->setObjectName(QStringLiteral("qx_RibbonApplicationButton"));
     connect(m_applicationButton, &QAbstractButton::clicked, q, &RibbonBar::applicationButtonClicked);
     m_tabBar = new RibbonTabBar(q);
     m_tabBar->setObjectName(QStringLiteral("qx_RibbonTabBar"));
@@ -161,6 +162,11 @@ void RibbonBarPrivate::setApplicationButton(QAbstractButton *btn)
         }
         btn->move(0, q->titleBarHeight());
         connect(btn, &QAbstractButton::clicked, q, &RibbonBar::applicationButtonClicked);
+
+        if (btn->objectName().isEmpty()) {
+            btn->setObjectName(QStringLiteral("qx_RibbonApplicationButton"));
+        }
+        btn->setVisible(true);
     }
     m_applicationButton = btn;
 }
@@ -271,16 +277,19 @@ void RibbonBarPrivate::updateRibbonElementGeometry()
     for (RibbonPage *page : pages) {
         page->setGroupLayoutMode(isTwoRowStyle() ? RibbonGroup::TwoRowMode : RibbonGroup::ThreeRowMode);
     }
+    updateRibbonBarHeight();
+}
 
+void RibbonBarPrivate::updateRibbonBarHeight()
+{
     // 根据样式调整bar的高度
-    if (!m_minimized) {
+    if (m_minimized){
+        // 处于最小模式下时，bar 的高度为 tabbar 的 bottom
+        // 最小模式时，bar 的高度在 setMinimizedFlag 中已调整
+        // q->setFixedHeight(m_tabBar->geometry().bottom());
+    } else {
         q->setFixedHeight(mainBarHeight());
     }
-//    // 最小模式时，bar 的高度在 resize 之后调整
-//    else if(m_minimized){
-//        // 处于最小模式下时，bar 的高度为 tabbar 的 bottom
-//        setFixedHeight(d->ribbonTabBar->geometry().bottom());
-//    }
 }
 
 void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
@@ -304,9 +313,7 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
             contextTitleRect.translate(m_tabBar->x(), m_tabBar->y());
             contextTitleRect.setHeight(m_tabBar->height() - 1);   // 减1像素，避免tabbar基线覆盖
             contextTitleRect -= m_tabBar->tabMargin() / 2;
-            // 把区域顶部扩展到窗口顶部
-            contextTitleRect.setTop(border.top());
-            // 绘制
+            contextTitleRect.setTop(border.top()); // 把区域顶部扩展到窗口顶部
             paintPageContextTab(p, pageContextDataList[i].pageContext->contextTitle(), contextTitleRect, clr);
             // 更新上下文标签的范围，用于控制标题栏的显示
             if (contextTitleRect.left() < pageContextPos.x()) {
@@ -382,9 +389,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
             contextTitleRect.translate(m_tabBar->x(), m_tabBar->y());
             contextTitleRect.setHeight(m_tabBar->height() - 1);
             contextTitleRect -= m_tabBar->tabMargin() / 2;
-            // 把区域顶部扩展到窗口顶部
-            contextTitleRect.setTop(border.top());
-            // 绘制
+            contextTitleRect.setTop(border.top()); // 把区域顶部扩展到窗口顶部
             paintPageContextTab(p, QString(), contextTitleRect, clr);
         }
 #ifdef QX_DRAW_CONTEXT_PAGE_BORDER
@@ -401,9 +406,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
     }
     p.restore();
     //! 显示标题等
-
     QWidget *parWindow = q->parentWidget();
-
     if (parWindow && m_titleVisible) {
         int start = m_tabBar->x() + m_tabBar->width();
         int width = m_quickAccessBar->x() - start;
@@ -494,7 +497,8 @@ void RibbonBarPrivate::paintPageContextTab(QPainter &painter, const QString &tit
         // 绘制 tab 边框
         painter.setPen(gColor);
         painter.setBrush(Qt::NoBrush);
-        QRect tabRect(contextRect.bottomLeft(), QPoint(contextRect.bottomRight().x() - 1, m_tabBar->geometry().bottom()));
+        QRect tabRect(contextRect.bottomLeft(),
+                      QPoint(contextRect.bottomRight().x() - 1, m_tabBar->geometry().bottom()));
         painter.drawRect(tabRect);
         painter.restore();
     }
@@ -623,7 +627,6 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
 
     // tab 的y值需要重新计算
     int tabH = q->tabBarHeight();
-
     if (tabH > validTitleBarHeight) {
         // 这种直接把tabH设置为validTitleBarHeight
         tabH = validTitleBarHeight;
@@ -643,7 +646,6 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
     // mainwindow的空间，接受鼠标事件，从而实现拖动等操作，否则tabbar占用整个顶栏，鼠标无法点击到mainwindow
     // 计算tab所占用的宽度
     int mintabBarWidth = calcMinTabBarWidth();
-
     if (mintabBarWidth < tabBarWidth) {
         tabBarWidth = mintabBarWidth;
     }
@@ -703,6 +705,9 @@ int RibbonBarPrivate::mainBarHeight() const
  */
 int RibbonBarPrivate::tabIndex(RibbonPage *page)
 {
+    if (page == Q_NULLPTR) {
+        return -1;
+    }
     const int size = m_tabBar->count();
 
     for (int i = 0; i < size; ++i) {
@@ -776,7 +781,7 @@ void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
         if (m_minimized) {
             m_tabBar->clearFocus();
             if (!m_stack->isVisible() && m_stack->isPopup()) {
-                // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+                // 在StackedWindget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
 #if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
                 QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
                                 m_tabBar->mapToGlobal(QCursor::pos()));
@@ -789,7 +794,7 @@ void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
                 resizeStackedWidget();
                 m_stack->setFocus();
                 m_stack->show();
-                // 在最小模式下，每次显示完stackedContainerWidget后把tab的
+                // 在最小模式下，每次显示完StackedWindget后把tab的
                 // 的index设置为-1，这样每次点击都会触发onCurrentRibbonTabChanged
             }
         }
@@ -813,7 +818,7 @@ void RibbonBarPrivate::onCurrentRibbonTabClicked(int index)
     }
     if (m_minimized) {
         if (!m_stack->isVisible() && m_stack->isPopup()) {
-            // 在stackedContainerWidget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
+            // 在StackedWindget弹出前，先给tabbar一个QHoverEvent,让tabbar知道鼠标已经移开
 #if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
             QHoverEvent ehl(QEvent::HoverLeave, m_tabBar->mapToGlobal(QCursor::pos()),
                             m_tabBar->mapToGlobal(QCursor::pos()));
@@ -896,19 +901,11 @@ QAbstractButton *RibbonBar::applicationButton()
  *
  * @note applicationButton的所有权归RibbonBar所有，不要在外部对applicationButton进行delete操作
  * @param btn applicationButton指针，可以传入@ref RibbonApplicationButton，
- * SA已经对RibbonApplicationButton进行了样式设置
+ * 已经对RibbonApplicationButton进行了样式设置
  */
 void RibbonBar::setApplicationButton(QAbstractButton *btn)
 {
     d->setApplicationButton(btn);
-    if (btn) {
-        if (btn->objectName().isEmpty()) {
-            btn->setObjectName(QStringLiteral("RibbonApplicationButton"));
-        }
-        btn->setVisible(true);
-        // btn->setGeometry(applicationButtonGeometry());
-    }
-    // 无论设置为什么都触发resize
     QApplication::postEvent(this, new QResizeEvent(size(), size()));
 }
 
@@ -1061,16 +1058,13 @@ bool RibbonBar::isPageVisible(RibbonPage *page) const
 void RibbonBar::showPage(RibbonPage *page)
 {
     for (auto i = d->m_hidedPage.begin(); i != d->m_hidedPage.end(); ++i) {
-        if (i->page == page) {
-            // 说明要显示
+        if (i->page == page) { // 说明要显示
             int index = d->m_tabBar->insertTab(i->index, i->page->windowTitle());
             i->index = index;
             d->m_tabBar->setTabData(index, QVariant::fromValue(*i));
             d->m_hidedPage.erase(i);   // 移除
-            // 更新index信息
-            d->updateTabData();
-            raisePage(page);
-            return;
+            d->updateTabData(); // 更新index信息
+            break;
         }
     }
     raisePage(page);
@@ -1225,7 +1219,7 @@ void RibbonBar::showPageContext(RibbonPageContext *context)
         // 此句如果模式重复设置不会进行多余操作
         page->setGroupLayoutMode(isTwoRowStyle() ? RibbonGroup::TwoRowMode : RibbonGroup::ThreeRowMode);
         // 切换模式后会改变高度，上下文标签显示时要保证显示出来
-        //  page->setFixedHeight(pageHeight());
+        // page->setFixedHeight(pageHeight());
         int index = d->m_tabBar->addTab(page->windowTitle());
         pageContextData.tabPageIndex.append(index);
 
@@ -1503,13 +1497,7 @@ void RibbonBar::setWindowButtonsSize(const QSize &size)
  */
 void RibbonBar::updateRibbonGeometry()
 {
-    // d->updateRibbonElementGeometry();
-    // updateRibbonElementGeometry() 中会调用 page->setGroupLayoutMode(..)
-    // 如果 mode 变换，page 内部会调用 updateItemGeomery，与下面的 page->updateItemGeometry() 重复
-    // 所以此处不调用 updateRibbonElementGeometry，而是单独更新高度
-    if (!isMinimized()) {
-        setFixedHeight(d->mainBarHeight());
-    }
+    d->updateRibbonBarHeight();
     QList<RibbonPage *> pages = this->pages();
     for (RibbonPage *page : pages) {
         page->updateItemGeometry();
@@ -1561,39 +1549,30 @@ bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
                 (QEvent::WindowActivate == e->type())) {
                 QApplication::postEvent(this, new QResizeEvent(size(), size()));
             }
-        } else if (obj == d->m_stack) {
-            // 在stack 是popup模式时，点击的是stackedContainerWidget区域外的时候，如果是在ribbonTabBar上点击
-            // 那么忽略掉这次点击，把点击下发到ribbonTabBar,这样可以避免stackedContainerWidget在点击ribbonTabBar后
-            // 隐藏又显示，出现闪烁
+        } else if (obj == d->m_stack && d->m_stack->isPopup()) {
+            // 在 stack 是 popup 模式时，点击 stack 区域外的时候，如果是在 ribbonTabBar 上点击, 那么忽略掉这次点击
+            // 把点击下发到 ribbonTabBar, 这样可以避免在点击 ribbonTabBar 后 stack 隐藏又显示，出现闪烁
             if ((QEvent::MouseButtonPress == e->type()) || (QEvent::MouseButtonDblClick == e->type())) {
-                if (d->m_stack->isPopup()) {
-                    QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+                QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-                    QPoint pos = mouseEvent->pos();
-                    QPoint globalPos = mouseEvent->globalPos();
+                QPoint pos = mouseEvent->pos();
+                QPoint globalPos = mouseEvent->globalPos();
 #else
-                    QPoint pos = mouseEvent->position().toPoint();
-                    QPoint globalPos = mouseEvent->globalPosition().toPoint();
+                QPoint pos = mouseEvent->position().toPoint();
+                QPoint globalPos = mouseEvent->globalPosition().toPoint();
 #endif
-                    if (!d->m_stack->rect().contains(pos)) {
-                        QWidget *clickedWidget = QApplication::widgetAt(globalPos);
-                        if (clickedWidget == d->m_tabBar) {
-                            const QPoint targetPoint = clickedWidget->mapFromGlobal(globalPos);
-                            QMouseEvent *evPress =
-                                new QMouseEvent(mouseEvent->type(), targetPoint, globalPos,
-                                                mouseEvent->button(), mouseEvent->buttons(), mouseEvent->modifiers());
-                            QApplication::postEvent(clickedWidget, evPress);
-                            return (true);
-                        }
+                if (!d->m_stack->rect().contains(pos)) {
+                    QWidget *clickedWidget = QApplication::widgetAt(globalPos);
+                    if (clickedWidget == d->m_tabBar) {
+                        const QPoint targetPoint = clickedWidget->mapFromGlobal(globalPos);
+                        QMouseEvent *evPress = new QMouseEvent(mouseEvent->type(), targetPoint, globalPos,
+                            mouseEvent->button(), mouseEvent->buttons(), mouseEvent->modifiers());
+                        QApplication::postEvent(clickedWidget, evPress);
+                        return true;
                     }
                 }
             }
         }
-        // if (WindowButtonGroup *g = qobject_cast<WindowButtonGroup *>(obj)) {
-        //     if (e->type() == QEvent::Resize) {
-        //         d->windowButtonSize = g->size();
-        //     }
-        // }
     }
     return QMenuBar::eventFilter(obj, e);
 }
@@ -1623,19 +1602,4 @@ void RibbonBar::resizeEvent(QResizeEvent *e)
         d->resizeInWpsLiteStyle();
     }
     update();
-}
-
-/**
- * @brief 重写moveevent是为了在移动时调整isPopupMode状态下的stackedContainerWidget位置
- * @param event
- */
-void RibbonBar::moveEvent(QMoveEvent *event)
-{
-    if (d->m_stack) {
-        if (d->m_stack->isPopup()) {
-            // 弹出模式时，窗口发生了移动，同步调整StackedContainerWidget的位置
-            d->resizeStackedWidget();
-        }
-    }
-    QWidget::moveEvent(event);
 }

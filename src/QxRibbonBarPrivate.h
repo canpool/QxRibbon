@@ -78,6 +78,7 @@ public:
     void updateTabData();
     void updatePageContextManagerData();
     void updateRibbonElementGeometry();
+    void updateRibbonBarHeight();
 
     void paintInOfficeStyle(QPainter &p);
     void paintInWpsLiteStyle(QPainter &p);

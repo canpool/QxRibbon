@@ -108,7 +108,7 @@ public:
         OfficeStyleTwoRow = 0x0100 | OfficeStyle,
         WpsLiteStyleTwoRow = 0x0100 | WpsLiteStyle,
     };
-    Q_ENUMS(RibbonStyle)
+    Q_ENUM(RibbonStyle)
 public:
     RibbonBar(QWidget *parent = Q_NULLPTR);
     ~RibbonBar() Q_DECL_OVERRIDE;
@@ -202,7 +202,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
 private:
     RibbonBarPrivate *d;
     friend class RibbonBarPrivate;
