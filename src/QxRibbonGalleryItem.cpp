@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonGalleryItem.h"
-#include "QxRibbonGalleryGroup.h"
 
 class RibbonGalleryItemPrivate
 {
@@ -25,6 +24,7 @@ RibbonGalleryItemPrivate::RibbonGalleryItemPrivate()
 RibbonGalleryItem::RibbonGalleryItem()
     : d(new RibbonGalleryItemPrivate)
 {
+    setTextAlignment(Qt::AlignTop | Qt::AlignHCenter);
 }
 
 RibbonGalleryItem::RibbonGalleryItem(const QString &text, const QIcon &icon)
@@ -32,13 +32,11 @@ RibbonGalleryItem::RibbonGalleryItem(const QString &text, const QIcon &icon)
 {
     setText(text);
     setIcon(icon);
-    setTextAlignment(Qt::AlignTop | Qt::AlignHCenter);
 }
 
 RibbonGalleryItem::RibbonGalleryItem(QAction *act)
     : RibbonGalleryItem()
 {
-    setTextAlignment(Qt::AlignTop | Qt::AlignHCenter);
     setAction(act);
 }
 
@@ -78,9 +76,6 @@ void RibbonGalleryItem::setText(const QString &text)
 
 QString RibbonGalleryItem::text() const
 {
-    if (d->m_action) {
-        return d->m_action->text();
-    }
     return data(Qt::DisplayRole).toString();
 }
 
@@ -91,9 +86,6 @@ void RibbonGalleryItem::setToolTip(const QString &text)
 
 QString RibbonGalleryItem::toolTip() const
 {
-    if (d->m_action) {
-        return d->m_action->toolTip();
-    }
     return data(Qt::ToolTipRole).toString();
 }
 
@@ -104,9 +96,6 @@ void RibbonGalleryItem::setIcon(const QIcon &ico)
 
 QIcon RibbonGalleryItem::icon() const
 {
-    if (d->m_action) {
-        return d->m_action->icon();
-    }
     return qvariant_cast<QIcon>(data(Qt::DecorationRole));
 }
 
@@ -126,9 +115,6 @@ void RibbonGalleryItem::setSelectable(bool isSelectable)
 
 bool RibbonGalleryItem::isEnable() const
 {
-    if (d->m_action) {
-        return d->m_action->isEnabled();
-    }
     return (d->m_flags & Qt::ItemIsEnabled);
 }
 
@@ -161,7 +147,7 @@ Qt::ItemFlags RibbonGalleryItem::flags() const
 void RibbonGalleryItem::setAction(QAction *act)
 {
     d->m_action = act;
-    if (Q_NULLPTR == d->m_action) {
+    if (Q_NULLPTR == act) {
         return;
     }
     if (act->isEnabled()) {
@@ -181,7 +167,7 @@ void RibbonGalleryItem::setTextAlignment(Qt::Alignment a)
     setData(Qt::TextAlignmentRole, (int)a);
 }
 
-Qt::Alignment RibbonGalleryItem::getTextAlignment() const
+Qt::Alignment RibbonGalleryItem::textAlignment() const
 {
     return qvariant_cast<Qt::Alignment>(data(Qt::TextAlignmentRole));
 }

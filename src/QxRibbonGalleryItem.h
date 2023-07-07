@@ -11,7 +11,6 @@
 #include <QMap>
 #include <QVariant>
 
-class RibbonGalleryGroup;
 class RibbonGalleryItemPrivate;
 
 ///
@@ -50,7 +49,7 @@ public:
     QAction *action();
 
     void setTextAlignment(Qt::Alignment a);
-    Qt::Alignment getTextAlignment() const;
+    Qt::Alignment textAlignment() const;
 private:
     RibbonGalleryItemPrivate *d;
 };

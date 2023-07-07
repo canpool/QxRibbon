@@ -11,6 +11,8 @@
 #include <QListView>
 #include <QStyledItemDelegate>
 
+class RibbonGalleryGroup;
+
 ///
 /// \brief RibbonGalleryGroup 对应的显示代理
 ///
