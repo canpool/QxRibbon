@@ -41,8 +41,8 @@ class QX_RIBBON_EXPORT RibbonGalleryGroupModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    RibbonGalleryGroupModel(QObject *parent = Q_NULLPTR);
-    ~RibbonGalleryGroupModel();
+    explicit RibbonGalleryGroupModel(QObject *parent = Q_NULLPTR);
+    virtual ~RibbonGalleryGroupModel();
 
     virtual int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
@@ -87,7 +87,7 @@ public:
         DisplayThreeRow = 3
     };
 public:
-    RibbonGalleryGroup(QWidget *w = Q_NULLPTR);
+    explicit RibbonGalleryGroup(QWidget *w = Q_NULLPTR);
     virtual ~RibbonGalleryGroup();
 
     // 重新计算grid尺寸

@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonGalleryGroup.h"
-#include "QxRibbonManager.h"
-#include "QxRibbonStyleOption.h"
 
 #include <QActionGroup>
 #include <QDebug>
@@ -36,8 +34,8 @@ RibbonGalleryGroupPrivate::RibbonGalleryGroupPrivate(RibbonGalleryGroup *p)
     , m_blockRecalc(false)
 {
     m_actionGroup = new QActionGroup(p);
-    p->connect(m_actionGroup, &QActionGroup::triggered, p, &RibbonGalleryGroup::triggered);
-    p->connect(m_actionGroup, &QActionGroup::hovered, p, &RibbonGalleryGroup::hovered);
+    QObject::connect(m_actionGroup, &QActionGroup::triggered, p, &RibbonGalleryGroup::triggered);
+    QObject::connect(m_actionGroup, &QActionGroup::hovered, p, &RibbonGalleryGroup::hovered);
 }
 
 
@@ -80,10 +78,8 @@ void RibbonGalleryGroupItemDelegate::paintIconOnly(QPainter *painter, const QSty
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, m_group);
     // draw the icon
     QRect iconRect = option.rect;
-
     iconRect.adjust(sp, sp, -sp, -sp);
     QIcon ico = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
-
     ico.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal, QIcon::On);
     painter->restore();
 }
@@ -120,12 +116,12 @@ RibbonGalleryGroupModel::~RibbonGalleryGroupModel()
 
 int RibbonGalleryGroupModel::rowCount(const QModelIndex &parent) const
 {
-    return (parent.isValid() ? 0 : m_items.size());
+    return (parent.isValid() ? 0 : m_items.count());
 }
 
 Qt::ItemFlags RibbonGalleryGroupModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid() || (index.row() >= m_items.size())) {
+    if (!index.isValid() || (index.row() >= m_items.count())) {
         return Qt::NoItemFlags;
     }
     return m_items.at(index.row())->flags();
@@ -189,7 +185,6 @@ RibbonGalleryItem *RibbonGalleryGroupModel::take(int row)
 
     beginRemoveRows(QModelIndex(), row, row);
     RibbonGalleryItem *item = m_items.takeAt(row);
-
     endRemoveRows();
     return item;
 }
@@ -261,15 +256,13 @@ void RibbonGalleryGroup::recalcGridSize(int galleryHeight)
         h = galleryHeight;
     }
     int w = h;
-    if (getGridMinimumWidth() > 0) {
-        if (w < getGridMinimumWidth()) {
-            w = getGridMinimumWidth();
-        }
+    int mw = getGridMinimumWidth();
+    if (mw > 0 && w < mw) {
+        w = mw;
     }
-    if (getGridMaximumWidth() > 0) {
-        if (w > getGridMaximumWidth()) {
-            w = getGridMaximumWidth();
-        }
+    mw = getGridMaximumWidth();
+    if (mw > 0 && w > mw) {
+        w = mw;
     }
     setGridSize(QSize(w, h));
     // 在通过GalleryGroupStyle确定icon的尺寸
@@ -331,10 +324,11 @@ RibbonGalleryGroup::GalleryGroupStyle RibbonGalleryGroup::getGalleryGroupStyle()
 
 void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
 {
-    if (Q_NULLPTR == groupModel()) {
+    RibbonGalleryGroupModel *model = groupModel();
+    if (Q_NULLPTR == model) {
         return;
     }
-    addItem(new RibbonGalleryItem(text, icon));
+    model->append(new RibbonGalleryItem(text, icon));
 }
 
 /**
@@ -344,25 +338,26 @@ void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
  */
 void RibbonGalleryGroup::addItem(RibbonGalleryItem *item)
 {
-    if (Q_NULLPTR == groupModel()) {
+    RibbonGalleryGroupModel *model = groupModel();
+    if (Q_NULLPTR == model) {
         return;
     }
-    groupModel()->append(item);
+    model->append(item);
 }
 
 void RibbonGalleryGroup::addActionItem(QAction *act)
 {
-    if (Q_NULLPTR == groupModel()) {
+    RibbonGalleryGroupModel *model = groupModel();
+    if (Q_NULLPTR == model) {
         return;
     }
     d->m_actionGroup->addAction(act);
-    groupModel()->append(new RibbonGalleryItem(act));
+    model->append(new RibbonGalleryItem(act));
 }
 
 void RibbonGalleryGroup::addActionItemList(const QList<QAction *> &acts)
 {
     RibbonGalleryGroupModel *model = groupModel();
-
     if (Q_NULLPTR == model) {
         return;
     }
@@ -401,13 +396,11 @@ QString RibbonGalleryGroup::getGroupTitle() const
 void RibbonGalleryGroup::selectByIndex(int i)
 {
     RibbonGalleryGroupModel *model = groupModel();
-
     if (Q_NULLPTR == model) {
         return;
     }
     QModelIndex ind = model->index(i, 0, QModelIndex());
     QItemSelectionModel *selmodel = selectionModel();
-
     if (selmodel) {
         selmodel->select(ind, QItemSelectionModel::SelectCurrent);
     }
@@ -480,7 +473,7 @@ QActionGroup *RibbonGalleryGroup::getActionGroup() const
 void RibbonGalleryGroup::onItemClicked(const QModelIndex &index)
 {
     if (index.isValid()) {
-        RibbonGalleryItem *item = (RibbonGalleryItem *)index.internalPointer();
+        RibbonGalleryItem *item = static_cast<RibbonGalleryItem *>(index.internalPointer());
         if (item) {
             QAction *act = item->action();
             if (act) {
@@ -493,7 +486,7 @@ void RibbonGalleryGroup::onItemClicked(const QModelIndex &index)
 void RibbonGalleryGroup::onItemEntered(const QModelIndex &index)
 {
     if (index.isValid()) {
-        RibbonGalleryItem *item = (RibbonGalleryItem *)index.internalPointer();
+        RibbonGalleryItem *item = static_cast<RibbonGalleryItem *>(index.internalPointer());
         if (item) {
             QAction *act = item->action();
             if (act) {
