@@ -69,11 +69,11 @@ void RibbonGalleryPrivate::init(RibbonGallery *parent)
     m_buttonUp->setIcon(QIcon(":/image/res/ArrowUp.png"));
     m_buttonDown->setIcon(QIcon(":/image/res/ArrowDown.png"));
     m_buttonMore->setIcon(QIcon(":/image/res/ArrowMore.png"));
-    q->connect(m_buttonUp, &QAbstractButton::clicked, q, &RibbonGallery::pageUp);
-    q->connect(m_buttonDown, &QAbstractButton::clicked, q, &RibbonGallery::pageDown);
-    q->connect(m_buttonMore, &QAbstractButton::clicked, q, &RibbonGallery::showMoreDetail);
+    QObject::connect(m_buttonUp, &QAbstractButton::clicked, q, &RibbonGallery::pageUp);
+    QObject::connect(m_buttonDown, &QAbstractButton::clicked, q, &RibbonGallery::pageDown);
+    QObject::connect(m_buttonMore, &QAbstractButton::clicked, q, &RibbonGallery::showMoreDetail);
     // 信号转发
-    q->connect(q, &RibbonGallery::triggered, q, &RibbonGallery::onTriggered);
+    QObject::connect(q, &RibbonGallery::triggered, q, &RibbonGallery::onTriggered);
     m_popupWidget = Q_NULLPTR;
     m_viewportGroup = Q_NULLPTR;
     m_btnLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -156,7 +156,6 @@ RibbonGalleryGroup *RibbonGallery::addGalleryGroup()
  */
 void RibbonGallery::addGalleryGroup(RibbonGalleryGroup *group)
 {
-    group->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     RibbonGalleryViewport *viewport = ensureGetPopupViewPort();
     viewport->addWidget(group, group->getGroupTitle());
     connect(group, &QAbstractItemView::clicked, this, &RibbonGallery::onItemClicked);
@@ -431,8 +430,8 @@ QLabel *RibbonGalleryViewport::getWidgetTitleLabel(QWidget *w)
  */
 void RibbonGalleryViewport::widgetTitleChanged(QWidget *w, const QString &title)
 {
-    QLabel *l = getWidgetTitleLabel(w);
-    if (l) {
-        l->setText(title);
+    QLabel *label = getWidgetTitleLabel(w);
+    if (label) {
+        label->setText(title);
     }
 }
