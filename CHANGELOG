@@ -1,4 +1,24 @@
 
+0.5.4
+---
+Feature
+- Support remove action for RibbonQuickAccessBar/RibbonButtonGroup
+
+Interface
+- Change isHaveOptionAction to hasOptionAction for RibbonGroup
+- Change RibbonSubElement.. to RibbonElement.. for RibbonManager
+- Add resizeRibbon for RibbonBar
+- Add setIconSize/iconSize, rename getter, remove hasWidget for RibbonCtlContainer
+
+Bugfix
+- Fix the text rect of arrow button
+- Fix customize controls were executed every time
+
+Other
+- Optimize controls
+- Redefine version variable
+
+
 0.5.3
 ---
 Feature
