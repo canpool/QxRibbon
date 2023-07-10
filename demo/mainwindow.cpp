@@ -180,6 +180,8 @@ void MainWindow::onActionCustomizeTriggered(bool b)
         m_customizeWidget->setAttribute(Qt::WA_ShowModal, true);      // 属性设置 true:模态 false:非模态
         m_customizeWidget->setupActionsManager(m_actMgr);
     }
+    // FIXME：show只能半模态，show之后立即执行applys，导致自定义内容无法得到应用，
+    // 下次打开RibbonCustomizeWidget，才会应用上次的定制
     m_customizeWidget->show();
     m_customizeWidget->applys();
 }

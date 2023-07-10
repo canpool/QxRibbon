@@ -18,6 +18,18 @@
 #define QX_RIBBON_PROP_CAN_CUSTOMIZE "_qx_isCanCustomize"
 #endif
 
+QList<RibbonCustomizeData> remove_indexs(const QList<RibbonCustomizeData> &csd, const QList<int> &willRemoveIndexs)
+{
+    QList<RibbonCustomizeData> res;
+
+    for (int i = 0; i < csd.size(); ++i) {
+        if (!willRemoveIndexs.contains(i)) {
+            res << csd[i];
+        }
+    }
+    return res;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// RibbonCustomizeData
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +38,8 @@ RibbonCustomizeData::RibbonCustomizeData()
     : indexValue(-1)
     , actionRowProportionValue(RibbonGroup::Large)
     , m_type(UnknowActionType)
-    , m_actionsManagerPointer(Q_NULLPTR)
+    , m_actionsManager(Q_NULLPTR)
+    , customized(false)
 {
 }
 
@@ -34,7 +47,8 @@ RibbonCustomizeData::RibbonCustomizeData(ActionType type, RibbonActionsManager *
     : indexValue(-1)
     , actionRowProportionValue(RibbonGroup::Large)
     , m_type(type)
-    , m_actionsManagerPointer(mgr)
+    , m_actionsManager(mgr)
+    , customized(false)
 {
 }
 
@@ -72,10 +86,12 @@ bool RibbonCustomizeData::isValid() const
  * @param m
  * @return 如果应用失败，返回false,如果actionType==UnknowActionType直接返回false
  */
-bool RibbonCustomizeData::apply(RibbonWindow *m) const
+bool RibbonCustomizeData::apply(RibbonWindow *m)
 {
+    if (customized) {
+        return true;
+    }
     RibbonBar *bar = m->ribbonBar();
-
     if (Q_NULLPTR == bar) {
         return false;
     }
@@ -85,128 +101,128 @@ bool RibbonCustomizeData::apply(RibbonWindow *m) const
 
     case AddPageActionType: {
         // 添加标签
-        RibbonPage *c = bar->insertPage(indexValue, keyValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->insertPage(indexValue, keyValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        c->setObjectName(pageObjNameValue);
-        RibbonCustomizeData::setCanCustomize(c);
-        return true;
+        page->setObjectName(pageObjNameValue);
+        RibbonCustomizeData::setCanCustomize(page);
+        break;
     }
 
     case AddGroupActionType: {
         // 添加group
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *p = c->insertGroup(indexValue, keyValue);
-        p->setObjectName(groupObjNameValue);
-        RibbonCustomizeData::setCanCustomize(p);
-        return true;
+        RibbonGroup *group = page->insertGroup(indexValue, keyValue);
+        group->setObjectName(groupObjNameValue);
+        RibbonCustomizeData::setCanCustomize(group);
+        break;
     }
 
     case AddActionActionType: {
-        if (Q_NULLPTR == m_actionsManagerPointer) {
+        if (Q_NULLPTR == m_actionsManager) {
             return false;
         }
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
-        QAction *act = m_actionsManagerPointer->action(keyValue);
+        QAction *act = m_actionsManager->action(keyValue);
         if (Q_NULLPTR == act) {
             return false;
         }
         RibbonCustomizeData::setCanCustomize(act);
         group->addAction(act, actionRowProportionValue);
-        return true;
+        break;
     }
 
     case RemovePageActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        bar->removePage(c);
-        return true;
+        bar->removePage(page);
+        break;
     }
 
     case RemoveGroupActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
-        c->removeGroup(group);
-        return true;
+        page->removeGroup(group);
+        break;
     }
 
     case RemoveActionActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
-        QAction *act = m_actionsManagerPointer->action(keyValue);
+        QAction *act = m_actionsManager->action(keyValue);
         if (Q_NULLPTR == act) {
             return false;
         }
         group->removeAction(act);
-        return true;
+        break;
     }
 
     case ChangePageOrderActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        int currentindex = bar->pageIndex(c);
+        int currentindex = bar->pageIndex(page);
         if (-1 == currentindex) {
             return false;
         }
         int toindex = currentindex + indexValue;
         bar->movePage(currentindex, toindex);
-        return true;
+        break;
     }
 
     case ChangeGroupOrderActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
-        int groupIndex = c->groupIndex(group);
+        int groupIndex = page->groupIndex(group);
         if (-1 == groupIndex) {
             return false;
         }
-        c->moveGroup(groupIndex, groupIndex + indexValue);
-        return true;
+        page->moveGroup(groupIndex, groupIndex + indexValue);
+        break;
     }
 
     case ChangeActionOrderActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
-        QAction *act = m_actionsManagerPointer->action(keyValue);
+        QAction *act = m_actionsManager->action(keyValue);
         if (Q_NULLPTR == act) {
             return false;
         }
@@ -215,57 +231,58 @@ bool RibbonCustomizeData::apply(RibbonWindow *m) const
             return false;
         }
         group->moveAction(actindex, actindex + indexValue);
-        return true;
+        break;
     }
 
     case RenamePageActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        c->setWindowTitle(keyValue);
-        return true;
+        page->setWindowTitle(keyValue);
+        break;
     }
 
     case RenameGroupActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
-        RibbonGroup *group = c->groupByObjectName(groupObjNameValue);
+        RibbonGroup *group = page->groupByObjectName(groupObjNameValue);
         if (Q_NULLPTR == group) {
             return false;
         }
         group->setWindowTitle(keyValue);
-        return true;
+        break;
     }
 
     case VisiblePageActionType: {
-        RibbonPage *c = bar->pageByObjectName(pageObjNameValue);
-        if (Q_NULLPTR == c) {
+        RibbonPage *page = bar->pageByObjectName(pageObjNameValue);
+        if (Q_NULLPTR == page) {
             return false;
         }
         if (1 == indexValue) {
-            bar->showPage(c);
+            bar->showPage(page);
         } else {
-            bar->hidePage(c);
+            bar->hidePage(page);
         }
-        return true;
+        break;
     }
 
     default:
-        break;
+        return false;
     }
-    return false;
+    customized = true;
+    return true;
 }
 
 /**
- * @brief 获取actionmanager指针
+ * @brief 获取actionsmanager指针
  * @return
  */
-RibbonActionsManager *RibbonCustomizeData::actionManager()
+RibbonActionsManager *RibbonCustomizeData::actionsManager()
 {
-    return m_actionsManagerPointer;
+    return m_actionsManager;
 }
 
 /**
@@ -274,7 +291,7 @@ RibbonActionsManager *RibbonCustomizeData::actionManager()
  */
 void RibbonCustomizeData::setActionsManager(RibbonActionsManager *mgr)
 {
-    m_actionsManagerPointer = mgr;
+    m_actionsManager = mgr;
 }
 
 /**
@@ -577,20 +594,6 @@ void RibbonCustomizeData::setCanCustomize(QObject *obj, bool canbe)
     obj->setProperty(QX_RIBBON_PROP_CAN_CUSTOMIZE, canbe);
 }
 
-QList<RibbonCustomizeData> remove_indexs(const QList<RibbonCustomizeData> &csd, const QList<int> &willremoveIndex);
-
-QList<RibbonCustomizeData> remove_indexs(const QList<RibbonCustomizeData> &csd, const QList<int> &willremoveIndex)
-{
-    QList<RibbonCustomizeData> res;
-
-    for (int i = 0; i < csd.size(); ++i) {
-        if (!willremoveIndex.contains(i)) {
-            res << csd[i];
-        }
-    }
-    return res;
-}
-
 /**
  * @brief 对QList<RibbonCustomizeData>进行简化操作
  *
@@ -615,31 +618,33 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
         return csd;
     }
     QList<RibbonCustomizeData> res;
-    QList<int> willremoveIndex;   // 记录要删除的index
+    QList<int> willRemoveIndexs;   // 记录要删除的index
+
+    // FIXME: 添加和删除存在非连续情况，其它情况类似，算法需要重写
 
     //! 首先针对连续出现的添加和删除操作进行优化
     for (int i = 1; i < size; ++i) {
         if ((csd[i - 1].actionType() == AddPageActionType) && (csd[i].actionType() == RemovePageActionType)) {
             if (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue) {
-                willremoveIndex << i - 1 << i;
+                willRemoveIndexs << i - 1 << i;
             }
         } else if ((csd[i - 1].actionType() == AddGroupActionType) &&
                    (csd[i].actionType() == RemoveGroupActionType)) {
             if ((csd[i - 1].groupObjNameValue == csd[i].groupObjNameValue) &&
                 (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue)) {
-                willremoveIndex << i - 1 << i;
+                willRemoveIndexs << i - 1 << i;
             }
         } else if ((csd[i - 1].actionType() == AddActionActionType) &&
                    (csd[i].actionType() == RemoveActionActionType)) {
             if ((csd[i - 1].keyValue == csd[i].keyValue) &&
                 (csd[i - 1].groupObjNameValue == csd[i].groupObjNameValue) &&
                 (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue)) {
-                willremoveIndex << i - 1 << i;
+                willRemoveIndexs << i - 1 << i;
             }
         }
     }
-    res = remove_indexs(csd, willremoveIndex);
-    willremoveIndex.clear();
+    res = remove_indexs(csd, willRemoveIndexs);
+    willRemoveIndexs.clear();
 
     //! 筛选VisiblePageActionType，对于连续出现的操作只保留最后一步
     size = res.size();
@@ -648,12 +653,12 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
             (res[i].actionType() == VisiblePageActionType)) {
             if (res[i - 1].pageObjNameValue == res[i].pageObjNameValue) {
                 // 要保证操作的是同一个内容
-                willremoveIndex << i - 1;   // 删除前一个只保留最后一个
+                willRemoveIndexs << i - 1;   // 删除前一个只保留最后一个
             }
         }
     }
-    res = remove_indexs(res, willremoveIndex);
-    willremoveIndex.clear();
+    res = remove_indexs(res, willRemoveIndexs);
+    willRemoveIndexs.clear();
 
     //! 针对RenamePageActionType和RenameGroupActionType操作，只需保留最后一个
     size = res.size();
@@ -663,7 +668,7 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
             for (int j = i + 1; j < size; ++j) {
                 if ((res[j].actionType() == RenamePageActionType) &&
                     (res[i].pageObjNameValue == res[j].pageObjNameValue)) {
-                    willremoveIndex << i;
+                    willRemoveIndexs << i;
                 }
             }
         } else if (res[i].actionType() == RenameGroupActionType) {
@@ -672,13 +677,13 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
                 if ((res[j].actionType() == RenameGroupActionType) &&
                     (res[i].groupObjNameValue == res[j].groupObjNameValue) &&
                     (res[i].pageObjNameValue == res[j].pageObjNameValue)) {
-                    willremoveIndex << i;
+                    willRemoveIndexs << i;
                 }
             }
         }
     }
-    res = remove_indexs(res, willremoveIndex);
-    willremoveIndex.clear();
+    res = remove_indexs(res, willRemoveIndexs);
+    willRemoveIndexs.clear();
 
     //! 针对连续的ChangePageOrderActionType，ChangeGroupOrderActionType，ChangeActionOrderActionType进行合并
     size = res.size();
@@ -688,25 +693,25 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
             (res[i - 1].pageObjNameValue == res[i].pageObjNameValue)) {
             // 说明连续两个顺序调整，把前一个indexvalue和后一个indexvalue相加，前一个删除
             res[i].indexValue += res[i - 1].indexValue;
-            willremoveIndex << i - 1;
+            willRemoveIndexs << i - 1;
         } else if ((res[i - 1].actionType() == ChangeGroupOrderActionType) &&
                    (res[i].actionType() == ChangeGroupOrderActionType) &&
                    (res[i - 1].groupObjNameValue == res[i].groupObjNameValue) &&
                    (res[i - 1].pageObjNameValue == res[i].pageObjNameValue)) {
             // 说明连续两个顺序调整，把前一个indexvalue和后一个indexvalue相加，前一个删除
             res[i].indexValue += res[i - 1].indexValue;
-            willremoveIndex << i - 1;
+            willRemoveIndexs << i - 1;
         } else if ((res[i - 1].actionType() == ChangeActionOrderActionType) &&
                    (res[i].actionType() == ChangeActionOrderActionType) && (res[i - 1].keyValue == res[i].keyValue) &&
                    (res[i - 1].groupObjNameValue == res[i].groupObjNameValue) &&
                    (res[i - 1].pageObjNameValue == res[i].pageObjNameValue)) {
             // 说明连续两个顺序调整，把前一个indexvalue和后一个indexvalue相加，前一个删除
             res[i].indexValue += res[i - 1].indexValue;
-            willremoveIndex << i - 1;
+            willRemoveIndexs << i - 1;
         }
     }
-    res = remove_indexs(res, willremoveIndex);
-    willremoveIndex.clear();
+    res = remove_indexs(res, willRemoveIndexs);
+    willRemoveIndexs.clear();
 
     //! 上一步操作可能会产生indexvalue为0的情况，此操作把indexvalue为0的删除
     size = res.size();
@@ -715,11 +720,11 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
             (res[i].actionType() == ChangeGroupOrderActionType) ||
             (res[i].actionType() == ChangeActionOrderActionType)) {
             if (0 == res[i].indexValue) {
-                willremoveIndex << i;
+                willRemoveIndexs << i;
             }
         }
     }
-    res = remove_indexs(res, willremoveIndex);
-    willremoveIndex.clear();
+    res = remove_indexs(res, willRemoveIndexs);
+    willRemoveIndexs.clear();
     return res;
 }

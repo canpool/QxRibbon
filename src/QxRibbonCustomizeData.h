@@ -48,10 +48,10 @@ public:
     bool isValid() const;
 
     // 应用RibbonCustomizeData
-    bool apply(RibbonWindow *m) const;
+    bool apply(RibbonWindow *m);
 
-    // 获取actionmanager指针
-    RibbonActionsManager *actionManager();
+    // 获取actionsmanager指针
+    RibbonActionsManager *actionsManager();
 
     // 设置ActionsManager
     void setActionsManager(RibbonActionsManager *mgr);
@@ -142,7 +142,8 @@ public:
     RibbonGroup::RowProportion actionRowProportionValue;
 private:
     ActionType m_type;              ///< 标记这个data是page还是group亦或是action
-    RibbonActionsManager *m_actionsManagerPointer;
+    RibbonActionsManager *m_actionsManager;
+    bool customized;
 };
 Q_DECLARE_METATYPE(RibbonCustomizeData)
 

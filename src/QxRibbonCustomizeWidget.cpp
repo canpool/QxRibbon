@@ -131,11 +131,11 @@ QList<RibbonCustomizeData> ribbon_customize_datas_from_xml(QXmlStreamReader *xml
     return res;
 }
 
-int ribbon_customize_datas_apply(const QList<RibbonCustomizeData> &cds, RibbonWindow *w)
+int ribbon_customize_datas_apply(QList<RibbonCustomizeData> &cds, RibbonWindow *w)
 {
     int c = 0;
 
-    for (const RibbonCustomizeData &d : cds) {
+    for (RibbonCustomizeData &d : cds) {
         if (d.apply(w)) {
             ++c;
         }
@@ -369,11 +369,11 @@ public:
         labelCustomize->setText(
             QApplication::translate("RibbonCustomizeWidget", "Customize the Ribbon", Q_NULLPTR));   // cn:自定义功能区
         radioButtonMainPage->setText(
-            QApplication::translate("RibbonCustomizeWidget", "Main Page", Q_NULLPTR));          // cn:主选项卡
+            QApplication::translate("RibbonCustomizeWidget", "Main Page", Q_NULLPTR));          // cn:主要页
         radioButtonAllPage->setText(
-            QApplication::translate("RibbonCustomizeWidget", "All Page", Q_NULLPTR));   // cn:所有选项卡
+            QApplication::translate("RibbonCustomizeWidget", "All Page", Q_NULLPTR));   // cn:所有页
         pushButtonNewPage->setText(
-            QApplication::translate("RibbonCustomizeWidget", "New Page", Q_NULLPTR));   // cn:新建选项卡
+            QApplication::translate("RibbonCustomizeWidget", "New Page", Q_NULLPTR));   // cn:新建页
         pushButtonNewGroup->setText(
             QApplication::translate("RibbonCustomizeWidget", "New Group", Q_NULLPTR));      // cn:新建组
         pushButtonRename->setText(
@@ -421,7 +421,7 @@ public:
     RibbonWindow *m_ribbonWindow;                       ///< 保存RibbonWindow的指针
     RibbonActionsManager *m_actionMgr;                  ///< action管理器
     RibbonActionsManagerModel *m_acionModel;            ///< action管理器对应的model
-    QStandardItemModel *m_ribbonModel;                  ///< 用于很成ribbon的树
+    QStandardItemModel *m_ribbonModel;                  ///< 用于生成ribbon的树
     int m_customizePageCount;                           ///< 记录自定义Page的个数
     int m_customizeGroupCount;                          ///< 记录自定义Group的个数
 
@@ -1109,6 +1109,7 @@ void RibbonCustomizeWidget::onPushButtonNewPageClicked()
     RibbonCustomizeData data = RibbonCustomizeData::makeAddPageCustomizeData(
         ni->text(), ni->row(), RibbonCustomizeWidgetPrivate::makeRandomObjName("page"));
 
+    // FIXME: 操作数据无缓冲，导致操作无法废弃，且缺少apply按钮（当前设计，添加按钮意义并不大）
     d->m_customizeDatas.append(data);
     ni->setData(true, RibbonCustomizeWidget::CanCustomizeRole);   // 有CustomizeRole，必有CanCustomizeRole
     ni->setData(true, RibbonCustomizeWidget::CustomizeRole);

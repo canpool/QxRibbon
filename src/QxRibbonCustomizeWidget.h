@@ -37,8 +37,8 @@ public:
      * @brief 定义ribbon树的显示类型
      */
     enum RibbonTreeShowType {
-        ShowAllPage,   ///< 显示所有Page，包括contextpage
-        ShowMainPage   ///< 显示主要的page，不包含上下文
+        ShowAllPage,   ///< 显示所有的页，包括上下文
+        ShowMainPage   ///< 显示主要的页，不包含上下文
     };
 
     /**
@@ -168,7 +168,7 @@ QList<RibbonCustomizeData> QX_RIBBON_EXPORT ribbon_customize_datas_from_xml(QXml
  * @param w RibbonWindow指针
  * @return 成功应用的个数
  */
-int QX_RIBBON_EXPORT ribbon_customize_datas_apply(const QList<RibbonCustomizeData> &cds, RibbonWindow *w);
+int QX_RIBBON_EXPORT ribbon_customize_datas_apply(QList<RibbonCustomizeData> &cds, RibbonWindow *w);
 
 /**
  * @brief 直接加载xml自定义ribbon配置文件用于ribbon的自定义显示
