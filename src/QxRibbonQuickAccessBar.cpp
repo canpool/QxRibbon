@@ -26,9 +26,9 @@ RibbonQuickAccessBar::~RibbonQuickAccessBar()
     delete d;
 }
 
-void RibbonQuickAccessBar::addSeparator()
+QAction *RibbonQuickAccessBar::addSeparator()
 {
-    d->m_buttonGroup->addSeparator();
+    return d->m_buttonGroup->addSeparator();
 }
 
 void RibbonQuickAccessBar::addAction(QAction *act)
@@ -51,12 +51,12 @@ void RibbonQuickAccessBar::removeAction(QAction *action)
     d->m_buttonGroup->removeAction(action);
 }
 
-void RibbonQuickAccessBar::addWidget(QWidget *w)
+QAction *RibbonQuickAccessBar::addWidget(QWidget *w)
 {
-    d->m_buttonGroup->addWidget(w);
+    return d->m_buttonGroup->addWidget(w);
 }
 
-void RibbonQuickAccessBar::addMenu(QMenu *m, QToolButton::ToolButtonPopupMode popMode)
+QAction *RibbonQuickAccessBar::addMenu(QMenu *m, QToolButton::ToolButtonPopupMode popMode)
 {
-    d->m_buttonGroup->addMenu(m, popMode);
+    return d->m_buttonGroup->addMenu(m, popMode);
 }
