@@ -33,12 +33,10 @@ SOURCES += \
     $$PWD/QxRibbonDrawHelper.cpp \
     $$PWD/QxRibbonQuickAccessBar.cpp
 
-HEADERS  += \
-    $$PWD/FramelessHelper.h \
+PUBLIC_HEADERS = \
     $$PWD/QxGlobal.h \
     $$PWD/QxRibbonActionsManager.h \
     $$PWD/QxRibbonBar.h \
-    $$PWD/QxRibbonBarPrivate.h \
     $$PWD/QxRibbonButton.h \
     $$PWD/QxRibbonButtonGroup.h \
     $$PWD/QxRibbonContainers.h \
@@ -49,15 +47,11 @@ HEADERS  += \
     $$PWD/QxRibbonFactory.h \
     $$PWD/QxRibbonGlobal.h \
     $$PWD/QxRibbonGroup.h \
-    $$PWD/QxRibbonGroupLayout.h \
-    $$PWD/QxRibbonGroupPrivate.h \
     $$PWD/QxRibbonManager.h \
     $$PWD/QxRibbonPage.h \
     $$PWD/QxRibbonPageContext.h \
-    $$PWD/QxRibbonPagePrivate.h \
     $$PWD/QxRibbonStyleOption.h \
     $$PWD/QxRibbonWindow.h \
-    $$PWD/QxWindowButtonGroup.h \
     $$PWD/QxRibbonApplicationButton.h \
     $$PWD/QxRibbonTabBar.h \
     $$PWD/QxRibbonGallery.h \
@@ -65,6 +59,18 @@ HEADERS  += \
     $$PWD/QxRibbonGalleryItem.h \
     $$PWD/QxRibbonDrawHelper.h \
     $$PWD/QxRibbonQuickAccessBar.h
+
+PRIVATE_HEADERS = \
+    $$PWD/FramelessHelper.h \
+    $$PWD/QxRibbonBarPrivate.h \
+    $$PWD/QxRibbonGroupLayout.h \
+    $$PWD/QxRibbonGroupPrivate.h \
+    $$PWD/QxRibbonPagePrivate.h \
+    $$PWD/QxWindowButtonGroup.h
+
+HEADERS  += \
+    $$PUBLIC_HEADERS \
+    $$PRIVATE_HEADERS
 
 RESOURCES += \
     $$PWD/res.qrc
