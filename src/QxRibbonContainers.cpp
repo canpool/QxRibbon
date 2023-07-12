@@ -31,7 +31,7 @@ public:
 
 RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate(RibbonCtrlContainer *p)
     : m_widget(Q_NULLPTR)
-    , m_iconSize(16, 16)
+    , m_iconSize(18, 18)
 {
     q = p;
     m_layout = new QHBoxLayout(p);

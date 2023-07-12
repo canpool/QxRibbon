@@ -4,10 +4,6 @@
         <file>res/smallFont.svg</file>
         <file>res/save.svg</file>
         <file>res/hideRibbon.svg</file>
-        <file>res/showHideButton.svg</file>
-        <file>res/item.svg</file>
-        <file>res/test1.svg</file>
-        <file>res/test2.svg</file>
         <file>res/folder-cog.svg</file>
         <file>res/folder-star.svg</file>
         <file>res/folder-stats.svg</file>
@@ -20,27 +16,17 @@
         <file>res/customize0.svg</file>
         <file>res/undo.svg</file>
         <file>res/redo.svg</file>
-        <file>res/presentationFile.svg</file>
         <file>res/file.svg</file>
-        <file>res/SA.svg</file>
         <file>res/help.svg</file>
-        <file>res/Decrease-Margin.svg</file>
-        <file>res/Decrease-Indent.svg</file>
-        <file>res/Align-Right.svg</file>
-        <file>res/Align-Left.svg</file>
-        <file>res/Align-Center.svg</file>
-        <file>res/Wrap-Image Left.svg</file>
-        <file>res/Wrap-Image Right.svg</file>
         <file>res/remove-app-btn.svg</file>
         <file>res/long-text.svg</file>
         <file>res/useqss.svg</file>
         <file>res/useCustomize.svg</file>
         <file>res/windowsflag-normal.svg</file>
         <file>res/chinese-char.svg</file>
-        <file>res/ContextPage.svg</file>
         <file>res/remove.svg</file>
         <file>res/removePage.svg</file>
-        <file>res/hideGroup.svg</file>
+        <file>res/hide.svg</file>
         <file>res/unlock.svg</file>
         <file>res/setText.svg</file>
         <file>res/show.svg</file>
@@ -50,16 +36,20 @@
         <file>res/action2.svg</file>
         <file>res/enableTest.svg</file>
         <file>res/delete.svg</file>
-        <file>res/layout.svg</file>
         <file>res/wordwrap.svg</file>
-        <file>res/al-bothside.svg</file>
-        <file>res/al-left.svg</file>
-        <file>res/al-center.svg</file>
-        <file>res/al-right.svg</file>
-        <file>res/Underline.svg</file>
-        <file>res/Italic.svg</file>
+        <file>res/align-bothside.svg</file>
+        <file>res/align-left.svg</file>
+        <file>res/align-center.svg</file>
+        <file>res/align-right.svg</file>
+        <file>res/italic.svg</file>
         <file>res/bold.svg</file>
-        <file>res/logo.png</file>
+        <file>res/logo.svg</file>
+        <file>res/logo64.svg</file>
+        <file>res/theme.svg</file>
+        <file>res/clipboard.svg</file>
+        <file>res/copy.svg</file>
+        <file>res/cut.svg</file>
+        <file>res/printer.svg</file>
     </qresource>
     <qresource prefix="/gallery-icon">
         <file>res/gallery/Document-File.svg</file>
