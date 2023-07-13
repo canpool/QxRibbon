@@ -24,21 +24,27 @@ public:
     MainWindow(QWidget *par = nullptr);
     void setRibbonTheme(int theme);
 private:
-    void createPageMain(RibbonPage *page);
-    void createPageOther(RibbonPage *page);
-    void createPageDelete(RibbonPage *page);
-    void createPageCustom(RibbonPage *page);
-    void createPageSize(RibbonPage *page);
+    void createCentralWidget();
+    void createStatusBar();
+    void createRibbon();
+
+    void createPageHome();
+    void createPageOther();
+    void createPageCustom();
+    void createPageApply();
     void createPageContext1();
     void createPageContext2();
     void createPageContext1(RibbonPage *page);
     void createPageContext2(RibbonPage *page);
-    void createQuickAccessBar(RibbonQuickAccessBar *quickAccessBar);
-    void createRightButtonGroup(RibbonButtonGroup *rightBar);
+    void createQuickAccessBar();
+    void createRightButtonGroup();
     void addSomeOtherAction();
+
     QAction *createAction(const QString &text, const QString &iconurl, const QString &objName);
     QAction *createAction(const QString &text, const QString &iconurl);
     QAction *addThemeAction(QAction *action, int themeId);
+
+    void changeRibbonTheme(int index);
 private slots:
     void onMenuButtonPopupCheckableTest(bool b);
     void onInstantPopupCheckableTest(bool b);

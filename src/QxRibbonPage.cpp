@@ -442,13 +442,19 @@ void RibbonPagePrivate::onRightScrollButtonClicked()
     updateItemGeometry();
 }
 
-RibbonPage::RibbonPage(QWidget *p)
-    : QWidget(p)
+RibbonPage::RibbonPage(QWidget *parent)
+    : QWidget(parent)
     , d(new RibbonPagePrivate(this))
 {
     d->init();
     setAutoFillBackground(true);
     setBackgroundBrush(Qt::white);
+}
+
+RibbonPage::RibbonPage(const QString &name, QWidget *parent)
+    : RibbonPage(parent)
+{
+    setPageName(name);
 }
 
 RibbonPage::~RibbonPage()

@@ -4,6 +4,8 @@
         <file>res/smallFont.svg</file>
         <file>res/save.svg</file>
         <file>res/hideRibbon.svg</file>
+        <file>res/folder.svg</file>
+        <file>res/folder-add.svg</file>
         <file>res/folder-cog.svg</file>
         <file>res/folder-star.svg</file>
         <file>res/folder-stats.svg</file>

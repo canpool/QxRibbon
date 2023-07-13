@@ -30,8 +30,9 @@ class QX_RIBBON_EXPORT RibbonPage : public QWidget
     Q_PROPERTY(bool isCanCustomize READ isCanCustomize WRITE setCanCustomize)
     Q_PROPERTY(QString pageName READ pageName WRITE setPageName)
 public:
-    RibbonPage(QWidget *p = Q_NULLPTR);
-    ~RibbonPage();
+    explicit RibbonPage(QWidget *parent = Q_NULLPTR);
+    explicit RibbonPage(const QString &name, QWidget *parent = Q_NULLPTR);
+    ~RibbonPage() Q_DECL_OVERRIDE;
 
     RibbonBar *ribbonBar() const;
 
