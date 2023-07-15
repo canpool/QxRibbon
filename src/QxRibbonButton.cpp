@@ -425,16 +425,11 @@ void RibbonButtonPrivate::drawIconAndLabel(QStyleOptionToolButton &opt, QPainter
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
                 HELP_DRAW_RECT(p, textRect);
 #endif
-                if (RibbonButton::Normal == m_largeButtonType) {
-                    alignment |= Qt::AlignHCenter | Qt::AlignTop;   // 文字是顶部对齐
-                } else {
-                    alignment |= Qt::AlignCenter;
-                }
+                alignment |= Qt::AlignHCenter | Qt::AlignTop;   // 文字是顶部对齐
 
                 // 再绘制文本，对于Normal模式下的Largebutton，如果有菜单，且m_isWordWrap是true，箭头将在文本旁边
                 if (RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap) {
-                    // lite 模式，文字不换行
-                    // 显示的内容需要进行省略处理
+                    // lite 模式，文字不换行, 显示的内容需要进行省略处理
                     opt.text =
                         w->fontMetrics().elidedText(opt.text, Qt::ElideRight, textRect.width(), Qt::TextShowMnemonic);
                 }
@@ -655,23 +650,26 @@ QRect RibbonButtonPrivate::adjustedTextRect(const QStyleOptionToolButton &opt, c
  */
 QRect RibbonButtonPrivate::calcIndicatorArrowDownRect(const QStyleOptionToolButton &opt)
 {
-    // 预留ARROW_WIDTHpx绘制箭头，1px的上下边界
+    // 预留 QX_INDICATOR_ARROW_WIDTH px绘制箭头，1px的上下边界
     QRect rect = opt.rect;
     if (RibbonButton::LargeButton == m_buttonType) {
+        // Lite不换行和换行两种情况下，箭头的大小通过rect的宽度控制（见calcIconAndTextRect中的m_textRect），
+        // 否则通过rect的高度控制（见下文的QX_INDICATOR_ARROW_WIDTH）
         if ((RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap)) {
             // 首先判断是否为lite且不允许换行
             rect.setRect(m_textRect.right(), m_textRect.top(),
                          opt.rect.right() - m_iconAndTextSpace - m_textRect.right(), m_textRect.height());
         } else if (m_isWordWrap) {
-            // 如果不是lite，且允许换行，那么就在文本第二行最后端
-            // 菜单的下拉箭头位于第二行文本的矩形区域
+            // 如果允许换行，那么就在文本第二行最后端，菜单的下拉箭头位于第二行文本的矩形区域
             rect.setRect(m_textRect.right(), m_textRect.top() + m_textRect.height() / 2,
                          opt.rect.right() - m_iconAndTextSpace - m_textRect.right(), m_textRect.height() / 2);
         } else {
-            // 都不是的情况下就第二行文本位置
-            rect.setRect(m_textRect.left(),
-                         m_textRect.bottom() - QX_INDICATOR_ARROW_WIDTH,   // 这里ARROW_WIDTH也作为高度
-                         m_textRect.width(), QX_INDICATOR_ARROW_WIDTH);
+            // 都不是的情况下就第二行文本位置       |y坐标
+            // m_textRect.height() / 2 + yh + QX_INDICATOR_ARROW_WIDTH + yh = m_textRect.height()
+            // yh = m_textRect.height() / 4 - QX_INDICATOR_ARROW_WIDTH / 2
+            // y = m_textRect.bottom() - yh - QX_INDICATOR_ARROW_WIDTH
+            int y = m_textRect.bottom() - m_textRect.height() / 4 - QX_INDICATOR_ARROW_WIDTH / 2;
+            rect.setRect(m_textRect.left(), y, m_textRect.width(), QX_INDICATOR_ARROW_WIDTH);
         }
     } else {
         rect.setRect(rect.width() - QX_INDICATOR_ARROW_WIDTH - m_iconAndTextSpace, m_iconAndTextSpace,
