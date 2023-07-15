@@ -285,6 +285,7 @@ void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
 {
     // QToolButton的sizeHint已经考虑了菜单箭头的位置
     // 从源码看，QToolButton的sizeHint是不会考虑换行的
+    m_sizeHint = s; // backup s
     if (RibbonButton::LargeButton == m_buttonType) {
         // 计算最佳大小
         if (RibbonGroup *group = qobject_cast<RibbonGroup *>(q->parent())) {
@@ -345,6 +346,15 @@ void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
                     if (m_isWordWrap) {
                         s.rwidth() += QX_INDICATOR_ARROW_WIDTH;
                     }
+                }
+            }
+            if (m_sizeHint != s) {
+                // 当设置 Lite 可换行时，如果不改变 s 大小，那么在 RibbonGroupLayout 的 updateGeomArray 中
+                // item->sizeHint() 获取的值将一直不变，意味着 willGeometry 也不变，这导致 layoutActions 中
+                // item->setGeometry(willGeometry) 不会触发 resizeEvent ，进而导致图标和文字得不到刷新，
+                // 所以这里加 1，保证可以触发 resizeEvent
+                if (RibbonButton::Lite == m_largeButtonType && s_liteStyleEnableWordWrap) {
+                    s.rwidth() += 1;
                 }
             }
         } else {
