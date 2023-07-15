@@ -97,6 +97,7 @@ class QX_RIBBON_EXPORT RibbonBar : public QMenuBar
 {
     Q_OBJECT
     Q_PROPERTY(RibbonStyle ribbonStyle READ currentRibbonStyle WRITE setRibbonStyle)
+    Q_PROPERTY(QuickAccessBarPosition quickAccessBarPosition READ quickAccessBarPosition WRITE setQuickAccessBarPosition)
     Q_PROPERTY(bool minimized READ isMinimized WRITE setMinimized)
     Q_PROPERTY(bool minimumButton READ haveShowMinimumButton WRITE showMinimumButton)
     Q_PROPERTY(QColor tabBarBaseLineColor READ tabBarBaseLineColor WRITE setTabBarBaseLineColor)
@@ -109,6 +110,13 @@ public:
         WpsLiteStyleTwoRow = 0x0100 | WpsLiteStyle,
     };
     Q_ENUM(RibbonStyle)
+
+    enum QuickAccessBarPosition {
+        // Only for WpsLiteStyle
+        QABLeftPosition = 1,
+        QABRightPosition
+    };
+    Q_ENUM(QuickAccessBarPosition)
 public:
     RibbonBar(QWidget *parent = Q_NULLPTR);
     ~RibbonBar() Q_DECL_OVERRIDE;
@@ -168,7 +176,9 @@ public:
     RibbonButtonGroup *rightButtonGroup();
     void activeRightButtonGroup();
 
-    RibbonQuickAccessBar *quickAccessBar();
+    RibbonQuickAccessBar *quickAccessBar() const;
+    void setQuickAccessBarPosition(QuickAccessBarPosition position);
+    QuickAccessBarPosition quickAccessBarPosition() const;
 
     RibbonStyle currentRibbonStyle() const;
     void setRibbonStyle(RibbonStyle v);

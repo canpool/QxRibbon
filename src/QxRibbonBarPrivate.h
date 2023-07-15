@@ -117,6 +117,7 @@ public:
     RibbonControlButton *m_minimumPageButton;   ///< 隐藏面板按钮
     RibbonButtonGroup *m_rightButtonGroup;      ///< 在 tabbar 右边的按钮群
     RibbonQuickAccessBar *m_quickAccessBar;
+    RibbonBar::QuickAccessBarPosition m_quickAccessBarPosition;
     RibbonBar::RibbonStyle m_ribbonStyle;
     RibbonBar::RibbonStyle m_lastShowStyle;
     QSize m_windowButtonsSize;  ///< 由 RibbonWindow 告诉的 windowbuttons 的尺寸

@@ -107,6 +107,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_iconRightBorderPosition(1)
     , m_minimumPageButton(Q_NULLPTR)
     , m_rightButtonGroup(Q_NULLPTR)
+    , m_quickAccessBarPosition(RibbonBar::QABRightPosition)
     , m_ribbonStyle(RibbonBar::OfficeStyle)
     , m_lastShowStyle(RibbonBar::OfficeStyle)
     , m_windowButtonsSize(RibbonElementStyleOpt.titleBarHeight() * 4, RibbonElementStyleOpt.titleBarHeight())
@@ -409,7 +410,12 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
     QWidget *parWindow = q->parentWidget();
     if (parWindow && m_titleVisible) {
         int start = m_tabBar->x() + m_tabBar->width();
-        int width = m_quickAccessBar->x() - start;
+        int width = q->width() - m_windowButtonsSize.width() - start;
+        if (m_quickAccessBarPosition == RibbonBar::QABRightPosition) {
+            width = m_quickAccessBar->x() - start;
+        } else if (m_rightButtonGroup) {
+            width = m_rightButtonGroup->x() - start;
+        }
         if (width > 20) {
             QRect titleRegion(start, border.top(), width, q->titleBarHeight());
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
@@ -607,7 +613,7 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
         m_rightButtonGroup->setGeometry(endX, y, wSize.width(), validTitleBarHeight);
     }
     // quick access bar定位
-    if (m_quickAccessBar && m_quickAccessBar->isVisible()) {
+    if (m_quickAccessBarPosition == RibbonBar::QABRightPosition && m_quickAccessBar && m_quickAccessBar->isVisible()) {
         QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
         endX -= quickAccessBarSize.width();
         m_quickAccessBar->setGeometry(endX, y, quickAccessBarSize.width(), validTitleBarHeight);
@@ -637,6 +643,11 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
     if (m_applicationButton && m_applicationButton->isVisible()) {
         m_applicationButton->setGeometry(x, y, m_applicationButton->size().width(), tabH);
         x = m_applicationButton->geometry().right() + 2;
+    }
+    if (m_quickAccessBarPosition == RibbonBar::QABLeftPosition && m_quickAccessBar && m_quickAccessBar->isVisible()) {
+        QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
+        m_quickAccessBar->setGeometry(x, y, quickAccessBarSize.width(), tabH);
+        x = m_quickAccessBar->geometry().right() + 2;
     }
     // tab bar 定位 wps模式下applicationButton的右边就是tab bar
     int tabBarWidth = endX - x;
@@ -1412,9 +1423,25 @@ void RibbonBar::activeRightButtonGroup()
     d->m_rightButtonGroup->show();
 }
 
-RibbonQuickAccessBar *RibbonBar::quickAccessBar()
+RibbonQuickAccessBar *RibbonBar::quickAccessBar() const
 {
     return d->m_quickAccessBar;
+}
+
+void RibbonBar::setQuickAccessBarPosition(QuickAccessBarPosition position)
+{
+    if (d->m_quickAccessBarPosition == position) {
+        return;
+    }
+    d->m_quickAccessBarPosition = position;
+    if (!d->isOfficeStyle()) {
+        resizeRibbon();
+    }
+}
+
+RibbonBar::QuickAccessBarPosition RibbonBar::quickAccessBarPosition() const
+{
+    return d->m_quickAccessBarPosition;
 }
 
 /**

@@ -238,6 +238,17 @@ void MainWindow::createPageHome()
         this->setFrameless(checked);
     });
 
+    cb = new QCheckBox();
+    cb->setObjectName(QStringLiteral("left QAB in wps style"));
+    cb->setText(tr("left QAB in wps style"));
+    cb->setWindowTitle(cb->text());
+    cb->setChecked(false);
+    groupStyle->addSmallWidget(cb);
+    connect(cb, &QCheckBox::clicked, this, [this](bool checked) {
+        this->ribbonBar()->setQuickAccessBarPosition(checked ? RibbonBar::QABLeftPosition
+                                                             : RibbonBar::QABRightPosition);
+    });
+
     RibbonGroup *groupToolButtonStyle = page->addGroup(tr("ribbon toolbutton style"));
 
     RibbonButton *btn;
