@@ -47,7 +47,11 @@ public:
     RibbonGalleryGroup *addGalleryGroup();
     void addGalleryGroup(RibbonGalleryGroup *group);
 
+    RibbonGalleryGroup *addGalleryGroup(const QString &title, QList<QAction *> actions);
+#if QX_RIBBON_DEPRECATED_SINCE(0, 6)
+    QT_DEPRECATED_X("Use addGalleryGroup")
     RibbonGalleryGroup *addCategoryActions(const QString &title, QList<QAction *> actions);
+#endif
 
     RibbonGalleryGroup *currentViewGroup() const;
     void setCurrentViewGroup(RibbonGalleryGroup *group);

@@ -167,13 +167,7 @@ void RibbonGallery::addGalleryGroup(RibbonGalleryGroup *group)
     setCurrentViewGroup(group);
 }
 
-/**
- * @brief 添加一组actions
- * @param title actions组的名字
- * @param actions
- * @return 返回RibbonGalleryGroup，用户可以通过修改RibbonGalleryGroup属性控制其显示方法
- */
-RibbonGalleryGroup *RibbonGallery::addCategoryActions(const QString &title, QList<QAction *> actions)
+RibbonGalleryGroup *RibbonGallery::addGalleryGroup(const QString &title, QList<QAction *> actions)
 {
     RibbonGalleryGroup *group = new RibbonGalleryGroup(this);
     if (!title.isEmpty()) {
@@ -183,6 +177,19 @@ RibbonGalleryGroup *RibbonGallery::addCategoryActions(const QString &title, QLis
     addGalleryGroup(group);
     return group;
 }
+
+/**
+ * @brief 添加一组actions
+ * @param title actions组的名字
+ * @param actions
+ * @return 返回RibbonGalleryGroup，用户可以通过修改RibbonGalleryGroup属性控制其显示方法
+ */
+#if QX_RIBBON_DEPRECATED_SINCE(0, 6)
+RibbonGalleryGroup *RibbonGallery::addCategoryActions(const QString &title, QList<QAction *> actions)
+{
+    return addGalleryGroup(title, actions);
+}
+#endif
 
 RibbonGalleryGroup *RibbonGallery::currentViewGroup() const
 {

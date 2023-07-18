@@ -28,3 +28,26 @@
 
 #define QX_RIBBON_VERSION_STR \
     QT_STRINGIFY(QX_VERSION_JOIN(QX_RIBBON_VERSION_MAJOR, QX_RIBBON_VERSION_MINOR, QX_RIBBON_VERSION_PATCH))
+
+
+#ifndef QX_RIBBON_DISABLE_DEPRECATED_BEFORE
+#define QX_RIBBON_DISABLE_DEPRECATED_BEFORE QT_VERSION_CHECK(0, 5, 0)
+#endif
+
+/*
+    QX_RIBBON_DEPRECATED_SINCE(major, minor) evaluates as true if the QxRibbon version is greater than
+    the deprecation point specified.
+
+ Use it to specify from which version of QxRibbon a function or class has been deprecated
+
+ Example:
+     #if QX_RIBBON_DEPRECATED_SINCE(0,6)
+         QT_DEPRECATED void deprecatedFunction(); // function deprecated since QxRibbon 0.6
+     #endif
+
+ */
+#ifdef QT_DEPRECATED
+#define QX_RIBBON_DEPRECATED_SINCE(major, minor) (QT_VERSION_CHECK(major, minor, 0) > QX_RIBBON_DISABLE_DEPRECATED_BEFORE)
+#else
+#define QX_RIBBON_DEPRECATED_SINCE(major, minor) 0
+#endif

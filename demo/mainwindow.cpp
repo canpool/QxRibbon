@@ -428,7 +428,7 @@ void MainWindow::createPageOther()
     galleryActions.append(lambdaCreateGalleryAction(tr("File Read Only"), ":/gallery-icon/res/gallery/File-Readonly.svg"));
     galleryActions.append(lambdaCreateGalleryAction(tr("File Settings"), ":/gallery-icon/res/gallery/File-Settings.svg"));
     galleryActions.append(lambdaCreateGalleryAction(tr("Presentation File"), ":/gallery-icon/res/gallery/Presentation-File.svg"));
-    RibbonGalleryGroup *galleryGroup1 = gallery->addCategoryActions(tr("Files"), galleryActions);
+    RibbonGalleryGroup *galleryGroup1 = gallery->addGalleryGroup(tr("Files"), galleryActions);
     galleryGroup1->setGalleryGroupStyle(RibbonGalleryGroup::IconWithWordWrapText);
     galleryGroup1->setGridMinimumWidth(80);
     galleryActions.clear();
@@ -438,7 +438,7 @@ void MainWindow::createPageOther()
     galleryActions.append(lambdaCreateGalleryAction(tr("Google-Maps"), ":/gallery-icon/res/gallery/Google-Maps.svg"));
     galleryActions.append(lambdaCreateGalleryAction(tr("Adobe"), ":/gallery-icon/res/gallery/Adobe.svg"));
     galleryActions.append(lambdaCreateGalleryAction(tr("Word"), ":/gallery-icon/res/gallery/Word.svg"));
-    RibbonGalleryGroup *galleryGroup2 = gallery->addCategoryActions(tr("Apps"), galleryActions);
+    RibbonGalleryGroup *galleryGroup2 = gallery->addGalleryGroup(tr("Apps"), galleryActions);
     galleryGroup2->setGridMinimumWidth(80);
     gallery->setCurrentViewGroup(galleryGroup1);
 
