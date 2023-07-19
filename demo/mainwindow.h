@@ -54,7 +54,6 @@ private slots:
     void onDelayedPopupCheckabletriggered(bool b);
     void onShowContextPage(bool on);
     void onStyleClicked(int id);
-    void onActionCustomizeTriggered(bool b);
     void onActionCustomizeAndSaveTriggered(bool b);
     void onActionHelpTriggered();
     void onActionRemoveAppBtnTriggered(bool b);

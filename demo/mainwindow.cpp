@@ -6,7 +6,7 @@
 #include "QxRibbonButtonGroup.h"
 #include "QxRibbonControls.h"
 #include "QxRibbonCustomizeDialog.h"
-#include "QxRibbonCustomizeWidget.h"
+#include "QxRibbonActionsManager.h"
 #include "QxRibbonManager.h"
 #include "QxRibbonGallery.h"
 #include "QxRibbonGroup.h"
@@ -549,7 +549,7 @@ void MainWindow::createPageCustom()
     group1->addLargeAction(addAct);
     group1->addLargeAction(removeAct);
     removeAct->setDisabled(true);
-    QAction *testAct = createAction(tr("TestAction"), ":/icon/res/action2.svg");
+    QAction *testAct = createAction(tr("custom action"), ":/icon/res/action2.svg");
     connect(addAct, &QAction::triggered, this, [this, addAct, removeAct, testAct]() {
         this->ribbonBar()->quickAccessBar()->addAction(testAct);
         this->ribbonBar()->resizeRibbon();
@@ -563,52 +563,6 @@ void MainWindow::createPageCustom()
         removeAct->setDisabled(true);
     });
     page->addGroup(group1);
-
-    // group2
-    RibbonGroup *group2 = new RibbonGroup(tr("page"));
-    addAct = createAction(tr("add page"), ":/icon/res/action2.svg");
-    removeAct = createAction(tr("remove page"), ":/icon/res/action4.svg");
-    group2->addMediumAction(addAct);
-    group2->addMediumAction(removeAct);
-    removeAct->setDisabled(true);
-    RibbonPage *testPage = new RibbonPage(tr("TestPage"), this);
-    testPage->hide();
-    connect(addAct, &QAction::triggered, this, [this, addAct, removeAct, testPage]() {
-        this->ribbonBar()->addPage(testPage);
-        addAct->setDisabled(true);
-        removeAct->setDisabled(false);
-    });
-    connect(removeAct, &QAction::triggered, this, [this, addAct, removeAct, testPage]() {
-        this->ribbonBar()->removePage(testPage);
-        testPage->hide();
-        addAct->setDisabled(false);
-        removeAct->setDisabled(true);
-    });
-    page->addGroup(group2);
-
-    // group3
-    RibbonGroup *group3 = new RibbonGroup(tr("group"));
-    addAct = createAction(tr("add group"), ":/icon/res/action2.svg");
-    removeAct = createAction(tr("remove group"), ":/icon/res/action4.svg");
-    group3->addSmallAction(addAct);
-    group3->addSmallAction(removeAct);
-    removeAct->setDisabled(true);
-    RibbonGroup *testGroup = new RibbonGroup(tr("TestGroup"), this);
-    testGroup->addLargeAction(createAction(tr("file1"), ":/icon/res/file.svg"));
-    testGroup->addLargeAction(createAction(tr("file2"), ":/icon/res/file.svg"));
-    testGroup->hide();
-    connect(addAct, &QAction::triggered, this, [this, page, addAct, removeAct, testGroup]() {
-        page->addGroup(testGroup);
-        addAct->setDisabled(true);
-        removeAct->setDisabled(false);
-    });
-    connect(removeAct, &QAction::triggered, this, [this, page, addAct, removeAct, testGroup]() {
-        page->takeGroup(testGroup);
-        testGroup->hide();
-        addAct->setDisabled(false);
-        removeAct->setDisabled(true);
-    });
-    page->addGroup(group3);
 
     // groupStyle
     RibbonGroup *groupStyle = new RibbonGroup(tr("config file"));
@@ -878,10 +832,6 @@ void MainWindow::createQuickAccessBar()
     }
     quickAccessBar->addMenu(m);
 
-    QAction *customize = createAction(tr("customize"), ":/icon/res/customize0.svg", "customize2");
-    quickAccessBar->addAction(customize);
-    connect(customize, &QAction::triggered, this, &MainWindow::onActionCustomizeTriggered);
-
     QAction *actionCustomizeAndSave = createAction(tr("customize and save"), ":/icon/res/customize.svg");
     quickAccessBar->addAction(actionCustomizeAndSave);
     connect(actionCustomizeAndSave, &QAction::triggered, this, &MainWindow::onActionCustomizeAndSaveTriggered);
@@ -997,22 +947,6 @@ void MainWindow::onStyleClicked(int id)
     ribbonBar()->setRibbonStyle(static_cast<RibbonBar::RibbonStyle>(id));
 }
 
-void MainWindow::onActionCustomizeTriggered(bool b)
-{
-    Q_UNUSED(b);
-    if (nullptr == m_customizeWidget) {
-        m_customizeWidget =
-            new RibbonCustomizeWidget(this, this, Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint | Qt::Dialog);
-        m_customizeWidget->setWindowModality(Qt::ApplicationModal);   // 设置阻塞类型
-        m_customizeWidget->setAttribute(Qt::WA_ShowModal, true);      // 属性设置 true:模态 false:非模态
-        m_customizeWidget->setupActionsManager(m_actMgr);
-    }
-    // FIXME：show只能半模态，show之后立即执行applys，导致自定义内容无法得到应用，
-    // 下次打开RibbonCustomizeWidget，才会应用上次的定制
-    m_customizeWidget->show();
-    m_customizeWidget->applys();
-}
-
 void MainWindow::onActionCustomizeAndSaveTriggered(bool b)
 {
     Q_UNUSED(b);
@@ -1096,7 +1030,7 @@ void MainWindow::onActionLoadCustomizeXmlFileTriggered()
     // 只能调用一次
     static bool has_call = false;
     if (!has_call) {
-        has_call = ribbon_apply_customize_from_xml_file("customize.xml", this, m_actMgr);
+        has_call = QxRibbonCustomizeApplyFromXmlFile("customize.xml", this, m_actMgr);
     }
 }
 

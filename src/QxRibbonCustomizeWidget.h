@@ -24,12 +24,8 @@ class RibbonWindow;
 
 /**
  * @brief 自定义界面窗口
- *
- * @note Ribbon 的自定义是基于步骤的，如果在窗口生成前调用了 @ref ribbon_apply_customize_from_xml_file 类似函数
- * 那么在对话框生成前为了保证同步需要调用 @ref RibbonCustomizeWidget::fromXml
- * 同步配置文件，这样再次修改后的配置文件就一致
  */
-class QX_RIBBON_EXPORT RibbonCustomizeWidget : public QWidget
+class RibbonCustomizeWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -152,15 +148,14 @@ private:
  * @param cds 基于QList<RibbonCustomizeData>生成的步骤
  * @return 如果出现异常，返回false,如果没有自定义数据也会返回false
  */
-bool QX_RIBBON_EXPORT ribbon_customize_datas_to_xml(QXmlStreamWriter *xml, const QList<RibbonCustomizeData> &cds);
+bool QxRibbonCustomizeDataSetToXml(QXmlStreamWriter *xml, const QList<RibbonCustomizeData> &cds);
 
 /**
  * @brief 通过xml获取QList<RibbonCustomizeData>
  * @param xml
  * @return QList<RibbonCustomizeData>
  */
-QList<RibbonCustomizeData> QX_RIBBON_EXPORT ribbon_customize_datas_from_xml(QXmlStreamReader *xml,
-                                                                         RibbonActionsManager *mgr);
+QList<RibbonCustomizeData> QxRibbonCustomizeDataGetFromXml(QXmlStreamReader *xml, RibbonActionsManager *mgr);
 
 /**
  * @brief 应用QList<RibbonCustomizeData>
@@ -168,21 +163,5 @@ QList<RibbonCustomizeData> QX_RIBBON_EXPORT ribbon_customize_datas_from_xml(QXml
  * @param w RibbonWindow指针
  * @return 成功应用的个数
  */
-int QX_RIBBON_EXPORT ribbon_customize_datas_apply(QList<RibbonCustomizeData> &cds, RibbonWindow *w);
+int QxRibbonCustomizeDataApply(QList<RibbonCustomizeData> &cds, RibbonWindow *w);
 
-/**
- * @brief 直接加载xml自定义ribbon配置文件用于ribbon的自定义显示
- * @param filePath xml配置文件
- * @param w 主窗体
- * @param mgr action管理器
- * @return 成功返回true
- * @note 重复加载一个配置文件会发生异常，为了避免此类事件发生，一般通过一个变量保证只加载一次，如：
- * @code
- * static bool has_call = false;
- * if (!has_call) {
- *     has_call = ribbon_apply_customize_from_xml_file("customize.xml", this, m_actMgr);
- * }
- * @endcode
- */
-bool QX_RIBBON_EXPORT ribbon_apply_customize_from_xml_file(const QString &filePath, RibbonWindow *w,
-                                                       RibbonActionsManager *mgr);

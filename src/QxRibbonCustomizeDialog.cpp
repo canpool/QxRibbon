@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonCustomizeDialog.h"
+#include "QxRibbonCustomizeWidget.h"
+#include <QFile>
+#include <QXmlStreamReader>
 #include <QApplication>
 #include <QPushButton>
 #include <QSpacerItem>
@@ -19,7 +22,9 @@ public:
     QHBoxLayout *horizontalLayoutButtonGroup;
     QPushButton *pushButtonCancel;
     QPushButton *pushButtonOk;
+    QPushButton *pushButtonApply;
     QSpacerItem *spacerItemleft;
+
     void setupUi(RibbonWindow *ribbonWindow, QWidget *customizeDialog)
     {
         if (customizeDialog->objectName().isEmpty()) {
@@ -39,13 +44,18 @@ public:
         spacerItemleft = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
         horizontalLayoutButtonGroup->addItem(spacerItemleft);
 
+        pushButtonOk = new QPushButton(customizeDialog);
+        pushButtonOk->setObjectName(QStringLiteral("pushButtonOk"));
+        horizontalLayoutButtonGroup->addWidget(pushButtonOk);
+
         pushButtonCancel = new QPushButton(customizeDialog);
         pushButtonCancel->setObjectName(QStringLiteral("pushButtonCancel"));
         horizontalLayoutButtonGroup->addWidget(pushButtonCancel);
 
-        pushButtonOk = new QPushButton(customizeDialog);
-        pushButtonOk->setObjectName(QStringLiteral("pushButtonCancel"));
-        horizontalLayoutButtonGroup->addWidget(pushButtonOk);
+        pushButtonApply = new QPushButton(customizeDialog);
+        pushButtonApply->setObjectName(QStringLiteral("pushButtonApply"));
+        horizontalLayoutButtonGroup->addWidget(pushButtonApply);
+
         verticalLayoutMain->addItem(horizontalLayoutButtonGroup);
         retranslateUi(customizeDialog);
     }
@@ -54,8 +64,9 @@ public:
     {
         customizeDialog->setWindowTitle(
             QApplication::translate("RibbonCustomizeDialog", "Customize Dialog", Q_NULLPTR));
-        pushButtonCancel->setText(QApplication::translate("RibbonCustomizeDialog", "Cancel", Q_NULLPTR));
         pushButtonOk->setText(QApplication::translate("RibbonCustomizeDialog", "OK", Q_NULLPTR));
+        pushButtonCancel->setText(QApplication::translate("RibbonCustomizeDialog", "Cancel", Q_NULLPTR));
+        pushButtonApply->setText(QApplication::translate("RibbonCustomizeDialog", "Apply", Q_NULLPTR));
     }
 };
 
@@ -83,6 +94,7 @@ void RibbonCustomizeDialog::initConnection()
 {
     connect(ui->pushButtonOk, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->pushButtonCancel, &QPushButton::clicked, this, &QDialog::reject);
+    connect(ui->pushButtonApply, &QPushButton::clicked, this, &RibbonCustomizeDialog::applys);
 }
 
 /**
@@ -147,14 +159,15 @@ void RibbonCustomizeDialog::fromXml(const QString &xmlpath)
     ui->customWidget->fromXml(xmlpath);
 }
 
-/**
- * @brief 返回RibbonCustomizeWidget窗口指针
- *
- * 通过RibbonCustomizeWidget窗口可以操作更多的内容
- *
- * @return RibbonCustomizeWidget指针，参考@ref RibbonCustomizeWidget
- */
-RibbonCustomizeWidget *RibbonCustomizeDialog::customizeWidget() const
+bool QxRibbonCustomizeApplyFromXmlFile(const QString &filePath, RibbonWindow *w, RibbonActionsManager *mgr)
 {
-    return ui->customWidget;
+    QFile f(filePath);
+
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+    f.seek(0);
+    QXmlStreamReader xml(&f);
+
+    return RibbonCustomizeWidget::fromXml(&xml, w, mgr);
 }

@@ -41,9 +41,7 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonButtonGroup.h \
     $$PWD/QxRibbonContainers.h \
     $$PWD/QxRibbonControls.h \
-    $$PWD/QxRibbonCustomizeData.h \
     $$PWD/QxRibbonCustomizeDialog.h \
-    $$PWD/QxRibbonCustomizeWidget.h \
     $$PWD/QxRibbonFactory.h \
     $$PWD/QxRibbonGlobal.h \
     $$PWD/QxRibbonGroup.h \
@@ -63,6 +61,8 @@ PUBLIC_HEADERS = \
 PRIVATE_HEADERS = \
     $$PWD/FramelessHelper.h \
     $$PWD/QxRibbonBarPrivate.h \
+    $$PWD/QxRibbonCustomizeData.h \
+    $$PWD/QxRibbonCustomizeWidget.h \
     $$PWD/QxRibbonGroupLayout.h \
     $$PWD/QxRibbonGroupPrivate.h \
     $$PWD/QxRibbonPagePrivate.h \

@@ -16,7 +16,7 @@ class RibbonWindow;
  * @brief 记录所有自定义操作的数据类
  * @note 此数据依赖于 @ref RibbonActionsManager 要在 RibbonActionsManager 之后使用此类
  */
-class QX_RIBBON_EXPORT RibbonCustomizeData
+class RibbonCustomizeData
 {
 public:
     enum ActionType {

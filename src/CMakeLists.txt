@@ -16,9 +16,7 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonButtonGroup.h
     QxRibbonContainers.h
     QxRibbonControls.h
-    QxRibbonCustomizeData.h
     QxRibbonCustomizeDialog.h
-    QxRibbonCustomizeWidget.h
     QxRibbonFactory.h
     QxRibbonGroup.h
     QxRibbonManager.h
@@ -38,6 +36,8 @@ set(QX_RIBBON_PUBLIC_HEADERS
 set(QX_RIBBON_PRIVATE_HEADERS
     FramelessHelper.h
     QxRibbonBarPrivate.h
+    QxRibbonCustomizeData.h
+    QxRibbonCustomizeWidget.h
     QxRibbonGroupLayout.h
     QxRibbonGroupPrivate.h
     QxRibbonPagePrivate.h
