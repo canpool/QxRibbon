@@ -598,12 +598,9 @@ void RibbonCustomizeData::setCanCustomize(QObject *obj, bool canbe)
  * @brief 对QList<RibbonCustomizeData>进行简化操作
  *
  * 此函数会执行如下操作：
- * 1、针对同一个page/group连续出现的添加和删除操作进行移除（前一步添加，后一步删除）
- *
- * 2、针对VisiblePageActionType，对于连续出现的操作只保留最后一步
- *
+ * 1、针对同一个元素出现添加和删除操作的进行移除（先添加，后删除）
+ * 2、针对VisiblePageActionType，对于多次出现的操作只保留最后一步
  * 3、针对RenamePageActionType和RenameGroupActionType操作，只保留最后一个
- *
  * 4、针对连续的ChangePageOrderActionType，ChangeGroupOrderActionType，ChangeActionOrderActionType进行合并为一个动作，
  * 如果合并后原地不动，则删除
  *
@@ -620,43 +617,73 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
     QList<RibbonCustomizeData> res;
     QList<int> willRemoveIndexs;   // 记录要删除的index
 
-    // FIXME: 添加和删除存在非连续情况，其它情况类似，算法需要重写
-
-    //! 首先针对连续出现的添加和删除操作进行优化
-    for (int i = 1; i < size; ++i) {
-        if ((csd[i - 1].actionType() == AddPageActionType) && (csd[i].actionType() == RemovePageActionType)) {
-            if (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue) {
-                willRemoveIndexs << i - 1 << i;
+    //! 首先针对添加和删除操作进行优化
+    // 说明：同一个元素不可能先删再加，只能先加再删，而且只能删一次，所以二级循环遍历，找到就跳出内循环
+    for (int i = 0; i < size; ++i) {
+        if (csd[i].actionType() == AddPageActionType) {
+            for (int j = i + 1; j < size; ++j) {
+                if (csd[j].actionType() != RemovePageActionType) {
+                    continue;
+                }
+                if (csd[i].pageObjNameValue == csd[j].pageObjNameValue) {
+                    willRemoveIndexs << i << j;
+                    break;
+                }
             }
-        } else if ((csd[i - 1].actionType() == AddGroupActionType) &&
-                   (csd[i].actionType() == RemoveGroupActionType)) {
-            if ((csd[i - 1].groupObjNameValue == csd[i].groupObjNameValue) &&
-                (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue)) {
-                willRemoveIndexs << i - 1 << i;
+        } else if (csd[i].actionType() == AddGroupActionType) {
+            for (int j = i + 1; j < size; ++j) {
+                if (csd[j].actionType() != RemoveGroupActionType) {
+                    continue;
+                }
+                if ((csd[i].groupObjNameValue == csd[j].groupObjNameValue) &&
+                    (csd[i].pageObjNameValue == csd[j].pageObjNameValue)) {
+                    willRemoveIndexs << i << j;
+                    break;
+                }
             }
-        } else if ((csd[i - 1].actionType() == AddActionActionType) &&
-                   (csd[i].actionType() == RemoveActionActionType)) {
-            if ((csd[i - 1].keyValue == csd[i].keyValue) &&
-                (csd[i - 1].groupObjNameValue == csd[i].groupObjNameValue) &&
-                (csd[i - 1].pageObjNameValue == csd[i].pageObjNameValue)) {
-                willRemoveIndexs << i - 1 << i;
+        } else if (csd[i].actionType() == AddActionActionType) {
+            for (int j = i + 1; j < size; ++j) {
+                if (csd[j].actionType() != RemoveActionActionType) {
+                    continue;
+                }
+                if ((csd[i].keyValue == csd[j].keyValue) &&
+                    (csd[i].groupObjNameValue == csd[j].groupObjNameValue) &&
+                    (csd[i].pageObjNameValue == csd[j].pageObjNameValue)) {
+                    willRemoveIndexs << i << j;
+                    break;
+                }
             }
         }
     }
     res = remove_indexs(csd, willRemoveIndexs);
     willRemoveIndexs.clear();
 
-    //! 筛选VisiblePageActionType，对于连续出现的操作只保留最后一步
+    //! 筛选VisiblePageActionType，对于多次出现的操作只保留最后一步
+    // 说明：同一个元素可能会被反复隐藏和显示，所以二级循环遍历，找到就删除前一个、记录后一个，直到内循环结束
+    // 下一次外循环，如果已被删除的或已经是最后的，就直接跳过
+    QList<int> willNotCheckIndexs; // 记录免检的index
     size = res.size();
-    for (int i = 1; i < size; ++i) {
-        if ((res[i - 1].actionType() == VisiblePageActionType) &&
-            (res[i].actionType() == VisiblePageActionType)) {
-            if (res[i - 1].pageObjNameValue == res[i].pageObjNameValue) {
-                // 要保证操作的是同一个内容
-                willRemoveIndexs << i - 1;   // 删除前一个只保留最后一个
+    for (int i = 0; i < size; ++i) {
+        if (res[i].actionType() == VisiblePageActionType) {
+            // 前置判断中使用的contains也是for循环，加了这个判断一级循环增加了处理能有多少性能收益？
+            if (willRemoveIndexs.contains(i) || willNotCheckIndexs.contains(i)) {
+                continue;
+            }
+            int last = i;
+            for (int j = i + 1; j < size; ++j) {
+                if (res[j].actionType() == VisiblePageActionType) {
+                    if (res[i].pageObjNameValue == res[j].pageObjNameValue) {
+                        willRemoveIndexs << last;   // 删除前一个只保留最后一个
+                        last = j;
+                    }
+                }
+            }
+            if (last != i) { // 说明多次出现，last已经是最后了，下次可以免检了
+                willNotCheckIndexs << last;
             }
         }
     }
+    willNotCheckIndexs.clear();
     res = remove_indexs(res, willRemoveIndexs);
     willRemoveIndexs.clear();
 
@@ -665,19 +692,23 @@ QList<RibbonCustomizeData> RibbonCustomizeData::simplify(const QList<RibbonCusto
     for (int i = 0; i < size; ++i) {
         if (res[i].actionType() == RenamePageActionType) {
             // 向后查询，如果查询到有同一个Page改名，把这个索引加入删除队列
+            int last = i;
             for (int j = i + 1; j < size; ++j) {
                 if ((res[j].actionType() == RenamePageActionType) &&
                     (res[i].pageObjNameValue == res[j].pageObjNameValue)) {
-                    willRemoveIndexs << i;
+                    willRemoveIndexs << last;
+                    last = j;
                 }
             }
         } else if (res[i].actionType() == RenameGroupActionType) {
             // 向后查询，如果查询到有同一个group改名，把这个索引加入删除队列
+            int last = i;
             for (int j = i + 1; j < size; ++j) {
                 if ((res[j].actionType() == RenameGroupActionType) &&
                     (res[i].groupObjNameValue == res[j].groupObjNameValue) &&
                     (res[i].pageObjNameValue == res[j].pageObjNameValue)) {
-                    willRemoveIndexs << i;
+                    willRemoveIndexs << last;
+                    last = j;
                 }
             }
         }
