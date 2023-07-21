@@ -308,17 +308,22 @@ void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
                     int trycount = 0;
                     int alignment = Qt::TextShowMnemonic | Qt::TextWordWrap;
                     do {
-                        // 先计算两行文本的紧凑矩形
-                        // 从一半开始逐渐递增
+                        // 先计算两行文本的紧凑矩形，从一半开始逐渐递增
                         textRange.setWidth(s.width() / 2 + (s.width() / 2) * (float(trycount) / maxTrycount));
                         textRange = fm.boundingRect(textRange, alignment, opt.text);
+                        // Linux GNOME平台上，fm.lineSpacing()为15，textRange.height()为35
+                        // Windows 10平台上，fm.lineSpacing()为16，textRange.height()为32
+#ifdef Q_OS_WINDOWS
                         if (textRange.height() <= (fm.lineSpacing() * 2)) {
+#else
+                        if (textRange.height() <= (fm.lineSpacing() * 2.5)) {
+#endif
                             // 保证在两行
                             m_isWordWrap = (textRange.height() > fm.lineSpacing());
                             break;
                         }
                         ++trycount;
-                    } while (trycount < 3);
+                    } while (trycount < maxTrycount);
                 }
                 // 左右留2像素
                 s.setWidth(textRange.width() + m_iconAndTextSpace * 2);
