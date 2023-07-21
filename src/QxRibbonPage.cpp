@@ -375,13 +375,15 @@ void RibbonPagePrivate::doWheelEvent(QWheelEvent *event)
         QPoint numPixels = event->pixelDelta();
         QPoint numDegrees = event->angleDelta() / 8;
 
+        // Linux GNOME 平台上测试，event->pixelDelta() 和 event->angleDelta() 取值都为 (0, +/-120)
+        // Windows 10 平台上测试，event->pixelDelta() 和 event->angleDelta() 取值分别为 (0, 0) 和 (0, +/-120)
         int scrollpix = 0;
-        if (!numPixels.isNull())
-            // FIXME: 测试时numPixels为null，所以scrollpix不知道该取什么值
-            scrollpix = numPixels.x() / 4;
-        else if (!numDegrees.isNull())
+        if (!numPixels.isNull()) {
+            // Linux GNOME 平台上，一次 scrollpix 为 30
+            scrollpix = numPixels.y() / 4;
+        } else if (!numDegrees.isNull()) {
+            // Windows 10 平台上, 一次 scrollpix 为 15
             scrollpix = numDegrees.y();
-        else {
         }
         if (scrollpix > 0) {   // 当滚轮向上滑，RibbonPage向左走
             int tmp = m_XBase - scrollpix;
