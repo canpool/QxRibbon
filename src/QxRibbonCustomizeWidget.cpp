@@ -758,13 +758,23 @@ void RibbonCustomizeWidget::updateModel(RibbonTreeShowType type)
 
 /**
  * @brief 应用所有设定
+ *
+ * 先apply再simplify，保证操作都被应用到。
+ *
+ * 如果先simplify后apply会存在如下问题：
+ * 比如：
+ *   1.先添加一个元素，执行applys，元素被添加到ribbonWindow
+ *   2.接着删除该元素，执行applys，由于先simplify，那么添加和删除相互抵消，
+ *     再apply时，元素将无法从ribbonWindow中删除
+ *
  * @return 应用成功返回true
  * @note 所有设定有一个应用成功都会返回true
  */
 bool RibbonCustomizeWidget::applys()
 {
+    int res = QxRibbonCustomizeDataApply(d->m_customizeDatas, d->m_ribbonWindow);
     simplify();
-    return (QxRibbonCustomizeDataApply(d->m_customizeDatas, d->m_ribbonWindow) > 0);
+    return (res > 0);
 }
 
 /**
