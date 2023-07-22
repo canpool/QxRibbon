@@ -637,7 +637,10 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
         // 这种直接把tabH设置为validTitleBarHeight
         tabH = validTitleBarHeight;
     }
-    y = y + validTitleBarHeight - tabH;   // 如果tabH较小，则下以，让tab底部和title的底部对齐
+    // 如果tabH较小，则下移，让tab底部和title的底部对齐
+    y += validTitleBarHeight - tabH;
+    // 调整quickAccessBar的Y坐标，否则在qt6或Linux GNOME环境中，quickAccessBar可能会盖住tabBarBaseLine
+    int qabY = y - (validTitleBarHeight - tabH) / 2;
 
     // applicationButton 定位，与TabBar同高
     if (m_applicationButton && m_applicationButton->isVisible()) {
@@ -646,7 +649,7 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
     }
     if (m_quickAccessBarPosition == RibbonBar::QABLeftPosition && m_quickAccessBar && m_quickAccessBar->isVisible()) {
         QSize quickAccessBarSize = m_quickAccessBar->sizeHint();
-        m_quickAccessBar->setGeometry(x, y, quickAccessBarSize.width(), tabH);
+        m_quickAccessBar->setGeometry(x, qabY, quickAccessBarSize.width(), tabH);
         x = m_quickAccessBar->geometry().right() + 2;
     }
     // tab bar 定位 wps模式下applicationButton的右边就是tab bar
