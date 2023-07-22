@@ -1015,14 +1015,17 @@ int RibbonCustomizeWidget::itemLevel(QStandardItem *item) const
 void RibbonCustomizeWidget::setSelectItem(QStandardItem *item, bool ensureVisible)
 {
     QItemSelectionModel *m = ui->treeViewResult->selectionModel();
-
     if (Q_NULLPTR == m) {
         return;
     }
-    if (m) {
-        m->clearSelection();
-        m->select(item->index(), QItemSelectionModel::Select);
-    }
+
+    m->clearSelection();
+    // 如果用select，看起来选中了，但是itemFromIndex却返回空
+    // 比如：新建一个页，接着新建一个组，onPushButtonNewGroupClicked中的selectedItem返回空，导致无法新建组。
+    // 备注：命令用SelectCurrent也没有用
+    //m->select(item->index(), QItemSelectionModel::Select);
+    m->setCurrentIndex(item->index(), QItemSelectionModel::Select);
+
     if (ensureVisible) {
         ui->treeViewResult->scrollTo(item->index());
     }
