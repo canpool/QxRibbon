@@ -858,7 +858,9 @@ void RibbonBarPrivate::onCurrentRibbonTabClicked(int index)
  */
 void RibbonBarPrivate::onCurrentRibbonTabDoubleClicked(int index)
 {
-    Q_UNUSED(index);
+    if (index == -1) {
+        return;
+    }
     q->setMinimized(!m_minimized);
 }
 
