@@ -290,7 +290,7 @@ RibbonMenu {
 }
 
 RibbonMenu::item {
-  padding: 5px 5px 5px 5px;
+  padding: 5px 10px 5px 20px;
   background-color: transparent;
 }
 
