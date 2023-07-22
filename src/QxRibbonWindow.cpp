@@ -91,12 +91,7 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
         // see also parentResize, using move instead of parent resize event when frameless toggled
         m_windowButtonGroup->move(q->width() - s.width() - 1, 1);
         m_windowButtonGroup->show();
-
-#ifdef Q_OS_UNIX
-        q->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-#else
         q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
-#endif
     } else {
         destroyFrameless();
         q->setWindowFlags(q->windowFlags() & ~Qt::FramelessWindowHint);

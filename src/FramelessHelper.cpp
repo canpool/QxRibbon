@@ -397,6 +397,12 @@ bool WidgetData::handleMouseMoveEvent(QMouseEvent *event)
             return true;
         } else if (d->m_bWidgetMovable && m_bLeftButtonTitlePressed) {
             if (m_pWidget->isMaximized()) {
+                // FIXME：1）Ubuntu 16.04 LTS/Unity 7.4.0环境中，最大化后鼠标拖拽标题栏获得的normalGeometry不是原始的，
+                // 而是无边框最大化后的尺寸，鼠标拖拽窗口最上面的Unity为窗口设计的标题栏才能获得真实的normalGeometry
+                // 2）GNOME环境中，最大化后鼠标拖拽标题栏获得的normalGeometry是原始的，但是会一闪而过，然后尺寸变成最大化的尺寸，
+                // 此时，由于尺寸已是最大化，又因为无边框后，鼠标移动窗口无法将窗口移到非显示区，导致根本无法移动
+                // 建议：Linux环境下不使用无边框方案
+
                 // 先求出窗口到鼠标的相对位置
                 QRect normalGeometry = m_pWidget->normalGeometry();
                 m_pWidget->showNormal();
