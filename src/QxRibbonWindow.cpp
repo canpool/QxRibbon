@@ -85,7 +85,9 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
             m_windowButtonGroup = new WindowButtonGroup(q);
         }
         QSize s = m_windowButtonGroup->sizeHint();
-        s.setHeight(m_ribbonBar->titleBarHeight());
+        // In the WpsLiteStyle style, tabBarHeight may be smaller than titleBarHeight,
+        // which causes the window buttons to cover the ribbon area, so use the smallest one
+        s.setHeight(qMin(m_ribbonBar->titleBarHeight(), m_ribbonBar->tabBarHeight()));
         m_windowButtonGroup->setFixedSize(s);
         m_windowButtonGroup->setWindowStates(q->windowState());
         // see also parentResize, using move instead of parent resize event when frameless toggled
