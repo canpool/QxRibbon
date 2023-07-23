@@ -85,9 +85,6 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
             m_windowButtonGroup = new WindowButtonGroup(q);
         }
         QSize s = m_windowButtonGroup->sizeHint();
-        // In the WpsLiteStyle style, tabBarHeight may be smaller than titleBarHeight,
-        // which causes the window buttons to cover the ribbon area, so use the smallest one
-        s.setHeight(qMin(m_ribbonBar->titleBarHeight(), m_ribbonBar->tabBarHeight()));
         m_windowButtonGroup->setFixedSize(s);
         m_windowButtonGroup->setWindowStates(q->windowState());
         // see also parentResize, using move instead of parent resize event when frameless toggled
@@ -189,6 +186,12 @@ void RibbonWindow::updateWindowFlag(Qt::WindowFlags flags)
     if (isUseRibbon() && isFrameless()) {
         if (d->m_windowButtonGroup) {
             d->m_windowButtonGroup->updateWindowFlag(flags);
+            // FIXME: In the WpsLiteStyle style, there is a short time overlap between rightButtonGroup and
+            // windowButtonGroup. Because the button group will be displayed first, and then resize the ribbon.
+            // I tried to hide the button group first and display the button group after resize ribbon,
+            // but because resize ribbon is a trigger event and non-blocking, the button group was displayed
+            // before resize was completed, so I failed.
+            d->resizeRibbon();
         }
     }
     repaint();
