@@ -1,4 +1,25 @@
 
+0.5.5
+---
+Feature
+- Support change position of RibbonQuickAccessBar in wps style
+
+Interface
+- Private RibbonCustomizeData and RibbonCustomizeWidget
+- Deprecate addCategoryActions for RibbonGallery
+
+Bugfix
+- Fix ribbonButtonForAction for RibbonGroup
+- Fix dynamic setting of window button
+- Fix RibbonButton don't refresh in Lite-WordWrap mode
+- Fix some bugs for RibbonCustomizeWidget
+
+Other
+- Optimize RibbonCustomizeWidget
+- Optimize tabbar only supports valid double clicked
+- Optimize the pos of text and menu-arrow for RibbonButton
+
+
 0.5.4
 ---
 Feature
