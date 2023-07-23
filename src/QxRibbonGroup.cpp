@@ -434,7 +434,7 @@ QAction *RibbonGroup::addSeparator(int top, int bottom)
  * @param action
  * @return 如果action没有对应的button，就返回Q_NULLPTR
  */
-RibbonButton *RibbonGroup::ribbonButtonForAction(QAction *action)
+RibbonButton *RibbonGroup::ribbonButtonForAction(QAction *action) const
 {
     RibbonGroupLayout *lay = qobject_cast<RibbonGroupLayout *>(layout());
 
@@ -443,7 +443,7 @@ RibbonButton *RibbonGroup::ribbonButtonForAction(QAction *action)
         if (index == -1) {
             return Q_NULLPTR;
         }
-        QLayoutItem *item = lay->takeAt(index);
+        QLayoutItem *item = lay->itemAt(index);
         if (item) {
             return qobject_cast<RibbonButton *>(item->widget());
         }

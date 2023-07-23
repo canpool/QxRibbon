@@ -81,7 +81,7 @@ public:
 
     QAction *addSeparator(int top = 6, int bottom = 6);
 
-    RibbonButton *ribbonButtonForAction(QAction *action);
+    RibbonButton *ribbonButtonForAction(QAction *action) const;
     QList<RibbonButton *> ribbonButtons() const;
 
     bool hasOptionAction() const;
