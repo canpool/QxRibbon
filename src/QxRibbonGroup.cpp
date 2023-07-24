@@ -54,6 +54,7 @@ void RibbonGroupOptionButton::connectAction(QAction *action)
 }
 
 int RibbonGroupPrivate::s_groupTitleHeight = 21;
+bool RibbonGroupPrivate::s_titleVisible = true;
 
 RibbonGroupPrivate::RibbonGroupPrivate(RibbonGroup *p)
     : q(p)
@@ -545,7 +546,7 @@ void RibbonGroup::setGroupLayoutMode(RibbonGroup::GroupLayoutMode mode)
 void RibbonGroup::updateItemGeometry()
 {
     // reset layout
-    layout()->setSpacing(RibbonGroup::TwoRowMode == d->m_groupLayoutMode ? 4 : 2);
+    layout()->setSpacing(isTwoRow() ? 4 : 2);
     updateGeometry();
 
     d->resetLargeToolButtonStyle();
@@ -570,8 +571,7 @@ QSize RibbonGroup::sizeHint() const
     QSize laySize = layout()->sizeHint();
     int maxWidth = laySize.width() + 2;
 
-    if (ThreeRowMode == groupLayoutMode()) {
-        // 三行模式
+    if (titleVisible()) {
         QFontMetrics fm = fontMetrics();
         QSize titleSize = fm.size(Qt::TextShowMnemonic, windowTitle());
         if (d->m_optionActionButton) {
@@ -641,7 +641,17 @@ int RibbonGroup::largeHeight() const
  */
 int RibbonGroup::titleHeight() const
 {
-    return (isTwoRow() ? 0 : groupTitleHeight());
+    return (titleVisible() ? groupTitleHeight() : 0);
+}
+
+bool RibbonGroup::titleVisible()
+{
+    return RibbonGroupPrivate::s_titleVisible;
+}
+
+void RibbonGroup::setTitleVisible(bool visible)
+{
+    RibbonGroupPrivate::s_titleVisible = visible;
 }
 
 /**
@@ -674,7 +684,7 @@ void RibbonGroup::paintEvent(QPaintEvent *event)
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
     HELP_DRAW_RECT(p, rect());
 #endif
-    if (ThreeRowMode == groupLayoutMode()) {
+    if (titleVisible()) {
         const int th = titleHeight();
         QFont f = font();
         f.setPixelSize(th * 0.6);
@@ -698,7 +708,7 @@ void RibbonGroup::resizeEvent(QResizeEvent *event)
 {
     //! 1.移动操作按钮到角落
     if (d->m_optionActionButton) {
-        if (ThreeRowMode == groupLayoutMode()) {
+        if (titleVisible()) {
             d->m_optionActionButton->move(width() - d->m_optionActionButton->width() - 2,
                 height() - titleHeight() + (titleHeight() - d->m_optionActionButton->height()) / 2);
         } else {

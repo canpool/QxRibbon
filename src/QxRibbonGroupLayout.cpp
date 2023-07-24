@@ -471,9 +471,9 @@ void RibbonGroupLayoutPrivate::updateGeomArray(const QRect &setrect)
             totalWidth = x + columnMaxWidth + spacing + mag.right();
         }
     }
-    // 在有optionButton情况下，的2行模式，需要调整totalWidth
-    if (group->isTwoRow()) {
-        if (group->hasOptionAction()) {
+    // 在有optionButton情况下，不显示标题时，需要调整totalWidth
+    if (group->hasOptionAction()) {
+        if (!group->titleVisible()) {
             totalWidth += group->optionActionButtonSize().width();
         }
     }

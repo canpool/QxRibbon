@@ -107,6 +107,9 @@ public:
     int largeHeight() const;
     int titleHeight() const;
 
+    static bool titleVisible();
+    static void setTitleVisible(bool visible);
+
     static int groupTitleHeight();
     static void setGroupTitleHeight(int h);
 signals:

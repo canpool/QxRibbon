@@ -249,6 +249,18 @@ void MainWindow::createPageHome()
                                                              : RibbonBar::QABRightPosition);
     });
 
+    cb = new QCheckBox();
+    cb->setObjectName(QStringLiteral("show group title"));
+    cb->setText(tr("show group title"));
+    cb->setWindowTitle(cb->text());
+    cb->setChecked(true);
+    groupStyle->addSmallWidget(cb);
+    connect(cb, &QCheckBox::clicked, this, [this](bool checked) {
+        RibbonGroup::setTitleVisible(checked);
+        RibbonElementStyleOpt.recalc();
+        this->ribbonBar()->updateRibbonGeometry();
+    });
+
     RibbonGroup *groupToolButtonStyle = page->addGroup(tr("ribbon toolbutton style"));
 
     RibbonButton *btn;

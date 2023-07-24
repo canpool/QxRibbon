@@ -48,5 +48,6 @@ public:
     RibbonGroupOptionButton *m_optionActionButton;      ///< 标题栏的y距离
     RibbonGroup::GroupLayoutMode m_groupLayoutMode;   ///< group的布局模式，默认为3行模式ThreeRowMode
     static int s_groupTitleHeight;                       ///< group标题栏的全局高度,默认为21
+    static bool s_titleVisible;
     bool m_isCanCustomize;                                ///< 记录是否可自定义
 };

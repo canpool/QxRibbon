@@ -53,13 +53,13 @@ int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) cons
     case RibbonBar::OfficeStyle:
         return m_titleBarHeight + m_tabBarHeight + (lineSpacing * 1.5) * 3 +
                RibbonGroupLayout::groupContentsMargins().top() + RibbonGroupLayout::groupContentsMargins().bottom() +
-               RibbonGroup::groupTitleHeight();
+               (RibbonGroup::titleVisible() ? RibbonGroup::groupTitleHeight() : 0);
     case RibbonBar::WpsLiteStyle:
         return m_ribbonBarHeightOfficeStyleThreeRow - m_tabBarHeight;
     case RibbonBar::WpsLiteStyleTwoRow:
-        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - m_tabBarHeight - RibbonGroup::groupTitleHeight();
+        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - m_tabBarHeight;
     case RibbonBar::OfficeStyleTwoRow:
-        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95 - RibbonGroup::groupTitleHeight();
+        return m_ribbonBarHeightOfficeStyleThreeRow * 0.95;
     default:
         break;
     }
