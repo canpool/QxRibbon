@@ -358,9 +358,9 @@ void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
             }
         } else {
             // 否则就是lite模式，只允许1行，有菜单就偏移
-            if (s.width() > s.height() * 1.5) {
+            if (s.width() > s.height() * 2) {
                 // 过于宽的按钮，把文字用...来替代
-                s.rwidth() = s.height() * 1.5;
+                s.rwidth() = s.height() * 2;
             }
             if ((opt.features & QStyleOptionToolButton::MenuButtonPopup) ||
                 (opt.features & QStyleOptionToolButton::HasMenu)) {
@@ -434,7 +434,11 @@ void RibbonButtonPrivate::drawIconAndLabel(QStyleOptionToolButton &opt, QPainter
 #ifdef QX_RIBBON_DEBUG_HELP_DRAW
                 HELP_DRAW_RECT(p, textRect);
 #endif
-                alignment |= Qt::AlignHCenter | Qt::AlignTop;   // 文字是顶部对齐
+                if (RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap) {
+                    alignment |= Qt::AlignCenter;
+                } else {
+                    alignment |= Qt::AlignHCenter | Qt::AlignTop;   // 文字是顶部对齐
+                }
 
                 // 再绘制文本，对于Normal模式下的Largebutton，如果有菜单，且m_isWordWrap是true，箭头将在文本旁边
                 if (RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap) {
@@ -666,8 +670,12 @@ QRect RibbonButtonPrivate::calcIndicatorArrowDownRect(const QStyleOptionToolButt
         // 否则通过rect的高度控制（见下文的QX_INDICATOR_ARROW_WIDTH）
         if ((RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap)) {
             // 首先判断是否为lite且不允许换行
-            rect.setRect(m_textRect.right(), m_textRect.top(),
-                         opt.rect.right() - m_iconAndTextSpace - m_textRect.right(), m_textRect.height());
+            // yh + QX_INDICATOR_ARROW_WIDTH + yh = m_textRect.height()
+            // yh = (m_textRect.height() - QX_INDICATOR_ARROW_WIDTH) / 2
+            // y = m_textRect.top() + yh
+            int y = m_textRect.top() + (m_textRect.height() - QX_INDICATOR_ARROW_WIDTH) / 2;
+            rect.setRect(m_textRect.right(), y,
+                         opt.rect.right() - m_iconAndTextSpace - m_textRect.right(), QX_INDICATOR_ARROW_WIDTH);
         } else if (m_isWordWrap) {
             // 如果允许换行，那么就在文本第二行最后端，菜单的下拉箭头位于第二行文本的矩形区域
             rect.setRect(m_textRect.right(), m_textRect.top() + m_textRect.height() / 2,
