@@ -1230,6 +1230,7 @@ void RibbonBar::showPageContext(RibbonPageContext *context)
     PageContextManagerData pageContextData;
 
     pageContextData.pageContext = context;
+    int cnt = context->pageCount();
     for (int i = 0; i < context->pageCount(); ++i) {
         RibbonPage *page = context->page(i);
         // 此句如果模式重复设置不会进行多余操作
@@ -1243,6 +1244,12 @@ void RibbonBar::showPageContext(RibbonPageContext *context)
         tabdata.page = page;
         tabdata.index = index;
         d->m_tabBar->setTabData(index, QVariant::fromValue(tabdata));
+        if (cnt > 1) {
+            // 如果连续添加多页，每添加一页就立即更新一下尺寸，如果依赖最后的postEvent会短暂出现导航箭头
+            QRect r = d->m_tabBar->geometry();
+            r.setWidth(d->calcMinTabBarWidth());
+            d->m_tabBar->setGeometry(r);
+        }
     }
     d->m_currentShowingPageContextList.append(pageContextData);
     // 由于上下文都是在最后追加，不需要调用updateTabData();
