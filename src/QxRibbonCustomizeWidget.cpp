@@ -38,9 +38,11 @@
 #include <QtWidgets/QWidget>
 
 
-bool QxRibbonCustomizeDataSetToXml(QXmlStreamWriter *xml, const QList<RibbonCustomizeData> &cds)
+bool QxRibbonCustomizeDataSetToXml(QXmlStreamWriter *xml, const QList<RibbonCustomizeData> &cds, bool force = false)
 {
-    if (cds.size() <= 0) {
+    // 如果xml中之前记录了添加页的定制数据，当再次删除该页时，经过simplify后，cds被抵消为空
+    // 此时不如因为cds为空不写，那么xml中始终保留一份添加的定制数据，所以增加force参数，当cds为空，old数据非空时，应该强制写
+    if (cds.size() <= 0 && !force) {
         return false;
     }
 
@@ -821,7 +823,7 @@ bool RibbonCustomizeWidget::toXml(QXmlStreamWriter *xml) const
 
     res = d->m_oldCustomizeDatas + d->m_customizeDatas;
     res = RibbonCustomizeData::simplify(res);
-    return QxRibbonCustomizeDataSetToXml(xml, res);
+    return QxRibbonCustomizeDataSetToXml(xml, res, d->m_oldCustomizeDatas.count() > 0);
 }
 
 /**
