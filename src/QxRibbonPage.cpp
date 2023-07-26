@@ -208,9 +208,11 @@ void RibbonPagePrivate::updateItemGeometry()
     RibbonPage *page = q;
     QSize contentSize = pageContentSize();
     int y = 0;
+    int x = 0;
 
     if (!m_contentsMargins.isNull()) {
         y = m_contentsMargins.top();
+        x = m_contentsMargins.left();
     }
     // total 是总宽，不是x坐标系，x才是坐标系
     int total = totalSizeHintWidth();
@@ -247,7 +249,7 @@ void RibbonPagePrivate::updateItemGeometry()
         }
     }
     total = 0;   // total重新计算
-    int x = m_XBase;
+    x += m_XBase;
 
     // 先按照sizeHint设置所有的尺寸
     for (RibbonPageItem &item : m_itemList) {
