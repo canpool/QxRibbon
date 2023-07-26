@@ -60,6 +60,9 @@ void RibbonGalleryPrivate::init(RibbonGallery *parent)
     m_buttonUp->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_buttonDown->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_buttonMore->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_buttonUp->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_buttonDown->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_buttonMore->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     m_buttonUp->setObjectName(QStringLiteral("RibbonGalleryButtonUp"));
     m_buttonDown->setObjectName(QStringLiteral("RibbonGalleryButtonDown"));
     m_buttonMore->setObjectName(QStringLiteral("RibbonGalleryButtonMore"));
