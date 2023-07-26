@@ -738,6 +738,7 @@ RibbonButton::RibbonButton(QWidget *parent)
     d->q = this;
     setAutoRaise(true);
     setButtonType(SmallButton);
+    setMouseTracking(true);
 }
 
 RibbonButton::RibbonButton(QAction *defaultAction, QWidget *parent)
@@ -908,7 +909,6 @@ void RibbonButton::setButtonType(RibbonButton::RibbonButtonType type)
         setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
     }
-    setMouseTracking(true);
 }
 
 QSize RibbonButton::minimumSizeHint() const
