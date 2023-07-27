@@ -368,6 +368,20 @@ void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
                 s.rwidth() += QX_INDICATOR_ARROW_WIDTH;
             }
         }
+        if (RibbonButton::Normal == m_largeButtonType ||
+                (RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap)) {
+            if (s.width() < s.height()) {
+                // 短文本的图标相对于长文本的图标可能会比较小，此处根据高度扩展短文本的按钮宽度
+                int textHeight = q->fontMetrics().lineSpacing();
+                if (m_isWordWrap && !opt.text.contains('\n')) {
+                    textHeight <<= 1;
+                }
+                int iconHeight = s.height() - textHeight - m_iconAndTextSpace;
+                if (iconHeight > s.width()) {
+                    s.rwidth() = iconHeight;
+                }
+            }
+        }
         // 无需在这里进行计算，在resizeevent里进行计算
         //! 3在这时候能确定m_textRect,m_iconRect
         // m_textRect = textRange.moveBottomLeft(QPoint(s.width() - m_iconAndTextSpace, s.height() -
@@ -440,14 +454,15 @@ void RibbonButtonPrivate::drawIconAndLabel(QStyleOptionToolButton &opt, QPainter
                     alignment |= Qt::AlignHCenter | Qt::AlignTop;   // 文字是顶部对齐
                 }
 
+                QString text = opt.text;
                 // 再绘制文本，对于Normal模式下的Largebutton，如果有菜单，且m_isWordWrap是true，箭头将在文本旁边
                 if (RibbonButton::Lite == m_largeButtonType && !s_liteStyleEnableWordWrap) {
                     // lite 模式，文字不换行, 显示的内容需要进行省略处理
-                    opt.text =
-                        w->fontMetrics().elidedText(opt.text, Qt::ElideRight, textRect.width(), Qt::TextShowMnemonic);
+                    text.remove('\n');
+                    text = w->fontMetrics().elidedText(text, Qt::ElideRight, textRect.width(), Qt::TextShowMnemonic);
                 }
                 style()->drawItemText(&p, QStyle::visualRect(opt.direction, opt.rect, textRect), alignment, opt.palette,
-                                      opt.state & QStyle::State_Enabled, opt.text, QPalette::ButtonText);
+                                      opt.state & QStyle::State_Enabled, text, QPalette::ButtonText);
             } else {
                 // 只有图标情况
                 if (isArrow) {

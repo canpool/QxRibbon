@@ -349,6 +349,11 @@ void MainWindow::createPageHome()
     btn = groupToolButtonStyle->addLargeAction(act);
     btn->setArrowType(Qt::DownArrow);
 
+    QAction *actionShortText = createAction(tr("Qx"), ":/icon/res/long-text.svg", "short-text");
+    groupToolButtonStyle->addLargeAction(actionShortText);
+    actionShortText = createAction(tr("Q\nx"), ":/icon/res/long-text.svg", "short-wordwrap-text");
+    groupToolButtonStyle->addLargeAction(actionShortText);
+
     QAction *actionLongText =
         createAction(tr("show very long text in a button,balabalabala etc"), ":/icon/res/long-text.svg", "long-text");
     groupToolButtonStyle->addLargeAction(actionLongText);
