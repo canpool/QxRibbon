@@ -72,6 +72,8 @@ public:
     QRect adjustedTextRect(const QStyleOptionToolButton &opt, const QWidget *w);
     QRect calcIndicatorArrowDownRect(const QStyleOptionToolButton &opt);
     QPixmap createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize);
+    // 根据鼠标位置更新按钮的信息
+    void updateButtonState(const QPoint &pos);
 
     void drawButton(QStyleOptionToolButton &opt, QPainter &p, const QWidget *w);
     void drawLargeButton(QStyleOptionToolButton &opt, QPainter &p, const QWidget *w);
@@ -91,6 +93,7 @@ public:
     QSize m_sizeHint;           ///< 保存计算好的sizehint
     QRect m_iconRect;           ///< 记录icon的绘制位置
     QRect m_textRect;           ///< 记录text的绘制位置
+    QRect m_indicatorArrowRect;   ///< 记录IndicatorArrow的绘制位置
 
     static bool s_isToolButtonTextShift;   ///< 配置RibbonButton文字在点击时是否会轻微改变位置而达到一种类似跳动的效果,
                                            ///< @default 默认为false
@@ -154,16 +157,14 @@ void RibbonButtonPrivate::drawSmallButton(QStyleOptionToolButton &opt, QPainter 
         } else {
             style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, w);
             if (tool.state & QStyle::State_MouseOver) {
-                if (m_mouseOnSubControl) {   // 此时鼠标在indecater那
-                    // 鼠标在文字区，把图标显示为正常
-                    tool.rect = m_iconRect;
-                    tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
+                if (m_mouseOnSubControl) {
+                    // 鼠标在箭头区，把图标和文字显示为正常
+                    tool.rect = m_iconRect.united(m_textRect);
                 } else {
-                    // 鼠标在图标区，把文字显示为正常
-                    tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
-                    tool.rect = opt.rect.adjusted(m_iconRect.width() + m_iconAndTextSpace, m_iconAndTextSpace,
-                                                  -m_iconAndTextSpace, -m_iconAndTextSpace);
+                    // 鼠标在非箭头区，把箭头区显示为正常
+                    tool.rect = m_indicatorArrowRect;
                 }
+                tool.state = QStyle::State_Raised;
                 style()->drawPrimitive(pe, &tool, &p, w);
             }
         }
@@ -229,16 +230,14 @@ void RibbonButtonPrivate::drawLargeButton(QStyleOptionToolButton &opt, QPainter 
             // 菜单没有激活,这时候要把图标域或者文字域绘制为正常模式
             //  style()->drawPrimitive(QStyle::PE_PanelButtonTool, &tool, &p, this);
             if (tool.state & QStyle::State_MouseOver) {
-                if (m_mouseOnSubControl) {   // 此时鼠标在indecater那
+                if (m_mouseOnSubControl) {
                     // 鼠标在文字区，把图标显示为正常
                     tool.rect = m_iconRect;
-                    tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
                 } else {
                     // 鼠标在图标区，把文字显示为正常
-                    tool.state = (QStyle::State_Raised);   // 把图标区域显示为正常
-                    tool.rect.setRect(m_textRect.x(), m_textRect.y(), tool.rect.width() - 2 * m_iconAndTextSpace,
-                                      m_textRect.height());
+                    tool.rect = m_textRect.united(m_indicatorArrowRect);
                 }
+                tool.state = QStyle::State_Raised;
                 style()->drawPrimitive(pe, &tool, &p, w);
             }
         }
@@ -707,6 +706,7 @@ QRect RibbonButtonPrivate::calcIndicatorArrowDownRect(const QStyleOptionToolButt
         rect.setRect(rect.width() - QX_INDICATOR_ARROW_WIDTH - m_iconAndTextSpace, m_iconAndTextSpace,
                      QX_INDICATOR_ARROW_WIDTH, rect.height() - 2 * m_iconAndTextSpace);
     }
+    m_indicatorArrowRect = rect; // 记录
     return rect;
 }
 
@@ -730,6 +730,22 @@ QPixmap RibbonButtonPrivate::createIconPixmap(const QStyleOptionToolButton &opt,
 #endif
     }
     return QPixmap();
+}
+
+void RibbonButtonPrivate::updateButtonState(const QPoint &pos)
+{
+    bool isMouseOnSubControl(false);
+    if (RibbonButton::LargeButton == m_buttonType) {
+        isMouseOnSubControl = m_textRect.united(m_indicatorArrowRect).contains(pos);
+    } else {
+        // 小按钮模式就和普通toolbutton一样
+        isMouseOnSubControl = m_indicatorArrowRect.contains(pos);
+    }
+    if (m_mouseOnSubControl != isMouseOnSubControl) {
+        m_mouseOnSubControl = isMouseOnSubControl;
+        // 从icon变到text过程中刷新一次
+        q->update();
+    }
 }
 
 void RibbonButtonPrivate::drawButton(QStyleOptionToolButton &opt, QPainter &p, const QWidget *w)
@@ -778,40 +794,27 @@ void RibbonButton::paintEvent(QPaintEvent *event)
 
 void RibbonButton::mouseMoveEvent(QMouseEvent *e)
 {
-    bool isMouseOnSubControl(false);
-
-    if (d->m_iconRect.isValid()) {
-        isMouseOnSubControl = !d->m_iconRect.contains(e->pos());
-    }
-
-    if (d->m_mouseOnSubControl != isMouseOnSubControl) {
-        d->m_mouseOnSubControl = isMouseOnSubControl;
-        // 从icon变到text过程中刷新一次
-        update();
-    }
+    d->updateButtonState(e->pos());
     QToolButton::mouseMoveEvent(e);
 }
 
 void RibbonButton::mousePressEvent(QMouseEvent *e)
 {
     if ((e->button() == Qt::LeftButton) && (popupMode() == MenuButtonPopup)) {
-        if (LargeButton == d->m_buttonType) {
-            QRect popupr = rect().adjusted(0, height() / 2, 0, 0);
-            if (popupr.isValid() && popupr.contains(e->pos())) {
-                d->m_menuButtonPressed = true;
-                showMenu();
-                return;
-            }
-        } else {
-            if (d->m_iconRect.isValid() && !d->m_iconRect.contains(e->pos())) {
-                d->m_menuButtonPressed = true;
-                showMenu();
-                return;
-            }
+        d->updateButtonState(e->pos());
+        if (d->m_mouseOnSubControl) {
+            d->m_menuButtonPressed = true;
+            showMenu();
+            // showMenu结束后，在判断当前的鼠标位置是否是在SubControl
+            d->updateButtonState(mapFromGlobal(QCursor::pos()));
+            return;
         }
     }
     d->m_menuButtonPressed = false;
-    QToolButton::mousePressEvent(e);
+    // 此处用QAbstractButton的mousePressEvent，而不是QToolButton的mousePressEvent
+    // 对于带菜单的QToolButton，QToolButton的mousePressEvent默认是点击按钮右侧弹出菜单，
+    // 弹出菜单的点击位置在上面进行了定制处理，所以不需要再用QToolButton的mousePressEvent进行处理
+    QAbstractButton::mousePressEvent(e);
 }
 
 void RibbonButton::mouseReleaseEvent(QMouseEvent *e)
