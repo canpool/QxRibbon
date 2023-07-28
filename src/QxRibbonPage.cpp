@@ -158,7 +158,7 @@ void RibbonPagePrivate::setGroupLayoutMode(RibbonGroup::GroupLayoutMode m)
     m_groupLayoutMode = m;
     QList<RibbonGroup *> groups = groupList();
 
-    for (RibbonGroup *group : groups) {
+    for (RibbonGroup *group : qAsConst(groups)) {
         group->setGroupLayoutMode(m);
     }
     updateItemGeometry();
@@ -177,7 +177,7 @@ int RibbonPagePrivate::totalSizeHintWidth() const
         total += (mag.left() + mag.right());
     }
     // 先计算总长
-    for (RibbonPageItem item : m_itemList) {
+    for (RibbonPageItem item : qAsConst(m_itemList)) {
         if (item.isEmpty()) {
             // 如果是hide就直接跳过
             continue;
@@ -358,10 +358,10 @@ void RibbonPagePrivate::doItemLayout()
         m_leftScrollBtn->raise();
     }
     // 不在上面那里进行show和hide因为这会触发RibbonGroupLayout的重绘，导致循环绘制，非常影响效率
-    for (QWidget *w : showWidgets) {
+    for (QWidget *w : qAsConst(showWidgets)) {
         w->show();
     }
-    for (QWidget *w : hideWidgets) {
+    for (QWidget *w : qAsConst(hideWidgets)) {
         w->hide();
     }
 }
@@ -742,7 +742,7 @@ RibbonBar *RibbonPage::ribbonBar() const
 void RibbonPage::updateItemGeometry()
 {
     QList<RibbonGroup *> groups = groupList();
-    for (RibbonGroup *group : groups) {
+    for (RibbonGroup *group : qAsConst(groups)) {
         group->updateItemGeometry();
     }
     d->updateItemGeometry();

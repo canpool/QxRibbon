@@ -276,7 +276,7 @@ void RibbonBarPrivate::updateRibbonElementGeometry()
 {
     // 根据样式调整 RibbonPage 的布局形式
     QList<RibbonPage *> pages = q->pages();
-    for (RibbonPage *page : pages) {
+    for (RibbonPage *page : qAsConst(pages)) {
         page->setGroupLayoutMode(isTwoRowStyle() ? RibbonGroup::TwoRowMode : RibbonGroup::ThreeRowMode);
     }
     updateRibbonBarHeight();
@@ -1149,7 +1149,7 @@ void RibbonBar::removePage(RibbonPage *page)
     }
     d->m_stack->removeWidget(page);
     // 同时验证这个page是否是contexpage里的
-    for (RibbonPageContext *c : d->m_pageContextList) {
+    for (RibbonPageContext *c : qAsConst(d->m_pageContextList)) {
         c->takePage(page);
     }
     // 这时要刷新所有tabdata的index信息
@@ -1360,7 +1360,7 @@ void RibbonBar::destroyPageContext(RibbonPageContext *context)
     //!
     QList<RibbonPage *> res = context->pageList();
 
-    for (RibbonPage *page : res) {
+    for (RibbonPage *page : qAsConst(res)) {
         page->hide();
         page->deleteLater();
     }
@@ -1548,7 +1548,7 @@ void RibbonBar::updateRibbonGeometry()
 {
     d->updateRibbonBarHeight();
     QList<RibbonPage *> pages = this->pages();
-    for (RibbonPage *page : pages) {
+    for (RibbonPage *page : qAsConst(pages)) {
         page->updateItemGeometry();
     }
 }

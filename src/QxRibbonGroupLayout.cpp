@@ -85,7 +85,7 @@ void RibbonGroupLayoutPrivate::columnWidthInfo(int colindex, int &width, int &ma
 {
     width = -1;
     maximum = -1;
-    for (RibbonGroupItem *item : m_items) {
+    for (RibbonGroupItem *item : qAsConst(m_items)) {
         if (!item->isEmpty() && (item->columnIndex == colindex)) {
             width = qMax(width, item->willGeometry.width());
             maximum = qMax(maximum, item->widget()->maximumWidth());
