@@ -24,6 +24,7 @@
 #include <QVariant>
 #include <QEventLoop>
 #include <QMouseEvent>
+#include <QEvent>
 
 const int tabBarBaseLineHeight = 1;
 
@@ -681,6 +682,15 @@ void RibbonBarPrivate::resizeStackedWidget()
         m_stack->setGeometry(
             border.left(), m_tabBar->geometry().bottom() + 1, q->width() - border.left() - border.right(),
             mainBarHeight() - m_tabBar->geometry().bottom() - border.bottom() - 1);
+    }
+}
+
+void RibbonBarPrivate::resizeRibbon()
+{
+    if (isOfficeStyle()) {
+        resizeInOfficeStyle();
+    } else {
+        resizeInWpsLiteStyle();
     }
 }
 
@@ -1550,7 +1560,8 @@ void RibbonBar::updateRibbonTheme()
 
 void RibbonBar::resizeRibbon()
 {
-    QApplication::postEvent(this, new QResizeEvent(this->size(), this->size()));
+    // TODO: 是否有必要在之后调用update进行repaint
+    d->resizeRibbon();
 }
 
 QColor RibbonBar::tabBarBaseLineColor() const
@@ -1577,6 +1588,21 @@ void RibbonBar::setWindowTitleVisible(bool visible)
 {
     d->m_titleVisible = visible;
     d->m_quickAccessBar->setIconVisible(isOfficeStyle() && visible);
+}
+
+bool RibbonBar::event(QEvent *event)
+{
+    bool res = QMenuBar::event(event);
+
+    switch (event->type()) {
+    case QEvent::LayoutRequest: {
+        d->resizeRibbon();
+    } break;
+    default:
+        break;
+    }
+
+    return res;
 }
 
 bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
@@ -1635,10 +1661,6 @@ void RibbonBar::paintEvent(QPaintEvent *e)
 void RibbonBar::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e);
-    if (isOfficeStyle()) {
-        d->resizeInOfficeStyle();
-    } else {
-        d->resizeInWpsLiteStyle();
-    }
+    d->resizeRibbon();
     update();
 }

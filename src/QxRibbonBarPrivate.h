@@ -89,6 +89,7 @@ public:
     void resizeInOfficeStyle();
     void resizeInWpsLiteStyle();
     void resizeStackedWidget();
+    void resizeRibbon();
 
     int calcMinTabBarWidth() const;
     int mainBarHeight() const;

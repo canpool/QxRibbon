@@ -37,6 +37,8 @@
 #include <QXmlStreamWriter>
 #include <QDialog>
 #include <QActionGroup>
+#include <QMdiArea>
+#include <QSplitter>
 
 #include "aboutdialog.h"
 #include "editablecontainer.h"
@@ -55,6 +57,8 @@ QX_USE_NAMESPACE
         m_edit->append(QString("%1 cost %2 ms(%3)").arg(STR).arg(___TMP_INT - __TMP_LASTTIMES).arg(___TMP_INT));       \
         __TMP_LASTTIMES = ___TMP_INT;                                                                                  \
     } while (0)
+
+#define QXRIBBON_TEST_MDIAREA    0
 
 MainWindow::MainWindow(QWidget *par)
     : RibbonWindow(par)
@@ -98,7 +102,18 @@ void MainWindow::createCentralWidget()
     m_edit = new QTextEdit(this);
     EditableContainer *ec = new EditableContainer(this);
     ec->setWidget(m_edit);
+#if QXRIBBON_TEST_MDIAREA
+    QMdiArea *area = new QMdiArea(this);
+    QTextEdit *te = new QTextEdit(this);
+    area->addSubWindow(te);
+    QSplitter *splitter = new QSplitter(this);
+    splitter->addWidget(m_edit);
+    splitter->addWidget(area);
+    splitter->setSizes({400, 200});
+    setCentralWidget(splitter);
+#else
     setCentralWidget(ec);
+#endif
 }
 
 void MainWindow::createStatusBar()
