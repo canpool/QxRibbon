@@ -306,8 +306,8 @@ void MainWindow::createPageHome()
 
     act = createAction(tr("test 3"), ":/icon/res/file.svg");
     act->setMenu(menu);
-    groupToolButtonStyle->addSmallAction(act);
-    groupToolButtonStyle->ribbonButtonForAction(act)->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    btn = groupToolButtonStyle->addSmallAction(act);
+    btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     act = createAction(tr("test 4"), ":/icon/res/file.svg");
     groupToolButtonStyle->addSmallAction(act);
     groupToolButtonStyle->ribbonButtonForAction(act)->setToolButtonStyle(Qt::ToolButtonIconOnly);
