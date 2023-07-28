@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QToolButton>
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QSpinBox>
@@ -59,6 +60,7 @@ QX_USE_NAMESPACE
     } while (0)
 
 #define QXRIBBON_TEST_MDIAREA    0
+#define QXRIBBON_TEST_CUSTOMIZE_APPBTN  1
 
 MainWindow::MainWindow(QWidget *par)
     : RibbonWindow(par)
@@ -125,13 +127,7 @@ void MainWindow::createRibbon()
 {
     COST_START();
 
-    RibbonBar *ribbon = ribbonBar();
-    ribbon->setContentsMargins(2, 0, 2, 0);
-
-    ribbon->applicationButton()->setText(tr("&File"));
-    ribbon->applicationButton()->setCheckable(true);
-    connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
-    COST_PRINT("setApplicationButton");
+    ribbonBar()->setContentsMargins(2, 0, 2, 0);
 
     createPageHome();
     COST_PRINT("createPageHome");
@@ -149,6 +145,8 @@ void MainWindow::createRibbon()
     COST_PRINT("createQuickAccessBar");
     createRightButtonGroup();
     COST_PRINT("createRightButtonGroup");
+    createApplicationButton();
+    COST_PRINT("createApplicationButton");
 
     addSomeOtherAction();
     COST_PRINT("addSomeOtherAction");
@@ -896,6 +894,32 @@ void MainWindow::createRightButtonGroup()
     QAction *actionHelp = createAction(tr("help"), ":/icon/res/help.svg");
     connect(actionHelp, &QAction::triggered, this, &MainWindow::onActionHelpTriggered);
     rightBar->addAction(actionHelp);
+}
+
+void MainWindow::createApplicationButton()
+{
+#if QXRIBBON_TEST_CUSTOMIZE_APPBTN
+    // FIXME: 当前按钮在单击后会出现下沉效果
+    QToolButton *appBtn = new QToolButton(this);
+    appBtn->setText(tr("&File"));
+    appBtn->setAutoRaise(true);
+    appBtn->setFocusPolicy(Qt::NoFocus);
+    appBtn->setPopupMode(QToolButton::InstantPopup);
+    appBtn->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    appBtn->setMinimumWidth(40);
+    RibbonMenu *appMenu = new RibbonMenu(this);
+    // 菜单添加的Action可以来自QuickAccessBar或其它的Action，此处创建新的Action为了方便演示
+    appMenu->addAction(createAction(tr("file"), ":/icon/res/file.svg"));
+    appMenu->addAction(createAction(tr("save"), ":/icon/res/save.svg"));
+    appMenu->addAction(createAction(tr("cut"), ":/icon/res/cut.svg"));
+    appBtn->setMenu(appMenu);
+    ribbonBar()->setApplicationButton(appBtn);
+#else
+    RibbonBar *ribbon = ribbonBar();
+    ribbon->applicationButton()->setText(tr("&File"));
+    ribbon->applicationButton()->setCheckable(true);
+    connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
+#endif
 }
 
 void MainWindow::addSomeOtherAction()

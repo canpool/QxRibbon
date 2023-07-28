@@ -38,6 +38,7 @@ private:
     void createPageContext2(RibbonPage *page);
     void createQuickAccessBar();
     void createRightButtonGroup();
+    void createApplicationButton();
     void addSomeOtherAction();
 
     QAction *createAction(const QString &text, const QString &iconurl, const QString &objName);

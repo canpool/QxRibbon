@@ -182,23 +182,27 @@ RibbonCtrlContainer {
 
 /*RibbonApplicationButton*/
 
-RibbonApplicationButton {
+QAbstractButton#qx_RibbonApplicationButton {
   color: white;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   background-color: #2b579a;
 }
 
-RibbonApplicationButton:hover {
+QAbstractButton#qx_RibbonApplicationButton:hover {
   background-color: #5888d0;
 }
 
-RibbonApplicationButton:pressed {
+QAbstractButton#qx_RibbonApplicationButton:pressed {
   background-color: #3369b9;
 }
 
-RibbonApplicationButton:focus {
+QAbstractButton#qx_RibbonApplicationButton:focus {
   outline: none;
+}
+
+QAbstractButton#qx_RibbonApplicationButton::menu-indicator {
+  image: none;
 }
 
 /*RibbonButton*/
