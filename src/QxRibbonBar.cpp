@@ -1560,8 +1560,9 @@ void RibbonBar::updateRibbonTheme()
 
 void RibbonBar::resizeRibbon()
 {
-    // TODO: 是否有必要在之后调用update进行repaint
-    d->resizeRibbon();
+    // FIXME: 此处使用resizeEvent中的d->resizeRibbon()和update()来代替postEvent会出现如下问题：
+    // WPS模式下，无边框和有边框之间切换后, m_applicationButton.isVisible()突然返回false，导致d->resizeRibbon()中计算尺寸异常
+    QApplication::postEvent(this, new QResizeEvent(size(), size()));
 }
 
 QColor RibbonBar::tabBarBaseLineColor() const
