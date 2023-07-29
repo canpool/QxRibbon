@@ -109,7 +109,7 @@ void MainWindow::createCentralWidget()
     QTextEdit *te = new QTextEdit(this);
     area->addSubWindow(te);
     QSplitter *splitter = new QSplitter(this);
-    splitter->addWidget(m_edit);
+    splitter->addWidget(ec);
     splitter->addWidget(area);
     splitter->setSizes({400, 200});
     setCentralWidget(splitter);
