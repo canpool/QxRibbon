@@ -129,4 +129,5 @@ public:
     bool m_minimized;
     bool m_titleVisible;
     bool m_pageContextCoverTab;
+    bool m_layoutRequest;
 };

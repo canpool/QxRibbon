@@ -118,6 +118,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_minimized(true)
     , m_titleVisible(true)
     , m_pageContextCoverTab(false)
+    , m_layoutRequest(false)
 {
     q = par;
     m_pageContextColorList << QColor(201, 89, 156)   // 玫红
@@ -1599,9 +1600,11 @@ bool RibbonBar::event(QEvent *event)
     case QEvent::LayoutRequest: {
         // FIXME: 引入LayoutRequest后，如果处理不当，会增加resize次数，需要梳理触发LayoutRequest的条件，
         // 同时，需要梳理哪些postEvent或sendEvent可以由LayoutRequest代替。
-        // 目前，当cornerWidget为QMdiArea且QMdiArea最大化时，激/失活窗口会触发LayoutRequest，存在刷新延迟问题
-        // 所以，暂时只能禁用resizeRibbon
-        // d->resizeRibbon();
+        // 目前，当cornerWidget为QMdiArea时，根据有效事件来设置m_layoutRequest
+        if (d->m_layoutRequest) {
+            d->resizeRibbon();
+            d->m_layoutRequest = false;
+        }
     } break;
     default:
         break;
@@ -1615,11 +1618,9 @@ bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
     if (obj) {
         // 调整多文档时在窗口模式下的按钮更新
         if ((obj == cornerWidget(Qt::TopLeftCorner)) || (obj == cornerWidget(Qt::TopRightCorner))) {
-            // FIXME: 如果在此处调整大小，一是类型识别不全，二是会触发多次resize事件。
-            // 但是，改由event()中的LayoutRequest来处理，又会引入新的问题。
-            if ((QEvent::UpdateLater == e->type()) || (QEvent::MouseButtonRelease == e->type()) ||
-                (QEvent::WindowActivate == e->type())) {
-                QApplication::postEvent(this, new QResizeEvent(size(), size()));
+            // 对于QMdiArea，最大化时会存在ShowToParent事件，之后有效点击按钮（logo、最大/小、关闭按钮）会存在MouseButtonRelease事件
+            if ((QEvent::ShowToParent == e->type()) || (QEvent::MouseButtonRelease == e->type())) {
+                d->m_layoutRequest = true;
             }
         } else if (obj == d->m_stack && d->m_stack->isPopup()) {
             // 在 stack 是 popup 模式时，点击 stack 区域外的时候，如果是在 ribbonTabBar 上点击, 那么忽略掉这次点击
