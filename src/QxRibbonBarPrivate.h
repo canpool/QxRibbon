@@ -130,4 +130,5 @@ public:
     bool m_titleVisible;
     bool m_pageContextCoverTab;
     bool m_layoutRequest;
+    bool m_blockResize;
 };

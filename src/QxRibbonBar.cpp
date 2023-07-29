@@ -119,6 +119,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_titleVisible(true)
     , m_pageContextCoverTab(false)
     , m_layoutRequest(false)
+    , m_blockResize(false)
 {
     q = par;
     m_pageContextColorList << QColor(201, 89, 156)   // 玫红
@@ -197,7 +198,9 @@ void RibbonBarPrivate::setMinimizedFlag(bool flag)
         m_stack->clearFocus();
         m_tabBar->setFocus();
         m_stack->hide();
+        m_blockResize = true;
         q->setFixedHeight(m_tabBar->geometry().bottom());
+        m_blockResize = false;
     } else {
         m_stack->setPopup(false);
         m_stack->setFocus();
@@ -280,7 +283,10 @@ void RibbonBarPrivate::updateRibbonElementGeometry()
     for (RibbonPage *page : qAsConst(pages)) {
         page->setGroupLayoutMode(isTwoRowStyle() ? RibbonGroup::TwoRowMode : RibbonGroup::ThreeRowMode);
     }
+    // 阻止因高度变化而会触发resizeEvent，进而执行resizeXX
+    m_blockResize = true;
     updateRibbonBarHeight();
+    m_blockResize = false;
 }
 
 void RibbonBarPrivate::updateRibbonBarHeight()
@@ -1496,7 +1502,9 @@ void RibbonBar::setRibbonStyle(RibbonBar::RibbonStyle v)
 
     if (isMinimized()) {
         // 处于最小模式下时，bar的高度为tabbar的bottom,这个调整必须在resize event之后
+        d->m_blockResize = true;
         setFixedHeight(d->m_tabBar->geometry().bottom());
+        d->m_blockResize = false;
     }
     emit ribbonStyleChanged(d->m_ribbonStyle);
 }
@@ -1669,6 +1677,9 @@ void RibbonBar::paintEvent(QPaintEvent *e)
 void RibbonBar::resizeEvent(QResizeEvent *e)
 {
     Q_UNUSED(e);
+    if (d->m_blockResize) {
+        return;
+    }
     d->resizeRibbon();
     update();
 }
