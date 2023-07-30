@@ -915,10 +915,7 @@ void MainWindow::createApplicationButton()
     appBtn->setMenu(appMenu);
     ribbonBar()->setApplicationButton(appBtn);
 #else
-    RibbonBar *ribbon = ribbonBar();
-    ribbon->applicationButton()->setText(tr("&File"));
-    ribbon->applicationButton()->setCheckable(true);
-    connect(ribbon, &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
+    setApplicationButton(ribbonBar()->applicationButton());
 #endif
 }
 
@@ -955,6 +952,13 @@ void MainWindow::addSomeOtherAction()
     m_actMgr->setTagName(RibbonActionsManager::CommonlyUsedActionTag, tr("in common use"));
     m_actMgr->setTagName(m_actionTagText, tr("no icon action"));
     m_actMgr->setTagName(m_actionTagWithIcon, tr("have icon action"));
+}
+
+void MainWindow::setApplicationButton(QAbstractButton *btn)
+{
+    btn->setText(tr("&File"));
+    btn->setCheckable(true);
+    connect(ribbonBar(), &RibbonBar::applicationButtonClicked, this, &MainWindow::onApplicationButtonClicked);
 }
 
 QAction *MainWindow::createAction(const QString &text, const QString &iconurl, const QString &objName)
@@ -1067,8 +1071,8 @@ void MainWindow::onActionRemoveAppBtnTriggered(bool b)
         ribbonBar()->setApplicationButton(nullptr);
     } else {
         RibbonApplicationButton *actionRemoveAppBtn = new RibbonApplicationButton();
-        actionRemoveAppBtn->setText(tr("File"));
         ribbonBar()->setApplicationButton(actionRemoveAppBtn);
+        setApplicationButton(actionRemoveAppBtn);
     }
 }
 
@@ -1192,9 +1196,10 @@ void MainWindow::onApplicationButtonClicked()
     QDialog w(this);
     w.setWindowFlags(Qt::Popup);
     w.resize(200, 100);
-    w.move(mapToGlobal(ribbonBar()->applicationButton()->geometry().bottomLeft()));
+    QAbstractButton *btn = ribbonBar()->applicationButton();
+    w.move(mapToGlobal(btn->geometry().bottomLeft()));
     w.exec();
-    ribbonBar()->applicationButton()->setChecked(false);
+    btn->setChecked(false);
 }
 
 void MainWindow::onMenuButtonPopupCheckableTest(bool b)

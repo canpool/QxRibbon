@@ -5,6 +5,7 @@
 
 class QTextEdit;
 class QActionGroup;
+class QAbstractButton;
 
 class RibbonPage;
 class RibbonPageContext;
@@ -40,6 +41,8 @@ private:
     void createRightButtonGroup();
     void createApplicationButton();
     void addSomeOtherAction();
+
+    void setApplicationButton(QAbstractButton *btn);
 
     QAction *createAction(const QString &text, const QString &iconurl, const QString &objName);
     QAction *createAction(const QString &text, const QString &iconurl);
