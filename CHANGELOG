@@ -1,4 +1,24 @@
 
+0.5.6
+---
+Feature
+- Support show/hide the title of RibbonGroup
+
+Interface
+- Remove the apply button from RibbonCustomizeWidget
+
+Bugfix
+- Fix icon small when button text short for RibbonButton
+- Fix x-coordinate not based on margins for RibbonPage
+- Fix invalid write xml for RibbonCustomizeWidget
+
+Other
+- Optimize customize application button
+- Optimize resize event for RibbonBar
+- Refine the button areas for RibbonButon
+- Optimize the gap of small button in two-row style
+
+
 0.5.5
 ---
 Feature
