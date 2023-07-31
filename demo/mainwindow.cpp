@@ -430,7 +430,12 @@ void MainWindow::createPageOther()
     btnGroup1->addAction(createAction(tr("Copy"), ":/icon/res/copy.svg"));
     btnGroup1->addAction(createAction(tr("Cut"), ":/icon/res/cut.svg"));
     btnGroup1->addAction(createAction(tr("Paste"), ":/icon/res/clipboard.svg"));
-    btnGroup1->addAction(createAction(tr("Printer"), ":/icon/res/printer.svg"));
+    QAction *printerAction = createAction(tr("Printer"), ":/icon/res/printer.svg");
+    QMenu *printerMenu = new QMenu();
+    printerMenu->addAction(tr("test1"));
+    printerMenu->addAction(tr("test2"));
+    printerAction->setMenu(printerMenu);
+    btnGroup1->addAction(printerAction);
     group1->addWidget(btnGroup1, RibbonGroup::Medium);
 
     RibbonButtonGroup *btnGroup2 = new RibbonButtonGroup(group1);
