@@ -9,7 +9,6 @@
 
 #include <QApplication>
 #include <QFile>
-#include <QHash>
 #include <QWindowStateChangeEvent>
 
 class RibbonWindowPrivate
@@ -84,12 +83,7 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
         if (Q_NULLPTR == m_windowButtonGroup) {
             m_windowButtonGroup = new WindowButtonGroup(q);
         }
-        QSize s = m_windowButtonGroup->sizeHint();
-        m_windowButtonGroup->setFixedSize(s);
         m_windowButtonGroup->setWindowStates(q->windowState());
-        // see also parentResize, using move instead of parent resize event when frameless toggled
-        m_windowButtonGroup->move(q->width() - s.width() - 1, 1);
-        m_windowButtonGroup->show();
         q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
     } else {
         destroyFrameless();
@@ -181,11 +175,12 @@ void RibbonWindow::setFrameless(bool frameless)
     show();
 }
 
-void RibbonWindow::updateWindowFlag(Qt::WindowFlags flags)
+void RibbonWindow::updateWindowFlags(Qt::WindowFlags flags)
 {
+    setWindowFlags(flags);
     if (isUseRibbon() && isFrameless()) {
         if (d->m_windowButtonGroup) {
-            d->m_windowButtonGroup->updateWindowFlag(flags);
+            d->m_windowButtonGroup->updateWindowFlags(flags);
             // FIXME: In the WpsLiteStyle style, there is a short time overlap between rightButtonGroup and
             // windowButtonGroup. Because the button group will be displayed first, and then resize the ribbon.
             // I tried to hide the button group first and display the button group after resize ribbon,
@@ -194,18 +189,20 @@ void RibbonWindow::updateWindowFlag(Qt::WindowFlags flags)
             d->resizeRibbon();
         }
     }
-    repaint();
+    show();
+}
+
+#if QX_RIBBON_DEPRECATED_SINCE(0, 6)
+void RibbonWindow::updateWindowFlag(Qt::WindowFlags flags)
+{
+    updateWindowFlags(flags);
 }
 
 Qt::WindowFlags RibbonWindow::windowButtonFlags() const
 {
-    if (isUseRibbon() && isFrameless()) {
-        if (d->m_windowButtonGroup) {
-            return d->m_windowButtonGroup->windowButtonFlags();
-        }
-    }
     return windowFlags();
 }
+#endif
 
 void RibbonWindow::setMenuWidget(QWidget *menuBar)
 {

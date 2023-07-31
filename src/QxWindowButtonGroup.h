@@ -14,17 +14,14 @@ class WindowButtonGroup : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WindowButtonGroup(QWidget *parent);
-    WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags);
+    explicit WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags = Qt::WindowFlags());
     ~WindowButtonGroup();
 
     void setupMinimizeButton(bool on);
     void setupMaximizeButton(bool on);
     void setupCloseButton(bool on);
 
-    void updateWindowFlag();
-    void updateWindowFlag(Qt::WindowFlags flags);
-    Qt::WindowFlags windowButtonFlags() const;
+    void updateWindowFlags(Qt::WindowFlags flags);
 
     void setButtonWidthStretch(int close = 4, int max = 3, int min = 3);
     void setIconScale(qreal iconscale = 0.5);

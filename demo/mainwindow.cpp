@@ -194,7 +194,7 @@ void MainWindow::createPageHome()
     groupStyle->addSmallAction(actRemoveAppBtn);
     connect(actRemoveAppBtn, &QAction::toggled, this, &MainWindow::onActionRemoveAppBtnTriggered);
 
-    QAction *actWindowFlagNormalButton = createAction(tr("window normal button"), ":/icon/res/windowsflag-normal.svg");
+    QAction *actWindowFlagNormalButton = createAction(tr("window maximizable"), ":/icon/res/windowsflag-normal.svg");
     actWindowFlagNormalButton->setCheckable(true);
     actWindowFlagNormalButton->setChecked(true);
     groupStyle->addSmallAction(actWindowFlagNormalButton);
@@ -1113,16 +1113,9 @@ void MainWindow::onActionLoadCustomizeXmlFileTriggered()
 void MainWindow::onActionWindowFlagNormalButtonTriggered(bool b)
 {
     if (b) {
-        // 最大最小关闭按钮都有
-        Qt::WindowFlags f = windowFlags();
-        f |= (Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
-        updateWindowFlag(f);
+        updateWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
     } else {
-        // 由于已经处于frameless状态，这个最大最小设置是无效的
-        //  setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
-        Qt::WindowFlags f = windowFlags();
-        f &= ~Qt::WindowMinMaxButtonsHint & ~Qt::WindowCloseButtonHint;
-        updateWindowFlag(f);
+        updateWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
     }
 }
 

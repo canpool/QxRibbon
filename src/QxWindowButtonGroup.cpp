@@ -35,7 +35,6 @@ public:
     int m_maxStretch;
     int m_minStretch;
     qreal m_iconScale;
-    Qt::WindowFlags m_winFlags;
 };
 
 WindowButtonGroupPrivate::WindowButtonGroupPrivate(WindowButtonGroup *p)
@@ -131,19 +130,6 @@ void WindowButtonGroupPrivate::updateSize()
 {
     q->setFixedSize(sizeHint());
     resize(q->size());
-
-    // int span = 0;
-    // if (m_closeButton) {
-    //     m_closeButton->move(q->width()-m_closeButton->width(), q->y());
-    //     span = m_closeButton->width();
-    // }
-    // if (m_maximizeButton) {
-    //     m_maximizeButton->move(q->width()-m_maximizeButton->width()-span, q->y());
-    //     span += m_maximizeButton->width();
-    // }
-    // if (m_minimizeButton) {
-    //     m_minimizeButton->move(q->width()-m_minimizeButton->width()-span, q->y());
-    // }
 }
 
 void WindowButtonGroupPrivate::resize(QSize size)
@@ -215,22 +201,11 @@ WindowToolButton::WindowToolButton(QWidget *p)
     setFlat(true);
 }
 
-WindowButtonGroup::WindowButtonGroup(QWidget *parent)
-    : QWidget(parent)
-    , d(new WindowButtonGroupPrivate(this))
-{
-    updateWindowFlag();
-    if (parent) {
-        parent->installEventFilter(this);
-    }
-}
-
 WindowButtonGroup::WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags)
     : QWidget(parent)
     , d(new WindowButtonGroupPrivate(this))
 {
-    d->m_winFlags = flags;
-    updateWindowFlag();
+    updateWindowFlags(flags);
     if (parent) {
         parent->installEventFilter(this);
     }
@@ -259,39 +234,15 @@ void WindowButtonGroup::setupCloseButton(bool on)
     d->setupCloseButton(on);
 }
 
-void WindowButtonGroup::updateWindowFlag()
+void WindowButtonGroup::updateWindowFlags(Qt::WindowFlags flags)
 {
-    Qt::WindowFlags flags = parentWidget()->windowFlags();
-
-    d->m_winFlags = flags;
-
-    setupMinimizeButton(flags & Qt::WindowMinimizeButtonHint);
-    setupMaximizeButton(flags & Qt::WindowMaximizeButtonHint);
-    setupCloseButton(flags & Qt::WindowCloseButtonHint);
-}
-
-void WindowButtonGroup::updateWindowFlag(Qt::WindowFlags flags)
-{
-    if (flags & Qt::WindowCloseButtonHint) {
-        d->m_winFlags |= Qt::WindowCloseButtonHint;
-    } else {
-        d->m_winFlags &= (~Qt::WindowCloseButtonHint);
-    }
-
-    if (flags & Qt::WindowMaximizeButtonHint) {
-        d->m_winFlags |= Qt::WindowMaximizeButtonHint;
-    } else {
-        d->m_winFlags &= (~Qt::WindowMaximizeButtonHint);
-    }
-
-    if (flags & Qt::WindowMinimizeButtonHint) {
-        d->m_winFlags |= Qt::WindowMinimizeButtonHint;
-    } else {
-        d->m_winFlags &= (~Qt::WindowMinimizeButtonHint);
+    if (flags == Qt::WindowFlags()) {
+        flags = parentWidget()->windowFlags();
     }
     setupMinimizeButton(flags & Qt::WindowMinimizeButtonHint);
     setupMaximizeButton(flags & Qt::WindowMaximizeButtonHint);
     setupCloseButton(flags & Qt::WindowCloseButtonHint);
+    parentResize();
 }
 
 
@@ -314,22 +265,6 @@ void WindowButtonGroup::setWindowStates(Qt::WindowStates s)
         d->m_maximizeButton->setChecked(on);
         d->m_maximizeButton->setToolTip(on ? tr("Restore") : tr("Maximize"));
     }
-}
-
-Qt::WindowFlags WindowButtonGroup::windowButtonFlags() const
-{
-    Qt::WindowFlags f = Qt::Widget;   // Qt::widget is 0
-
-    if (d->m_winFlags & Qt::WindowCloseButtonHint) {
-        f |= Qt::WindowCloseButtonHint;
-    }
-    if (d->m_winFlags & Qt::WindowMaximizeButtonHint) {
-        f |= Qt::WindowMaximizeButtonHint;
-    }
-    if (d->m_winFlags & Qt::WindowMinimizeButtonHint) {
-        f |= Qt::WindowMinimizeButtonHint;
-    }
-    return f;
 }
 
 QSize WindowButtonGroup::sizeHint() const

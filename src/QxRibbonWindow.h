@@ -59,8 +59,13 @@ public:
     bool isFrameless() const;
     void setFrameless(bool frameless);
 
+    void updateWindowFlags(Qt::WindowFlags flags);
+#if QX_RIBBON_DEPRECATED_SINCE(0, 6)
+    QT_DEPRECATED_X("Use updateWindowFlags")
     void updateWindowFlag(Qt::WindowFlags flags);
+    QT_DEPRECATED_X("Use windowFlags")
     Qt::WindowFlags windowButtonFlags() const;
+#endif
 
     void setMenuWidget(QWidget *menuBar);
     void setMenuBar(QMenuBar *menuBar);
