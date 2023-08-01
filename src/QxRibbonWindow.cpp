@@ -9,13 +9,11 @@
 
 #include <QApplication>
 #include <QFile>
-#include <QWindowStateChangeEvent>
 
 class RibbonWindowPrivate
 {
 public:
     RibbonWindowPrivate(RibbonWindow *p);
-    void init();
     void setMenuWidget(QWidget *menuBar);
     void destroyFrameless();
     void setFrameless(bool frameless);
@@ -23,9 +21,9 @@ public:
 public:
     RibbonWindow *q;
     RibbonBar *m_ribbonBar;
-    int m_theme;
     WindowButtonGroup *m_windowButtonGroup;
     FramelessHelper *m_framelessHelper;
+    int m_theme;
     bool m_useRibbon;
     bool m_frameless;
 };
@@ -33,15 +31,11 @@ public:
 RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
     : q(p)
     , m_ribbonBar(Q_NULLPTR)
-    , m_theme(RibbonWindow::Office2013Theme)
     , m_windowButtonGroup(Q_NULLPTR)
     , m_framelessHelper(Q_NULLPTR)
+    , m_theme(RibbonWindow::Office2013Theme)
     , m_useRibbon(true)
     , m_frameless(true)
-{
-}
-
-void RibbonWindowPrivate::init()
 {
 }
 
@@ -108,7 +102,6 @@ RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
     : QMainWindow(parent)
     , d(new RibbonWindowPrivate(this))
 {
-    d->init();
     if (useRibbon) {
         setRibbonTheme(ribbonTheme());
         setMenuWidget(new RibbonBar(this));
@@ -189,6 +182,8 @@ void RibbonWindow::updateWindowFlags(Qt::WindowFlags flags)
             d->resizeRibbon();
         }
     }
+    // Note: This function setWindowFlags calls setParent() when changing the flags for a window,
+    // causing the widget to be hidden. You must call show() to make the widget visible again..
     show();
 }
 
@@ -254,18 +249,16 @@ bool RibbonWindow::eventFilter(QObject *obj, QEvent *e)
 
 bool RibbonWindow::event(QEvent *e)
 {
-    if (e) {
-        switch (e->type()) {
-        case QEvent::WindowStateChange: {
-            if (isUseRibbon() && isFrameless()) {
-                if (d->m_windowButtonGroup) {
-                    d->m_windowButtonGroup->setWindowStates(windowState());
-                }
+    switch (e->type()) {
+    case QEvent::WindowStateChange: {
+        if (isUseRibbon() && isFrameless()) {
+            if (d->m_windowButtonGroup) {
+                d->m_windowButtonGroup->setWindowStates(windowState());
             }
-        } break;
-        default:
-            break;
         }
+    } break;
+    default:
+        break;
     }
     return QMainWindow::event(e);
 }
