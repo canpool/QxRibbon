@@ -32,7 +32,6 @@ public:
     virtual int ribbonBarHeight(RibbonBar::RibbonStyle s) const;
     virtual int titleBarHeight() const;
     virtual int tabBarHeight() const;
-
     virtual void recalc();
 protected:
     virtual int calcRibbonBarHeight(RibbonBar::RibbonStyle s) const;

@@ -12,8 +12,10 @@ class RibbonStyleOptionPrivate
 public:
     RibbonStyleOptionPrivate();
     void calc();
+    void calcBaseHeight();
     int calcRibbonBarHeight(RibbonBar::RibbonStyle s) const;
 public:
+    int m_lineSpacing;
     int m_tabBarHeight;
     int m_titleBarHeight;
     int m_ribbonBarHeightOfficeStyleThreeRow;
@@ -23,43 +25,45 @@ public:
 };
 
 RibbonStyleOptionPrivate::RibbonStyleOptionPrivate()
+    : m_lineSpacing(17)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int lineSpacing = QApplication::fontMetrics().lineSpacing();
-#else
-    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
-#endif
-
-    m_titleBarHeight = lineSpacing * 1.8;
-    m_tabBarHeight = lineSpacing * 1.5;
+    calc();
 }
 
 void RibbonStyleOptionPrivate::calc()
 {
+    calcBaseHeight();
     m_ribbonBarHeightOfficeStyleThreeRow = calcRibbonBarHeight(RibbonBar::OfficeStyle);
     m_ribbonBarHeightWpsLiteStyleThreeRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyle);
     m_ribbonBarHeightOfficeStyleTwoRow = calcRibbonBarHeight(RibbonBar::OfficeStyleTwoRow);
     m_ribbonBarHeightWpsLiteStyleTwoRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyleTwoRow);
 }
 
-int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
+void RibbonStyleOptionPrivate::calcBaseHeight()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int lineSpacing = QApplication::fontMetrics().lineSpacing();
+    int m_lineSpacing = QApplication::fontMetrics().lineSpacing();
 #else
-    int lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
+    int m_lineSpacing = QFontMetricsF(QApplication::font()).lineSpacing();
 #endif
+
+    m_titleBarHeight = m_lineSpacing * 1.8;
+    m_tabBarHeight = m_lineSpacing * 1.5;
+}
+
+int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
+{
     switch (s) {
     case RibbonBar::OfficeStyle:
-        return m_titleBarHeight + m_tabBarHeight + (lineSpacing * 1.5) * 3 +
+        return m_titleBarHeight + m_tabBarHeight + (m_lineSpacing * 1.5) * 3 +
                RibbonGroupLayout::groupContentsMargins().top() + RibbonGroupLayout::groupContentsMargins().bottom() +
                (RibbonGroup::titleVisible() ? RibbonGroup::groupTitleHeight() : 0);
     case RibbonBar::WpsLiteStyle:
         return m_ribbonBarHeightOfficeStyleThreeRow - m_tabBarHeight;
     case RibbonBar::WpsLiteStyleTwoRow:
-        return m_ribbonBarHeightOfficeStyleThreeRow - m_tabBarHeight - lineSpacing * 1.1;
+        return m_ribbonBarHeightOfficeStyleThreeRow - m_tabBarHeight - m_lineSpacing * 1.1;
     case RibbonBar::OfficeStyleTwoRow:
-        return m_ribbonBarHeightOfficeStyleThreeRow - lineSpacing * 1.1;
+        return m_ribbonBarHeightOfficeStyleThreeRow - m_lineSpacing * 1.1;
     default:
         break;
     }
@@ -69,7 +73,6 @@ int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) cons
 RibbonStyleOption::RibbonStyleOption()
     : d(new RibbonStyleOptionPrivate)
 {
-    d->calc();
 }
 
 RibbonStyleOption::~RibbonStyleOption()
@@ -106,6 +109,7 @@ int RibbonStyleOption::tabBarHeight() const
 
 void RibbonStyleOption::recalc()
 {
+    d->calcBaseHeight();
     d->m_ribbonBarHeightOfficeStyleThreeRow = calcRibbonBarHeight(RibbonBar::OfficeStyle);
     d->m_ribbonBarHeightWpsLiteStyleThreeRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyle);
     d->m_ribbonBarHeightOfficeStyleTwoRow = calcRibbonBarHeight(RibbonBar::OfficeStyleTwoRow);
