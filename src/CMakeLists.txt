@@ -36,6 +36,7 @@ set(QX_RIBBON_PUBLIC_HEADERS
 set(QX_RIBBON_PRIVATE_HEADERS
     FramelessHelper.h
     QxRibbonBarPrivate.h
+    QxRibbonButtonPrivate.h
     QxRibbonCustomizeData.h
     QxRibbonCustomizeWidget.h
     QxRibbonGroupLayout.h

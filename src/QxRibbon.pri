@@ -61,6 +61,7 @@ PUBLIC_HEADERS = \
 PRIVATE_HEADERS = \
     $$PWD/FramelessHelper.h \
     $$PWD/QxRibbonBarPrivate.h \
+    $$PWD/QxRibbonButtonPrivate.h \
     $$PWD/QxRibbonCustomizeData.h \
     $$PWD/QxRibbonCustomizeWidget.h \
     $$PWD/QxRibbonGroupLayout.h \
