@@ -697,11 +697,11 @@ void MainWindow::createPageContext1()
     RibbonBar *ribbon = ribbonBar();
     m_pageContext = ribbon->addPageContext(tr("context"), QColor(), 1);
 
-    RibbonPage *contextPagePage1 = m_pageContext->addPage(tr("Page1"));
-    createPageContext1(contextPagePage1);
+    RibbonPage *page1 = m_pageContext->addPage(tr("Page1"));
+    createPageContext1(page1);
 
-    RibbonPage *contextPagePage2 = m_pageContext->addPage(tr("Page2"));
-    createPageContext2(contextPagePage2);
+    RibbonPage *page2 = m_pageContext->addPage(tr("Page2"));
+    createPageContext2(page2);
 }
 
 void MainWindow::createPageContext2()
