@@ -77,7 +77,13 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
         if (Q_NULLPTR == m_windowButtonGroup) {
             m_windowButtonGroup = new WindowButtonGroup(q);
         }
-        m_windowButtonGroup->setWindowStates(q->windowState());
+        Qt::WindowStates s = q->windowState();
+        if (s.testFlag(Qt::WindowFullScreen)) {
+            m_windowButtonGroup->setVisible(false);
+        } else {
+            m_windowButtonGroup->setVisible(true);
+        }
+        m_windowButtonGroup->setWindowStates(s);
         q->setWindowFlags(q->windowFlags() | Qt::FramelessWindowHint);
     } else {
         destroyFrameless();
@@ -90,7 +96,7 @@ void RibbonWindowPrivate::resizeRibbon()
     if (m_ribbonBar == Q_NULLPTR) {
         return;
     }
-    if (m_windowButtonGroup) {
+    if (m_windowButtonGroup && m_windowButtonGroup->isVisible()) {
         m_ribbonBar->setWindowButtonsSize(m_windowButtonGroup->size());
     } else {
         m_ribbonBar->setWindowButtonsSize(QSize(0, 0));
@@ -163,14 +169,17 @@ void RibbonWindow::setFrameless(bool frameless)
     }
     d->m_frameless = frameless;
     d->setFrameless(frameless);
+    show(); // the m_windowButtonGroup.isVisible() judgment is added in resizeRibbon(), so show() is called earlier
     d->m_ribbonBar->setWindowTitleVisible(frameless);
     d->resizeRibbon();
-    show();
 }
 
 void RibbonWindow::updateWindowFlags(Qt::WindowFlags flags)
 {
     setWindowFlags(flags);
+    // Note: This function setWindowFlags calls setParent() when changing the flags for a window,
+    // causing the widget to be hidden. You must call show() to make the widget visible again..
+    show();
     if (isUseRibbon() && isFrameless()) {
         if (d->m_windowButtonGroup) {
             d->m_windowButtonGroup->updateWindowFlags(flags);
@@ -182,9 +191,6 @@ void RibbonWindow::updateWindowFlags(Qt::WindowFlags flags)
             d->resizeRibbon();
         }
     }
-    // Note: This function setWindowFlags calls setParent() when changing the flags for a window,
-    // causing the widget to be hidden. You must call show() to make the widget visible again..
-    show();
 }
 
 #if QX_RIBBON_DEPRECATED_SINCE(0, 6)
@@ -217,7 +223,7 @@ void RibbonWindow::resizeEvent(QResizeEvent *event)
         if (d->m_ribbonBar->size().width() != this->size().width()) {
             d->m_ribbonBar->setFixedWidth(this->size().width());
         }
-        if (d->m_windowButtonGroup) {
+        if (d->m_windowButtonGroup && d->m_windowButtonGroup->isVisible()) {
             d->m_ribbonBar->setWindowButtonsSize(d->m_windowButtonGroup->size());
         } else {
             d->m_ribbonBar->setWindowButtonsSize(QSize(0, 0));
@@ -253,7 +259,14 @@ bool RibbonWindow::event(QEvent *e)
     case QEvent::WindowStateChange: {
         if (isUseRibbon() && isFrameless()) {
             if (d->m_windowButtonGroup) {
-                d->m_windowButtonGroup->setWindowStates(windowState());
+                Qt::WindowStates s = windowState();
+                if (s.testFlag(Qt::WindowFullScreen)) {
+                    d->m_windowButtonGroup->setVisible(false);
+                } else {
+                    d->m_windowButtonGroup->setVisible(true);
+                }
+                d->m_windowButtonGroup->setWindowStates(s);
+                d->resizeRibbon();
             }
         }
     } break;

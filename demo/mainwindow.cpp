@@ -250,6 +250,7 @@ void MainWindow::createPageHome()
     connect(cb, &QCheckBox::clicked, this, [this](bool checked) {
         this->setFrameless(checked);
     });
+    QCheckBox *framelessCB = cb;
 
     cb = new QCheckBox();
     cb->setObjectName(QStringLiteral("left QAB in wps style"));
@@ -273,6 +274,22 @@ void MainWindow::createPageHome()
         // 组标题的显示/隐藏直接影响ribbon的整体大小，所以需要调用RibbonElementStyleOpt.recalc()
         RibbonElementStyleOpt.recalc();
         this->ribbonBar()->updateRibbonGeometry();
+    });
+
+    cb = new QCheckBox();
+    cb->setObjectName(QStringLiteral("show full screen"));
+    cb->setText(tr("show full screen"));
+    cb->setWindowTitle(cb->text());
+    cb->setChecked(false);
+    groupStyle->addSmallWidget(cb);
+    connect(cb, &QCheckBox::clicked, this, [this, framelessCB](bool checked) {
+        if (checked) {
+            this->showFullScreen();
+        } else {
+            this->showNormal();
+        }
+        // FIXME: 全屏显示时，如果切换有边框和无边框会影响全屏显示，所以当全屏显示时，暂时先禁止有无边框切换
+        framelessCB->setDisabled(checked);
     });
 
     RibbonGroup *groupToolButtonStyle = page->addGroup(tr("ribbon toolbutton style"));

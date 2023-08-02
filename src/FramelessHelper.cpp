@@ -344,7 +344,7 @@ bool WidgetData::handleMousePressEvent(QMouseEvent *event)
 #endif
 
         if (m_pressedMousePos.m_bOnEdges) {
-            if (m_pWidget->isMaximized()) {
+            if (m_pWidget->isMaximized() || m_pWidget->isFullScreen()) {
                 // 窗口在最大化状态时，点击边界不做任何处理
                 return false;
             }
@@ -354,7 +354,7 @@ bool WidgetData::handleMousePressEvent(QMouseEvent *event)
                 return true;
             }
         } else if (d->m_bRubberBandOnMove && m_bLeftButtonTitlePressed) {
-            if (m_pWidget->isMaximized()) {
+            if (m_pWidget->isMaximized() || m_pWidget->isFullScreen()) {
                 // 窗口在最大化状态时，点击标题栏不做任何处理
                 return false;
             }
@@ -385,7 +385,7 @@ bool WidgetData::handleMouseMoveEvent(QMouseEvent *event)
 {
     if (m_bLeftButtonPressed) {
         if (d->m_bWidgetResizable && m_pressedMousePos.m_bOnEdges) {
-            if (m_pWidget->isMaximized()) {
+            if (m_pWidget->isMaximized() || m_pWidget->isFullScreen()) {
                 // 窗口在最大化状态时，点击边界不做任何处理
                 return false;
             }
@@ -396,6 +396,9 @@ bool WidgetData::handleMouseMoveEvent(QMouseEvent *event)
 #endif
             return true;
         } else if (d->m_bWidgetMovable && m_bLeftButtonTitlePressed) {
+            if (m_pWidget->isFullScreen()) {
+                return false;
+            }
             if (m_pWidget->isMaximized()) {
                 // FIXME：1）Ubuntu 16.04 LTS/Unity 7.4.0环境中，最大化后鼠标拖拽标题栏获得的normalGeometry不是原始的，
                 // 而是无边框最大化后的尺寸，鼠标拖拽窗口最上面的Unity为窗口设计的标题栏才能获得真实的normalGeometry
@@ -466,7 +469,7 @@ bool WidgetData::handleDoubleClickedMouseEvent(QMouseEvent *event)
             if (mainwindow->windowFlags() & Qt::WindowMaximizeButtonHint) {
                 // 在最大化按钮显示时才进行showNormal处理
                 bool titlePressed = event->pos().y() < m_moveMousePos.m_nTitleHeight;
-                if (titlePressed) {
+                if (titlePressed && !m_pWidget->isFullScreen()) {
                     if (m_pWidget->isMaximized()) {
                         m_pWidget->showNormal();
                     } else {
