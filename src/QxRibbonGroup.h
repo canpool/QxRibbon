@@ -13,7 +13,7 @@ class RibbonGallery;
 class RibbonGroupPrivate;
 
 /**
- * @brief group 页窗口，grou p是 ribbon 的面板用于承放控件
+ * @brief group 用于对 ribbon 页窗口中的控件进行分组
  *
  * ribbon 的 group 分为两行模式和三行模式，以 office 为代表的 ribbon 为 3 行模式，以 WPS 为代表的“紧凑派”就是 2 行模式，
  * Ribbon 可通过 RibbonBar 的 @ref RibbonBar::RibbonStyle 来指定模式 (通过函数 @ref RibbonBar::setRibbonStyle )
@@ -35,7 +35,7 @@ public:
         TwoRowMode      ///< 两行布局模式，wps的后续布局模式就是两行布局模式，group能布置2行小toolbutton
     };
     enum RowProportion {
-        Auto,   ///< 为定义占比，这时候将会依据expandingDirections来判断，如果能有Qt::Vertical，就等同于Large，否则就是Small
+        Auto,   ///< 未定义占比，这时候将会依据expandingDirections来判断，如果能有Qt::Vertical，就等同于Large，否则就是Small
         Large,  ///< 大占比，一个widget的高度会充满整个group
         Medium, ///< 中占比，在 @ref RibbonGroup::groupLayoutMode 为 @ref RibbonGroup::ThreeRowMode 时才会起作用，
                 ///< 且要同一列里两个都是 Medium 时，会在三行中占据两行

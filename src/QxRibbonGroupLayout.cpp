@@ -42,12 +42,10 @@ class RibbonGroupLayoutPrivate
 public:
     RibbonGroupLayoutPrivate();
 
-    // 返回所有列的区域
-    //  QMap<int,QRect> columnsGeometry() const;
     // 根据列数，计算窗口的宽度，以及最大宽度
     void columnWidthInfo(int colindex, int &width, int &maximum) const;
 
-    // 重新计算扩展条码，此函数必须在updateGeomArray函数之后调用
+    // 重新计算扩展尺寸，此函数必须在updateGeomArray函数之后调用
     void recalcExpandGeomArray(const QRect &setrect);
 
     RibbonGroupItem *createItem(QAction *action, RibbonGroup::RowProportion rp = RibbonGroup::Auto);
@@ -762,32 +760,6 @@ const QList<RibbonGroupItem *> &RibbonGroupLayout::ribbonGroupItems() const
 {
     return d->m_items;
 }
-
-/**
- * @brief 返回所有列的区域
- * @return <列索引，列区域>
- */
-// QMap<int, QRect> RibbonGroupLayout::columnsGeometry() const
-//{
-//    QMap<int, QRect> res;
-//    for (RibbonGroupItem *item:m_items){
-//        if(item->isEmpty()){
-//           continue;
-//        }
-//        QMap<int, QRect>::iterator i = res.find(item->columnIndex);
-//        if(i == res.end())
-//        {
-//            QRect r = item->geometry();
-//            r.setY(this->contentsMargins().top());
-//            r.setHeight(m_largeHeight);
-//            i = res.insert(item->columnIndex,r);
-//        }
-//        if(item->willGeometry.width() > i.value().width()){
-//            i.value().setWidth(item->willGeometry.width());
-//        }
-//    }
-//    return res;
-//}
 
 void RibbonGroupLayout::setGeometry(const QRect &rect)
 {

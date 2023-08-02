@@ -38,7 +38,7 @@ public:
 /**
  * @brief 针对 RibbonGroup 的布局
  *
- * RibbonGroupLayout 实际是一个列布局，每一列有 2~3 行，看窗口定占几行
+ * RibbonGroupLayout 实际是一个列布局，每一列有 2~3 行，看窗口定义占几行
  *
  * 核心函数： @ref RibbonGroupLayout::createItem
  *
