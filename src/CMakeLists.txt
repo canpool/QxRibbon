@@ -29,7 +29,6 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonTabBar.h
     QxRibbonGallery.h
     QxRibbonGalleryGroup.h
-    QxRibbonGalleryItem.h
     QxRibbonDrawHelper.h
     QxRibbonQuickAccessBar.h
 )
@@ -41,6 +40,7 @@ set(QX_RIBBON_PRIVATE_HEADERS
     QxRibbonColorButtonPrivate.h
     QxRibbonCustomizeData.h
     QxRibbonCustomizeWidget.h
+    QxRibbonGalleryGroupPrivate.h
     QxRibbonGroupLayout.h
     QxRibbonGroupPrivate.h
     QxRibbonPagePrivate.h
@@ -72,7 +72,6 @@ set(QX_RIBBON_SOURCES
     QxRibbonTabBar.cpp
     QxRibbonGallery.cpp
     QxRibbonGalleryGroup.cpp
-    QxRibbonGalleryItem.cpp
     QxRibbonDrawHelper.cpp
     QxRibbonQuickAccessBar.cpp
 )

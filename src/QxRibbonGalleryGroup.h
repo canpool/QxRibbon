@@ -5,58 +5,9 @@
 #pragma once
 
 #include "QxRibbonGlobal.h"
-#include "QxRibbonGalleryItem.h"
-
-#include <QList>
 #include <QListView>
-#include <QStyledItemDelegate>
 
-class RibbonGalleryGroup;
-
-///
-/// \brief RibbonGalleryGroup 对应的显示代理
-///
-class QX_RIBBON_EXPORT RibbonGalleryGroupItemDelegate : public QStyledItemDelegate
-{
-public:
-    RibbonGalleryGroupItemDelegate(RibbonGalleryGroup *group, QObject *parent = Q_NULLPTR);
-
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
-                       const QModelIndex &index) const Q_DECL_OVERRIDE;
-
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
-    virtual void paintIconOnly(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual void paintIconWithText(QPainter *painter, const QStyleOptionViewItem &option,
-                                   const QModelIndex &index) const;
-    virtual void paintIconWithTextWordWrap(QPainter *painter, const QStyleOptionViewItem &option,
-                                           const QModelIndex &index) const;
-private:
-    RibbonGalleryGroup *m_group;
-};
-
-///
-/// \brief RibbonGalleryGroup 对应的 model
-///
-class QX_RIBBON_EXPORT RibbonGalleryGroupModel : public QAbstractListModel
-{
-    Q_OBJECT
-public:
-    explicit RibbonGalleryGroupModel(QObject *parent = Q_NULLPTR);
-    virtual ~RibbonGalleryGroupModel();
-
-    virtual int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
-    virtual QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const Q_DECL_OVERRIDE;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role) Q_DECL_OVERRIDE;
-    void clear();
-    RibbonGalleryItem *at(int row) const;
-    void insert(int row, RibbonGalleryItem *item);
-    RibbonGalleryItem *take(int row);
-    void append(RibbonGalleryItem *item);
-private:
-    QList<RibbonGalleryItem *> m_items;
-};
+class QActionGroup;
 
 class RibbonGalleryGroupPrivate;
 
@@ -100,14 +51,9 @@ public:
     GalleryGroupStyle getGalleryGroupStyle() const;
     // 添加一个item
     void addItem(const QString &text, const QIcon &icon);
-    void addItem(RibbonGalleryItem *item);
     // 以一个aciton作为item添加
     void addActionItem(QAction *act);
     void addActionItemList(const QList<QAction *> &acts);
-
-    // 构建一个model，这个model的父类是RibbonGalleryGroup，如果要共享model，需要手动处理model的父类
-    void setupGroupModel();
-    RibbonGalleryGroupModel *groupModel();
     // 标题
     void setGroupTitle(const QString &title);
     QString getGroupTitle() const;
@@ -137,8 +83,7 @@ signals:
     /**
      * @brief 等同QActionGroup的triggered
      * 所有加入RibbonGalleryGroup的action都会被一个QActionGroup管理,可以通过@sa getActionGroup 获取到对应的actiongroup
-     * @note 此属性需要通过QAbstractItemView::entered(const QModelIndex
-     * &index)激活，因此要保证设置了setMouseTracking(true)
+     * @note 此属性需要通过QAbstractItemView::entered(const QModelIndex &index)激活，因此要保证设置了setMouseTracking(true)
      * @param action
      */
     void hovered(QAction *action);

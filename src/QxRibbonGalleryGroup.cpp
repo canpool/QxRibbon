@@ -3,41 +3,182 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxRibbonGalleryGroup.h"
+#include "QxRibbonGalleryGroupPrivate.h"
 
 #include <QActionGroup>
 #include <QDebug>
 #include <QItemSelectionModel>
 #include <QPainter>
 
-/* RibbonGalleryGroupPrivate */
-class RibbonGalleryGroupPrivate
+/* RibbonGalleryItemPrivate */
+class RibbonGalleryItemPrivate
 {
 public:
-    RibbonGalleryGroupPrivate(RibbonGalleryGroup *p);
+    RibbonGalleryItemPrivate();
 public:
-    RibbonGalleryGroup *q;
-    QString m_groupTitle;
-    RibbonGalleryGroup::GalleryGroupStyle m_preStyle;
-    RibbonGalleryGroup::DisplayRow m_displayRow;
-    int m_gridMinimumWidth;        ///< grid最小宽度
-    int m_gridMaximumWidth;        ///< grid最大宽度
-    QActionGroup *m_actionGroup;   ///< 所有GalleryGroup管理的actions都由这个actiongroup管理
-    bool m_blockRecalc;
+    QMap<int, QVariant> m_datas;
+    Qt::ItemFlags m_flags;
+    QAction *m_action;
 };
 
-RibbonGalleryGroupPrivate::RibbonGalleryGroupPrivate(RibbonGalleryGroup *p)
-    : q(p)
-    , m_preStyle(RibbonGalleryGroup::IconWithText)
-    , m_displayRow(RibbonGalleryGroup::DisplayOneRow)
-    , m_gridMinimumWidth(0)
-    , m_gridMaximumWidth(0)
-    , m_blockRecalc(false)
+RibbonGalleryItemPrivate::RibbonGalleryItemPrivate()
+    : m_flags(Qt::ItemIsEnabled | Qt::ItemIsSelectable)
+      , m_action(Q_NULLPTR)
 {
-    m_actionGroup = new QActionGroup(p);
-    QObject::connect(m_actionGroup, &QActionGroup::triggered, p, &RibbonGalleryGroup::triggered);
-    QObject::connect(m_actionGroup, &QActionGroup::hovered, p, &RibbonGalleryGroup::hovered);
+
 }
 
+/* RibbonGalleryItem */
+RibbonGalleryItem::RibbonGalleryItem()
+    : d(new RibbonGalleryItemPrivate)
+{
+    setTextAlignment(Qt::AlignTop | Qt::AlignHCenter);
+}
+
+RibbonGalleryItem::RibbonGalleryItem(const QString &text, const QIcon &icon)
+    : RibbonGalleryItem()
+{
+    setText(text);
+    setIcon(icon);
+}
+
+RibbonGalleryItem::RibbonGalleryItem(QAction *act)
+    : RibbonGalleryItem()
+{
+    setAction(act);
+}
+
+RibbonGalleryItem::~RibbonGalleryItem()
+{
+    delete d;
+}
+
+void RibbonGalleryItem::setData(int role, const QVariant &data)
+{
+    d->m_datas[role] = data;
+}
+
+QVariant RibbonGalleryItem::data(int role) const
+{
+    if (d->m_action) {
+        switch (role) {
+        case Qt::DisplayRole:
+            return d->m_action->text();
+
+        case Qt::ToolTipRole:
+            return d->m_action->toolTip();
+
+        case Qt::DecorationRole:
+            return d->m_action->icon();
+        default:
+            break;
+        }
+    }
+    return d->m_datas.value(role);
+}
+
+void RibbonGalleryItem::setText(const QString &text)
+{
+    setData(Qt::DisplayRole, text);
+}
+
+QString RibbonGalleryItem::text() const
+{
+    return data(Qt::DisplayRole).toString();
+}
+
+void RibbonGalleryItem::setToolTip(const QString &text)
+{
+    setData(Qt::ToolTipRole, text);
+}
+
+QString RibbonGalleryItem::toolTip() const
+{
+    return data(Qt::ToolTipRole).toString();
+}
+
+void RibbonGalleryItem::setIcon(const QIcon &ico)
+{
+    setData(Qt::DecorationRole, ico);
+}
+
+QIcon RibbonGalleryItem::icon() const
+{
+    return qvariant_cast<QIcon>(data(Qt::DecorationRole));
+}
+
+bool RibbonGalleryItem::isSelectable() const
+{
+    return (d->m_flags & Qt::ItemIsSelectable);
+}
+
+void RibbonGalleryItem::setSelectable(bool isSelectable)
+{
+    if (isSelectable) {
+        d->m_flags |= Qt::ItemIsSelectable;
+    } else {
+        d->m_flags &= ~Qt::ItemIsSelectable;
+    }
+}
+
+bool RibbonGalleryItem::isEnable() const
+{
+    return (d->m_flags & Qt::ItemIsEnabled);
+}
+
+void RibbonGalleryItem::setEnable(bool isEnable)
+{
+    if (d->m_action) {
+        d->m_action->setEnabled(isEnable);
+    }
+
+    if (isEnable) {
+        d->m_flags |= Qt::ItemIsEnabled;
+    } else {
+        d->m_flags &= ~Qt::ItemIsEnabled;
+    }
+}
+
+void RibbonGalleryItem::setFlags(Qt::ItemFlags flag)
+{
+    d->m_flags = flag;
+    if (d->m_action) {
+        d->m_action->setEnabled(flag & Qt::ItemIsEnabled);
+    }
+}
+
+Qt::ItemFlags RibbonGalleryItem::flags() const
+{
+    return d->m_flags;
+}
+
+void RibbonGalleryItem::setAction(QAction *act)
+{
+    d->m_action = act;
+    if (Q_NULLPTR == act) {
+        return;
+    }
+    if (act->isEnabled()) {
+        d->m_flags |= Qt::ItemIsEnabled;
+    } else {
+        d->m_flags &= ~Qt::ItemIsEnabled;
+    }
+}
+
+QAction *RibbonGalleryItem::action()
+{
+    return d->m_action;
+}
+
+void RibbonGalleryItem::setTextAlignment(Qt::Alignment a)
+{
+    setData(Qt::TextAlignmentRole, (int)a);
+}
+
+Qt::Alignment RibbonGalleryItem::textAlignment() const
+{
+    return qvariant_cast<Qt::Alignment>(data(Qt::TextAlignmentRole));
+}
 
 /* RibbonGalleryGroupItemDelegate */
 RibbonGalleryGroupItemDelegate::RibbonGalleryGroupItemDelegate(RibbonGalleryGroup *group, QObject *parent)
@@ -196,6 +337,41 @@ void RibbonGalleryGroupModel::append(RibbonGalleryItem *item)
     endInsertRows();
 }
 
+/* RibbonGalleryGroupPrivate */
+class RibbonGalleryGroupPrivate
+{
+public:
+    RibbonGalleryGroupPrivate(RibbonGalleryGroup *p);
+    RibbonGalleryGroupModel *groupModel();
+public:
+    RibbonGalleryGroup *q;
+    QString m_groupTitle;
+    RibbonGalleryGroup::GalleryGroupStyle m_preStyle;
+    RibbonGalleryGroup::DisplayRow m_displayRow;
+    int m_gridMinimumWidth;        ///< grid最小宽度
+    int m_gridMaximumWidth;        ///< grid最大宽度
+    QActionGroup *m_actionGroup;   ///< 所有GalleryGroup管理的actions都由这个actiongroup管理
+    bool m_blockRecalc;
+};
+
+RibbonGalleryGroupPrivate::RibbonGalleryGroupPrivate(RibbonGalleryGroup *p)
+    : q(p)
+    , m_preStyle(RibbonGalleryGroup::IconWithText)
+    , m_displayRow(RibbonGalleryGroup::DisplayOneRow)
+    , m_gridMinimumWidth(0)
+    , m_gridMaximumWidth(0)
+    , m_blockRecalc(false)
+{
+    m_actionGroup = new QActionGroup(p);
+    QObject::connect(m_actionGroup, &QActionGroup::triggered, p, &RibbonGalleryGroup::triggered);
+    QObject::connect(m_actionGroup, &QActionGroup::hovered, p, &RibbonGalleryGroup::hovered);
+}
+
+RibbonGalleryGroupModel *RibbonGalleryGroupPrivate::groupModel()
+{
+    return qobject_cast<RibbonGalleryGroupModel *>(q->model());
+}
+
 /* RibbonGalleryGroup */
 RibbonGalleryGroup::RibbonGalleryGroup(QWidget *w)
     : QListView(w)
@@ -324,30 +500,16 @@ RibbonGalleryGroup::GalleryGroupStyle RibbonGalleryGroup::getGalleryGroupStyle()
 
 void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
 {
-    RibbonGalleryGroupModel *model = groupModel();
+    RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
     }
     model->append(new RibbonGalleryItem(text, icon));
 }
 
-/**
- * @brief 添加一个条目
- *
- * @param item 条目的内存所有权归属RibbonGalleryGroup管理
- */
-void RibbonGalleryGroup::addItem(RibbonGalleryItem *item)
-{
-    RibbonGalleryGroupModel *model = groupModel();
-    if (Q_NULLPTR == model) {
-        return;
-    }
-    model->append(item);
-}
-
 void RibbonGalleryGroup::addActionItem(QAction *act)
 {
-    RibbonGalleryGroupModel *model = groupModel();
+    RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
     }
@@ -357,7 +519,7 @@ void RibbonGalleryGroup::addActionItem(QAction *act)
 
 void RibbonGalleryGroup::addActionItemList(const QList<QAction *> &acts)
 {
-    RibbonGalleryGroupModel *model = groupModel();
+    RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
     }
@@ -367,19 +529,6 @@ void RibbonGalleryGroup::addActionItemList(const QList<QAction *> &acts)
     for (int i = 0; i < acts.size(); ++i) {
         model->append(new RibbonGalleryItem(acts[i]));
     }
-}
-
-///
-/// \brief 构建一个model，这个model的父类是RibbonGalleryGroup，如果要共享model，需要手动处理model的父类
-///
-void RibbonGalleryGroup::setupGroupModel()
-{
-    setModel(new RibbonGalleryGroupModel(this));
-}
-
-RibbonGalleryGroupModel *RibbonGalleryGroup::groupModel()
-{
-    return qobject_cast<RibbonGalleryGroupModel *>(model());
 }
 
 void RibbonGalleryGroup::setGroupTitle(const QString &title)
@@ -395,7 +544,7 @@ QString RibbonGalleryGroup::getGroupTitle() const
 
 void RibbonGalleryGroup::selectByIndex(int i)
 {
-    RibbonGalleryGroupModel *model = groupModel();
+    RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
     }

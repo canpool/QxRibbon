@@ -30,7 +30,6 @@ SOURCES += \
     $$PWD/QxRibbonTabBar.cpp \
     $$PWD/QxRibbonGallery.cpp \
     $$PWD/QxRibbonGalleryGroup.cpp \
-    $$PWD/QxRibbonGalleryItem.cpp \
     $$PWD/QxRibbonDrawHelper.cpp \
     $$PWD/QxRibbonQuickAccessBar.cpp
 
@@ -56,7 +55,6 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonTabBar.h \
     $$PWD/QxRibbonGallery.h \
     $$PWD/QxRibbonGalleryGroup.h \
-    $$PWD/QxRibbonGalleryItem.h \
     $$PWD/QxRibbonDrawHelper.h \
     $$PWD/QxRibbonQuickAccessBar.h
 
@@ -67,6 +65,7 @@ PRIVATE_HEADERS = \
     $$PWD/QxRibbonColorButtonPrivate.h \
     $$PWD/QxRibbonCustomizeData.h \
     $$PWD/QxRibbonCustomizeWidget.h \
+    $$PWD/QxRibbonGalleryGroupPrivate.h \
     $$PWD/QxRibbonGroupLayout.h \
     $$PWD/QxRibbonGroupPrivate.h \
     $$PWD/QxRibbonPagePrivate.h \
