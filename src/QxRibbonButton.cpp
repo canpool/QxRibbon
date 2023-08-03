@@ -636,19 +636,24 @@ void RibbonButtonPrivate::drawButton(QStyleOptionToolButton &opt, QPainter &p, c
 }
 
 RibbonButton::RibbonButton(QWidget *parent)
-    : QToolButton(parent)
-    , d(new RibbonButtonPrivate())
+    : RibbonButton(new RibbonButtonPrivate(), parent)
 {
-    d->q = this;
-    setAutoRaise(true);
-    setButtonType(SmallButton);
-    setMouseTracking(true);
 }
 
 RibbonButton::RibbonButton(QAction *defaultAction, QWidget *parent)
     : RibbonButton(parent)
 {
     setDefaultAction(defaultAction);
+}
+
+RibbonButton::RibbonButton(RibbonButtonPrivate *_d, QWidget *parent)
+    : QToolButton(parent)
+{
+    d = _d;
+    d->q = this;
+    setAutoRaise(true);
+    setButtonType(SmallButton);
+    setMouseTracking(true);
 }
 
 RibbonButton::~RibbonButton()

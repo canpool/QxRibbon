@@ -11,6 +11,7 @@ SOURCES += \
     $$PWD/QxRibbonBar.cpp \
     $$PWD/QxRibbonButton.cpp \
     $$PWD/QxRibbonButtonGroup.cpp \
+    $$PWD/QxRibbonColorButton.cpp \
     $$PWD/QxRibbonContainers.cpp \
     $$PWD/QxRibbonControls.cpp \
     $$PWD/QxRibbonCustomizeData.cpp \
@@ -39,6 +40,7 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonBar.h \
     $$PWD/QxRibbonButton.h \
     $$PWD/QxRibbonButtonGroup.h \
+    $$PWD/QxRibbonColorButton.h \
     $$PWD/QxRibbonContainers.h \
     $$PWD/QxRibbonControls.h \
     $$PWD/QxRibbonCustomizeDialog.h \
@@ -62,6 +64,7 @@ PRIVATE_HEADERS = \
     $$PWD/FramelessHelper.h \
     $$PWD/QxRibbonBarPrivate.h \
     $$PWD/QxRibbonButtonPrivate.h \
+    $$PWD/QxRibbonColorButtonPrivate.h \
     $$PWD/QxRibbonCustomizeData.h \
     $$PWD/QxRibbonCustomizeWidget.h \
     $$PWD/QxRibbonGroupLayout.h \

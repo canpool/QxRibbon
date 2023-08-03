@@ -32,7 +32,7 @@ public:
 public:
     explicit RibbonButton(QWidget *parent = Q_NULLPTR);
     explicit RibbonButton(QAction *defaultAction, QWidget *parent = Q_NULLPTR);
-    ~RibbonButton();
+    virtual ~RibbonButton();
 
     RibbonButtonType buttonType() const;
     void setButtonType(RibbonButtonType type);
@@ -59,6 +59,8 @@ protected:
     virtual void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
     virtual bool hitButton(const QPoint &pos) const Q_DECL_OVERRIDE;
     virtual void actionEvent(QActionEvent *e) Q_DECL_OVERRIDE;
-private:
+protected:
+    explicit RibbonButton(RibbonButtonPrivate *_d, QWidget *parent = Q_NULLPTR);
+protected:
     RibbonButtonPrivate *d;
 };

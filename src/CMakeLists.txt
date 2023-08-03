@@ -14,6 +14,7 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonBar.h
     QxRibbonButton.h
     QxRibbonButtonGroup.h
+    QxRibbonColorButton.h
     QxRibbonContainers.h
     QxRibbonControls.h
     QxRibbonCustomizeDialog.h
@@ -37,6 +38,7 @@ set(QX_RIBBON_PRIVATE_HEADERS
     FramelessHelper.h
     QxRibbonBarPrivate.h
     QxRibbonButtonPrivate.h
+    QxRibbonColorButtonPrivate.h
     QxRibbonCustomizeData.h
     QxRibbonCustomizeWidget.h
     QxRibbonGroupLayout.h
@@ -51,6 +53,7 @@ set(QX_RIBBON_SOURCES
     QxRibbonBar.cpp
     QxRibbonButton.cpp
     QxRibbonButtonGroup.cpp
+    QxRibbonColorButton.cpp
     QxRibbonContainers.cpp
     QxRibbonControls.cpp
     QxRibbonCustomizeData.cpp

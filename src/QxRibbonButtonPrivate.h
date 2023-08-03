@@ -24,7 +24,7 @@ public:
     // 在需要绘制文字的时候调用此函数，有些效果需要文字的文字改变
     QRect adjustedTextRect(const QStyleOptionToolButton &opt, const QWidget *w);
     QRect calcIndicatorArrowDownRect(const QStyleOptionToolButton &opt);
-    QPixmap createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize);
+    virtual QPixmap createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize);
     // 根据鼠标位置更新按钮的信息
     void updateButtonState(const QPoint &pos);
 
