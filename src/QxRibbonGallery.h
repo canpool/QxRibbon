@@ -41,42 +41,25 @@ class QX_RIBBON_EXPORT RibbonGallery : public QFrame
 {
     Q_OBJECT
 public:
-    RibbonGallery(QWidget *parent = 0);
+    RibbonGallery(QWidget *parent = Q_NULLPTR);
     virtual ~RibbonGallery();
 
     RibbonGalleryGroup *addGalleryGroup();
-    void addGalleryGroup(RibbonGalleryGroup *group);
-
     RibbonGalleryGroup *addGalleryGroup(const QString &title, QList<QAction *> actions);
 #if QX_RIBBON_DEPRECATED_SINCE(0, 6)
     QT_DEPRECATED_X("Use addGalleryGroup")
     RibbonGalleryGroup *addCategoryActions(const QString &title, QList<QAction *> actions);
 #endif
-
+    void addGalleryGroup(RibbonGalleryGroup *group);
     RibbonGalleryGroup *currentViewGroup() const;
     void setCurrentViewGroup(RibbonGalleryGroup *group);
 
     RibbonGalleryViewport *getPopupViewPort() const;
-
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
-
-public:
-    // 设置最右边三个控制按钮的最大宽度（默认15）
-    static void setGalleryButtonMaximumWidth(int w);
+    static void setGalleryButtonMaximumWidth(int w = 15);
 signals:
-    /**
-     * @brief 转发管理的RibbonGalleryGroup::triggered
-     * 所有加入RibbonGallery的action都会被一个QActionGroup管理,可以通过@sa getActionGroup 获取到对应的actiongroup
-     * @param action
-     */
     void triggered(QAction *action);
-    /**
-     * @brief 转发管理的RibbonGalleryGroup::hovered
-     * @note 此属性需要确保RibbonGalleryGroup::setMouseTracking(true)
-     * @param action
-     */
     void hovered(QAction *action);
-
 public slots:
     virtual void pageUp();
     virtual void pageDown();
@@ -88,7 +71,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 private:
-    RibbonGalleryViewport *ensureGetPopupViewPort();
+    RibbonGalleryViewport *getPopupViewPort();
 private:
     RibbonGalleryPrivate *d;
     friend class RibbonGalleryPrivate;
@@ -102,12 +85,10 @@ class QX_RIBBON_EXPORT RibbonGalleryViewport : public QWidget
 public:
     RibbonGalleryViewport(QWidget *parent);
     ~RibbonGalleryViewport();
-
+public:
     void addWidget(QWidget *w);
     void addWidget(QWidget *w, const QString &title);
-
     void removeWidget(QWidget *w);
-
     QLabel *getWidgetTitleLabel(QWidget *w);
 public slots:
     void widgetTitleChanged(QWidget *w, const QString &title);

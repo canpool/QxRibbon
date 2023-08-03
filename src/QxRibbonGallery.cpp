@@ -19,25 +19,15 @@ class RibbonGalleryPrivate
 {
 public:
     RibbonGalleryPrivate();
-
+public:
     void init(RibbonGallery *parent);
-
-    bool isValid() const
-    { return (q != Q_NULLPTR); }
-
-    void createPopupWidget();
-
     void setViewPort(RibbonGalleryGroup *v);
 public:
     RibbonGallery *q;
     RibbonControlButton *m_buttonUp;
     RibbonControlButton *m_buttonDown;
     RibbonControlButton *m_buttonMore;
-#if 0
-    RibbonMenu *m_popupWidget;
-#else
     RibbonGalleryViewport *m_popupWidget;
-#endif
     RibbonGalleryGroup *m_viewportGroup;
     QBoxLayout *m_btnLayout;
     QBoxLayout *m_layout;
@@ -48,6 +38,8 @@ int RibbonGalleryPrivate::s_galleryButtonMaximumWidth = 15;
 
 RibbonGalleryPrivate::RibbonGalleryPrivate()
     : q(Q_NULLPTR)
+    , m_popupWidget(Q_NULLPTR)
+    , m_viewportGroup(Q_NULLPTR)
 {
 }
 
@@ -75,10 +67,8 @@ void RibbonGalleryPrivate::init(RibbonGallery *parent)
     QObject::connect(m_buttonUp, &QAbstractButton::clicked, q, &RibbonGallery::pageUp);
     QObject::connect(m_buttonDown, &QAbstractButton::clicked, q, &RibbonGallery::pageDown);
     QObject::connect(m_buttonMore, &QAbstractButton::clicked, q, &RibbonGallery::showMoreDetail);
-    // 信号转发
-    QObject::connect(q, &RibbonGallery::triggered, q, &RibbonGallery::onTriggered);
-    m_popupWidget = Q_NULLPTR;
-    m_viewportGroup = Q_NULLPTR;
+    QObject::connect(q, &RibbonGallery::triggered, q, &RibbonGallery::onTriggered); // 信号转发
+
     m_btnLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     m_btnLayout->setSpacing(0);
     m_btnLayout->setContentsMargins(0, 0, 0, 0);
@@ -91,17 +81,6 @@ void RibbonGalleryPrivate::init(RibbonGallery *parent)
     m_layout->addLayout(m_btnLayout);
     m_layout->addStretch();
     q->setLayout(m_layout);
-}
-
-void RibbonGalleryPrivate::createPopupWidget()
-{
-    if (Q_NULLPTR == m_popupWidget) {
-#if 0
-        m_popupWidget = new RibbonMenu(q);
-#else
-        m_popupWidget = new RibbonGalleryViewport(q);
-#endif
-    }
 }
 
 void RibbonGalleryPrivate::setViewPort(RibbonGalleryGroup *v)
@@ -159,7 +138,7 @@ RibbonGalleryGroup *RibbonGallery::addGalleryGroup()
  */
 void RibbonGallery::addGalleryGroup(RibbonGalleryGroup *group)
 {
-    RibbonGalleryViewport *viewport = ensureGetPopupViewPort();
+    RibbonGalleryViewport *viewport = getPopupViewPort();
     viewport->addWidget(group, group->getGroupTitle());
     connect(group, &QAbstractItemView::clicked, this, &RibbonGallery::onItemClicked);
     connect(group, &RibbonGalleryGroup::groupTitleChanged, this, [group, viewport](const QString &t) {
@@ -262,13 +241,13 @@ void RibbonGallery::showMoreDetail()
     if (Q_NULLPTR == d->m_popupWidget) {
         return;
     }
-    QSize popupMenuSize = d->m_popupWidget->sizeHint();
+    QSize popupSize = d->m_popupWidget->sizeHint();
     QPoint start = mapToGlobal(QPoint(0, 0));
 
     int width = d->m_viewportGroup->width();                           // viewport
 
     width += qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent);   // scrollbar
-    d->m_popupWidget->setGeometry(start.x(), start.y(), width, popupMenuSize.height());
+    d->m_popupWidget->setGeometry(start.x(), start.y(), width, popupSize.height());
     d->m_popupWidget->show();
 }
 
@@ -288,17 +267,15 @@ void RibbonGallery::onTriggered(QAction *action)
 {
     Q_UNUSED(action);
     // 点击后关闭弹出窗口
-    if (d->m_popupWidget) {
-        if (d->m_popupWidget->isVisible()) {
-            d->m_popupWidget->hide();
-        }
+    if (d->m_popupWidget && d->m_popupWidget->isVisible()) {
+        d->m_popupWidget->hide();
     }
 }
 
-RibbonGalleryViewport *RibbonGallery::ensureGetPopupViewPort()
+RibbonGalleryViewport *RibbonGallery::getPopupViewPort()
 {
     if (Q_NULLPTR == d->m_popupWidget) {
-        d->createPopupWidget();
+        d->m_popupWidget = new RibbonGalleryViewport(this);
     }
     return d->m_popupWidget;
 }
@@ -419,6 +396,7 @@ void RibbonGalleryViewport::removeWidget(QWidget *w)
     QLabel *label = getWidgetTitleLabel(w);
     if (label) {
         d->m_layout->removeWidget(label);
+        d->m_widgetToTitleLabel.remove(w);
     }
     d->m_layout->removeWidget(w);
 }
