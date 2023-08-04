@@ -41,34 +41,33 @@ public:
     explicit RibbonGalleryGroup(QWidget *w = Q_NULLPTR);
     virtual ~RibbonGalleryGroup();
 
-    // 重新计算grid尺寸
     void setRecalcGridSizeBlock(bool on = true);
     bool isRecalcGridSizeBlock() const;
     void recalcGridSize();
     void recalcGridSize(int galleryHeight);
-    // 设置显示的样式
+
     void setGalleryGroupStyle(GalleryGroupStyle style);
-    GalleryGroupStyle getGalleryGroupStyle() const;
-    // 添加一个item
+    GalleryGroupStyle galleryGroupStyle() const;
+
     void addItem(const QString &text, const QIcon &icon);
-    // 以一个aciton作为item添加
-    void addActionItem(QAction *act);
-    void addActionItemList(const QList<QAction *> &acts);
-    // 标题
+    void addItem(QAction *act);
+    void addItems(const QList<QAction *> &acts);
+
     void setGroupTitle(const QString &title);
-    QString getGroupTitle() const;
+    QString groupTitle() const;
+
     void selectByIndex(int i);
-    // 设置显示的行数
+
     void setDisplayRow(DisplayRow r);
-    DisplayRow getDisplayRow() const;
-    // 设置grid最小的宽度，默认为0（不限制），可以限定grid的宽度
+    DisplayRow displayRow() const;
+
     void setGridMinimumWidth(int w);
-    int getGridMinimumWidth() const;
-    // 设置grid最大的宽度，默认为0（不限制），可以限定grid的宽度
+    int gridMinimumWidth() const;
+
     void setGridMaximumWidth(int w);
-    int getGridMaximumWidth() const;
-    // 获取RibbonGalleryGroup管理的actiongroup
-    QActionGroup *getActionGroup() const;
+    int gridMaximumWidth() const;
+
+    QActionGroup *actionGroup() const;
 private slots:
     void onItemClicked(const QModelIndex &index);
     void onItemEntered(const QModelIndex &index);
@@ -76,13 +75,13 @@ signals:
     void groupTitleChanged(const QString &title);
     /**
      * @brief 等同QActionGroup的triggered
-     * 所有加入RibbonGalleryGroup的action都会被一个QActionGroup管理,可以通过@sa getActionGroup 获取到对应的actiongroup
+     * 所有加入RibbonGalleryGroup的action都会被一个QActionGroup管理,可以通过@sa actionGroup获取到对应的actiongroup
      * @param action
      */
     void triggered(QAction *action);
     /**
      * @brief 等同QActionGroup的triggered
-     * 所有加入RibbonGalleryGroup的action都会被一个QActionGroup管理,可以通过@sa getActionGroup 获取到对应的actiongroup
+     * 所有加入RibbonGalleryGroup的action都会被一个QActionGroup管理,可以通过@sa actionGroup获取到对应的actiongroup
      * @note 此属性需要通过QAbstractItemView::entered(const QModelIndex &index)激活，因此要保证设置了setMouseTracking(true)
      * @param action
      */

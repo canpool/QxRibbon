@@ -90,11 +90,11 @@ void RibbonGalleryPrivate::setViewPort(RibbonGalleryGroup *v)
         m_layout->addWidget(m_viewportGroup, 1);
     }
     m_viewportGroup->setRecalcGridSizeBlock(true);
-    m_viewportGroup->setGalleryGroupStyle(v->getGalleryGroupStyle());
-    m_viewportGroup->setDisplayRow(v->getDisplayRow());
+    m_viewportGroup->setGalleryGroupStyle(v->galleryGroupStyle());
+    m_viewportGroup->setDisplayRow(v->displayRow());
     m_viewportGroup->setSpacing(v->spacing());
-    m_viewportGroup->setGridMaximumWidth(v->getGridMaximumWidth());
-    m_viewportGroup->setGridMinimumWidth(v->getGridMinimumWidth());
+    m_viewportGroup->setGridMaximumWidth(v->gridMaximumWidth());
+    m_viewportGroup->setGridMinimumWidth(v->gridMinimumWidth());
     m_viewportGroup->setRecalcGridSizeBlock(false);
     m_viewportGroup->recalcGridSize(m_viewportGroup->height());
     m_viewportGroup->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -139,7 +139,7 @@ RibbonGalleryGroup *RibbonGallery::addGalleryGroup()
 void RibbonGallery::addGalleryGroup(RibbonGalleryGroup *group)
 {
     RibbonGalleryViewport *viewport = getPopupViewPort();
-    viewport->addWidget(group, group->getGroupTitle());
+    viewport->addWidget(group, group->groupTitle());
     connect(group, &QAbstractItemView::clicked, this, &RibbonGallery::onItemClicked);
     connect(group, &RibbonGalleryGroup::groupTitleChanged, this, [group, viewport](const QString &t) {
         viewport->widgetTitleChanged(group, t);
@@ -155,7 +155,7 @@ RibbonGalleryGroup *RibbonGallery::addGalleryGroup(const QString &title, QList<Q
     if (!title.isEmpty()) {
         group->setGroupTitle(title);
     }
-    group->addActionItemList(actions);
+    group->addItems(actions);
     addGalleryGroup(group);
     return group;
 }

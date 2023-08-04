@@ -23,7 +23,7 @@ public:
 
 RibbonGalleryItemPrivate::RibbonGalleryItemPrivate()
     : m_flags(Qt::ItemIsEnabled | Qt::ItemIsSelectable)
-      , m_action(Q_NULLPTR)
+    , m_action(Q_NULLPTR)
 {
 
 }
@@ -192,7 +192,7 @@ void RibbonGalleryGroupItemDelegate::paint(QPainter *painter, const QStyleOption
     if (Q_NULLPTR == m_group) {
         return;
     }
-    switch (m_group->getGalleryGroupStyle()) {
+    switch (m_group->galleryGroupStyle()) {
     case RibbonGalleryGroup::IconWithText:
         paintIconWithText(painter, option, index);
         break;
@@ -421,7 +421,7 @@ void RibbonGalleryGroup::recalcGridSize(int galleryHeight)
         return;
     }
     // 首先通过DisplayRow计算GridSize
-    int dr = static_cast<int>(getDisplayRow());
+    int dr = static_cast<int>(displayRow());
     if (dr < 1) {
         dr = 1;
     } else if (dr > 3) {
@@ -432,11 +432,11 @@ void RibbonGalleryGroup::recalcGridSize(int galleryHeight)
         h = galleryHeight;
     }
     int w = h;
-    int mw = getGridMinimumWidth();
+    int mw = gridMinimumWidth();
     if (mw > 0 && w < mw) {
         w = mw;
     }
-    mw = getGridMaximumWidth();
+    mw = gridMaximumWidth();
     if (mw > 0 && w > mw) {
         w = mw;
     }
@@ -444,7 +444,7 @@ void RibbonGalleryGroup::recalcGridSize(int galleryHeight)
     // 在通过GalleryGroupStyle确定icon的尺寸
     // 这个是移动像素，qt在鼠标移动到图标上时会移动一下，给用户明确的动态，导致如果布局很满会超出显示范围，因此要在此基础上缩放一点
     const int shiftpix = 4;
-    switch (getGalleryGroupStyle()) {
+    switch (galleryGroupStyle()) {
     case IconWithText: {
         int textHeight = fontMetrics().lineSpacing();
         int iconHeight = h - textHeight - 2 * spacing() - shiftpix;
@@ -493,7 +493,7 @@ void RibbonGalleryGroup::setGalleryGroupStyle(RibbonGalleryGroup::GalleryGroupSt
     recalcGridSize();
 }
 
-RibbonGalleryGroup::GalleryGroupStyle RibbonGalleryGroup::getGalleryGroupStyle() const
+RibbonGalleryGroup::GalleryGroupStyle RibbonGalleryGroup::galleryGroupStyle() const
 {
     return d->m_preStyle;
 }
@@ -507,7 +507,7 @@ void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
     model->append(new RibbonGalleryItem(text, icon));
 }
 
-void RibbonGalleryGroup::addActionItem(QAction *act)
+void RibbonGalleryGroup::addItem(QAction *act)
 {
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
@@ -517,7 +517,7 @@ void RibbonGalleryGroup::addActionItem(QAction *act)
     model->append(new RibbonGalleryItem(act));
 }
 
-void RibbonGalleryGroup::addActionItemList(const QList<QAction *> &acts)
+void RibbonGalleryGroup::addItems(const QList<QAction *> &acts)
 {
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
@@ -534,10 +534,10 @@ void RibbonGalleryGroup::addActionItemList(const QList<QAction *> &acts)
 void RibbonGalleryGroup::setGroupTitle(const QString &title)
 {
     d->m_groupTitle = title;
-    emit groupTitleChanged(d->m_groupTitle);
+    emit groupTitleChanged(title);
 }
 
-QString RibbonGalleryGroup::getGroupTitle() const
+QString RibbonGalleryGroup::groupTitle() const
 {
     return d->m_groupTitle;
 }
@@ -569,7 +569,7 @@ void RibbonGalleryGroup::setDisplayRow(DisplayRow r)
  * @brief Gallery显示的行数
  * @return
  */
-RibbonGalleryGroup::DisplayRow RibbonGalleryGroup::getDisplayRow() const
+RibbonGalleryGroup::DisplayRow RibbonGalleryGroup::displayRow() const
 {
     return d->m_displayRow;
 }
@@ -587,7 +587,7 @@ void RibbonGalleryGroup::setGridMinimumWidth(int w)
  * @brief grid最小的宽度，默认为0（不限制）
  * @return
  */
-int RibbonGalleryGroup::getGridMinimumWidth() const
+int RibbonGalleryGroup::gridMinimumWidth() const
 {
     return d->m_gridMinimumWidth;
 }
@@ -605,7 +605,7 @@ void RibbonGalleryGroup::setGridMaximumWidth(int w)
  * @brief grid最大的的宽度，默认为0（不限制）
  * @param w
  */
-int RibbonGalleryGroup::getGridMaximumWidth() const
+int RibbonGalleryGroup::gridMaximumWidth() const
 {
     return d->m_gridMaximumWidth;
 }
@@ -614,7 +614,7 @@ int RibbonGalleryGroup::getGridMaximumWidth() const
  * @brief 获取RibbonGalleryGroup管理的actiongroup
  * @return
  */
-QActionGroup *RibbonGalleryGroup::getActionGroup() const
+QActionGroup *RibbonGalleryGroup::actionGroup() const
 {
     return d->m_actionGroup;
 }

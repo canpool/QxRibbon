@@ -16,9 +16,6 @@
 
 class RibbonGalleryItemPrivate;
 
-///
-/// \brief 类似 QStandardItem 的 GalleryItem
-///
 class RibbonGalleryItem
 {
 public:
