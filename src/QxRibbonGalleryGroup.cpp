@@ -297,11 +297,7 @@ bool RibbonGalleryGroupModel::setData(const QModelIndex &index, const QVariant &
 void RibbonGalleryGroupModel::clear()
 {
     beginResetModel();
-    for (int i = 0; i < m_items.count(); ++i) {
-        if (m_items.at(i)) {
-            delete m_items.at(i);
-        }
-    }
+    qDeleteAll(m_items);
     m_items.clear();
     endResetModel();
 }
@@ -343,6 +339,7 @@ class RibbonGalleryGroupPrivate
 public:
     RibbonGalleryGroupPrivate(RibbonGalleryGroup *p);
     RibbonGalleryGroupModel *groupModel();
+    void itemActivate(const QModelIndex &index, QAction::ActionEvent event);
 public:
     RibbonGalleryGroup *q;
     QString m_groupTitle;
@@ -372,6 +369,19 @@ RibbonGalleryGroupModel *RibbonGalleryGroupPrivate::groupModel()
     return qobject_cast<RibbonGalleryGroupModel *>(q->model());
 }
 
+void RibbonGalleryGroupPrivate::itemActivate(const QModelIndex &index, QAction::ActionEvent event)
+{
+    if (index.isValid()) {
+        RibbonGalleryItem *item = static_cast<RibbonGalleryItem *>(index.internalPointer());
+        if (item) {
+            QAction *act = item->action();
+            if (act) {
+                act->activate(event);
+            }
+        }
+    }
+}
+
 /* RibbonGalleryGroup */
 RibbonGalleryGroup::RibbonGalleryGroup(QWidget *w)
     : QListView(w)
@@ -384,6 +394,7 @@ RibbonGalleryGroup::RibbonGalleryGroup(QWidget *w)
     setSpacing(1);
     setItemDelegate(new RibbonGalleryGroupItemDelegate(this, this));
     connect(this, &QAbstractItemView::clicked, this, &RibbonGalleryGroup::onItemClicked);
+    connect(this, &QAbstractItemView::entered, this, &RibbonGalleryGroup::onItemEntered);
     RibbonGalleryGroupModel *m = new RibbonGalleryGroupModel(this);
     setModel(m);
 }
@@ -489,6 +500,8 @@ void RibbonGalleryGroup::setGalleryGroupStyle(RibbonGalleryGroup::GalleryGroupSt
     d->m_preStyle = style;
     if (style == IconWithWordWrapText) {
         setWordWrap(true);
+    } else {
+        setWordWrap(false);
     }
     recalcGridSize();
 }
@@ -621,26 +634,10 @@ QActionGroup *RibbonGalleryGroup::actionGroup() const
 
 void RibbonGalleryGroup::onItemClicked(const QModelIndex &index)
 {
-    if (index.isValid()) {
-        RibbonGalleryItem *item = static_cast<RibbonGalleryItem *>(index.internalPointer());
-        if (item) {
-            QAction *act = item->action();
-            if (act) {
-                act->activate(QAction::Trigger);
-            }
-        }
-    }
+    d->itemActivate(index, QAction::Trigger);
 }
 
 void RibbonGalleryGroup::onItemEntered(const QModelIndex &index)
 {
-    if (index.isValid()) {
-        RibbonGalleryItem *item = static_cast<RibbonGalleryItem *>(index.internalPointer());
-        if (item) {
-            QAction *act = item->action();
-            if (act) {
-                act->activate(QAction::Hover);
-            }
-        }
-    }
+    d->itemActivate(index, QAction::Hover);
 }
