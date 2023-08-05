@@ -4,6 +4,7 @@
 **/
 #include "QxRibbonContainers.h"
 #include <QDebug>
+#include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPaintEvent>
@@ -16,37 +17,51 @@ class RibbonCtrlContainerPrivate
 public:
     RibbonCtrlContainerPrivate(RibbonCtrlContainer *p);
 
+    void init();
     void setWidget(QWidget *w);
     void takeWidget(QWidget *w);
 public:
     RibbonCtrlContainer *q;
     QWidget *m_widget;
-    QHBoxLayout *m_layout;
+    QBoxLayout *m_layout;
     QLabel *m_labelPixmap;
     QLabel *m_labelText;
     QIcon m_icon;
     QSize m_iconSize;
+    Qt::Orientation m_orientation;
 };
 
 
 RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate(RibbonCtrlContainer *p)
-    : m_widget(Q_NULLPTR)
+    : q(p)
+    , m_widget(Q_NULLPTR)
     , m_iconSize(18, 18)
+    , m_orientation(Qt::Horizontal)
 {
-    q = p;
-    m_layout = new QHBoxLayout(p);
-    m_layout->setSpacing(2);
-    m_layout->setObjectName(QString::fromUtf8("layout"));
-    m_layout->setContentsMargins(0, 0, 0, 0);
 
-    m_labelPixmap = new QLabel(p);
-    m_labelPixmap->setObjectName(QString::fromUtf8("labelPixmap"));
+}
+
+void RibbonCtrlContainerPrivate::init()
+{
+    QHBoxLayout *headerLayout = new QHBoxLayout();
+    headerLayout->setSpacing(2);
+    headerLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_labelPixmap = new QLabel(q);
+    m_labelPixmap->setObjectName(QLatin1String("logo"));
     m_labelPixmap->setAlignment(Qt::AlignCenter);
-    m_layout->addWidget(m_labelPixmap);
+    headerLayout->addWidget(m_labelPixmap);
 
-    m_labelText = new QLabel(p);
-    m_labelText->setObjectName(QString::fromUtf8("labelText"));
-    m_layout->addWidget(m_labelText);
+    m_labelText = new QLabel(q);
+    m_labelText->setObjectName(QLatin1String("title"));
+    headerLayout->addWidget(m_labelText);
+
+    QBoxLayout::Direction direction =
+        m_orientation == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
+    m_layout = new QBoxLayout(direction, q);
+    m_layout->setSpacing(2);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->addLayout(headerLayout);
 }
 
 void RibbonCtrlContainerPrivate::setWidget(QWidget *w)
@@ -64,7 +79,8 @@ void RibbonCtrlContainerPrivate::setWidget(QWidget *w)
         w->setParent(q);
     }
     m_layout->addWidget(w);
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QSizePolicy sizePolicy(m_orientation == Qt::Horizontal ? QSizePolicy::Expanding : QSizePolicy::Preferred,
+                           QSizePolicy::Preferred);
     sizePolicy.setHorizontalStretch(0);
     sizePolicy.setVerticalStretch(0);
     w->setSizePolicy(sizePolicy);
@@ -80,9 +96,16 @@ void RibbonCtrlContainerPrivate::takeWidget(QWidget *w)
 }
 
 RibbonCtrlContainer::RibbonCtrlContainer(QWidget *parent)
+    : RibbonCtrlContainer(Qt::Horizontal, parent)
+{
+}
+
+RibbonCtrlContainer::RibbonCtrlContainer(Qt::Orientation orientation, QWidget *parent)
     : QWidget(parent)
     , d(new RibbonCtrlContainerPrivate(this))
 {
+    d->m_orientation = orientation;
+    d->init();
 }
 
 RibbonCtrlContainer::~RibbonCtrlContainer()
@@ -140,4 +163,24 @@ void RibbonCtrlContainer::setWidget(QWidget *w)
 QWidget *RibbonCtrlContainer::widget() const
 {
     return d->m_widget;
+}
+
+Qt::Orientation RibbonCtrlContainer::orientation() const
+{
+    return d->m_orientation;
+}
+
+void RibbonCtrlContainer::setOrientation(Qt::Orientation orientation)
+{
+    if (orientation == d->m_orientation) {
+        return;
+    }
+    d->m_orientation = orientation;
+    if (orientation == Qt::Horizontal) {
+        d->m_layout->setDirection(QBoxLayout::LeftToRight);
+        d->m_labelPixmap->setAlignment(Qt::AlignCenter);
+    } else {
+        d->m_layout->setDirection(QBoxLayout::TopToBottom);
+        d->m_labelPixmap->setAlignment(Qt::AlignLeft);
+    }
 }

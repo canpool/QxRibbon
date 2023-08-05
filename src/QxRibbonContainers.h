@@ -10,9 +10,18 @@
 /**
  * @brief Control Widget Container
  *
- * LeftToRight:
+ * Qt::Horizontal (default)
  *  ------------------------
  *  | icon | text | widget |
+ *  ------------------------
+ *
+ * Qt::Vertical
+ *  ------------------------
+ *  | icon | text          |
+ *  ------------------------
+ *  |                      |
+ *  |        widget        |
+ *  |                      |
  *  ------------------------
  */
 class RibbonCtrlContainerPrivate;
@@ -20,8 +29,9 @@ class QX_RIBBON_EXPORT RibbonCtrlContainer : public QWidget
 {
     Q_OBJECT
 public:
-    RibbonCtrlContainer(QWidget *parent = Q_NULLPTR);
-    ~RibbonCtrlContainer();
+    explicit RibbonCtrlContainer(QWidget *parent = Q_NULLPTR);
+    explicit RibbonCtrlContainer(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
+    virtual ~RibbonCtrlContainer();
 
     void setIconVisible(bool b);
     void setTitleVisible(bool b);
@@ -37,6 +47,9 @@ public:
 
     void setWidget(QWidget *w);
     QWidget *widget() const;
+
+    Qt::Orientation orientation() const;
+    void setOrientation(Qt::Orientation orientation);
 private:
     RibbonCtrlContainerPrivate *d;
 };
