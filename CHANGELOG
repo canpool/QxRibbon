@@ -1,4 +1,16 @@
 
+0.5.7
+---
+Feature
+- Add RibbonColorButton
+- Support full screen for RibbonWindow
+
+Interface
+- Add setter/getter of orientation for RibbonCtrlContainer
+- Rename some interfaces of RibbonGalleryGroup
+- Private item,delegate,mode of RibbonGallery
+
+
 0.5.6
 ---
 Feature
