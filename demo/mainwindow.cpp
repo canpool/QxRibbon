@@ -13,6 +13,7 @@
 #include "QxRibbonGroup.h"
 #include "QxRibbonPage.h"
 #include "QxRibbonQuickAccessBar.h"
+#include "QxRibbon.h"
 
 #include <QAbstractButton>
 #include <QAction>
@@ -379,6 +380,9 @@ void MainWindow::createPageHome()
     act = new QAction(tr("Arrow Button"), this);
     btn = groupToolButtonStyle->addLargeAction(act);
     btn->setArrowType(Qt::DownArrow);
+
+    act = new QAction(QxRibbon::colorIcon(Qt::red, QSize(32, 32)), tr("Color Action"), this);
+    groupToolButtonStyle->addLargeAction(act);
 
     act = createAction(tr("Color Button"), ":/icon/res/long-text.svg");
     RibbonColorButton *colorButton = new RibbonColorButton(this);

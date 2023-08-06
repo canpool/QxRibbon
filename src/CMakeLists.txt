@@ -10,6 +10,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 set(QX_RIBBON_PUBLIC_HEADERS
     QxGlobal.h
+    QxRibbon.h
     QxRibbonActionsManager.h
     QxRibbonBar.h
     QxRibbonButton.h
@@ -49,6 +50,7 @@ set(QX_RIBBON_PRIVATE_HEADERS
 
 set(QX_RIBBON_SOURCES
     FramelessHelper.cpp
+    QxRibbon.cpp
     QxRibbonActionsManager.cpp
     QxRibbonBar.cpp
     QxRibbonButton.cpp

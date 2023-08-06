@@ -7,6 +7,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     $$PWD/FramelessHelper.cpp \
+    $$PWD/QxRibbon.cpp \
     $$PWD/QxRibbonActionsManager.cpp \
     $$PWD/QxRibbonBar.cpp \
     $$PWD/QxRibbonButton.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 
 PUBLIC_HEADERS = \
     $$PWD/QxGlobal.h \
+    $$PWD/QxRibbon.h \
     $$PWD/QxRibbonActionsManager.h \
     $$PWD/QxRibbonBar.h \
     $$PWD/QxRibbonButton.h \
