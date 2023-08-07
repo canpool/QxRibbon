@@ -72,6 +72,11 @@ RibbonButtonPrivate::RibbonButtonPrivate()
 
 }
 
+RibbonButtonPrivate::~RibbonButtonPrivate()
+{
+
+}
+
 QStyle *RibbonButtonPrivate::style() const
 {
     return q->style();

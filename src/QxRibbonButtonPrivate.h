@@ -14,6 +14,7 @@ class RibbonButtonPrivate
 {
 public:
     RibbonButtonPrivate();
+    virtual ~RibbonButtonPrivate();
 
     QStyle *style() const;
 
