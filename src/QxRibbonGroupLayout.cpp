@@ -541,6 +541,7 @@ RibbonGroupLayout::~RibbonGroupLayout()
         }
         delete item;
     }
+    delete d;
 }
 
 /**
