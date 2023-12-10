@@ -1,4 +1,10 @@
 
+0.5.8
+---
+Bugfix
+- Fix memory leak
+
+
 0.5.7
 ---
 Feature
