@@ -7,7 +7,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     $$PWD/FramelessHelper.cpp \
-    $$PWD/QxRibbon.cpp \
     $$PWD/QxRibbonActionsManager.cpp \
     $$PWD/QxRibbonBar.cpp \
     $$PWD/QxRibbonButton.cpp \
@@ -25,6 +24,7 @@ SOURCES += \
     $$PWD/QxRibbonPage.cpp \
     $$PWD/QxRibbonPageContext.cpp \
     $$PWD/QxRibbonStyleOption.cpp \
+    $$PWD/QxRibbonUtils.cpp \
     $$PWD/QxRibbonWindow.cpp \
     $$PWD/QxWindowButtonGroup.cpp \
     $$PWD/QxRibbonApplicationButton.cpp \
@@ -35,7 +35,6 @@ SOURCES += \
     $$PWD/QxRibbonQuickAccessBar.cpp
 
 PUBLIC_HEADERS = \
-    $$PWD/QxRibbon.h \
     $$PWD/QxRibbonActionsManager.h \
     $$PWD/QxRibbonBar.h \
     $$PWD/QxRibbonButton.h \
@@ -51,6 +50,7 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonPage.h \
     $$PWD/QxRibbonPageContext.h \
     $$PWD/QxRibbonStyleOption.h \
+    $$PWD/QxRibbonUtils.h \
     $$PWD/QxRibbonWindow.h \
     $$PWD/QxRibbonApplicationButton.h \
     $$PWD/QxRibbonTabBar.h \

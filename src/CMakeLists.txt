@@ -9,7 +9,6 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 set(QX_RIBBON_PUBLIC_HEADERS
-    QxRibbon.h
     QxRibbonActionsManager.h
     QxRibbonBar.h
     QxRibbonButton.h
@@ -24,6 +23,7 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonPage.h
     QxRibbonPageContext.h
     QxRibbonStyleOption.h
+    QxRibbonUtils.h
     QxRibbonWindow.h
     QxRibbonApplicationButton.h
     QxRibbonTabBar.h
@@ -49,7 +49,6 @@ set(QX_RIBBON_PRIVATE_HEADERS
 
 set(QX_RIBBON_SOURCES
     FramelessHelper.cpp
-    QxRibbon.cpp
     QxRibbonActionsManager.cpp
     QxRibbonBar.cpp
     QxRibbonButton.cpp
@@ -67,6 +66,7 @@ set(QX_RIBBON_SOURCES
     QxRibbonPage.cpp
     QxRibbonPageContext.cpp
     QxRibbonStyleOption.cpp
+    QxRibbonUtils.cpp
     QxRibbonWindow.cpp
     QxWindowButtonGroup.cpp
     QxRibbonApplicationButton.cpp

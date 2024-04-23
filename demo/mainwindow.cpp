@@ -13,7 +13,7 @@
 #include "QxRibbonGroup.h"
 #include "QxRibbonPage.h"
 #include "QxRibbonQuickAccessBar.h"
-#include "QxRibbon.h"
+#include "QxRibbonUtils.h"
 
 #include <QAbstractButton>
 #include <QAction>
