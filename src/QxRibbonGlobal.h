@@ -4,7 +4,60 @@
 **/
 #pragma once
 
-#include "QxGlobal.h"
+#include <QtCore/qglobal.h>
+
+#ifndef Q_NULLPTR
+#define Q_NULLPTR 0
+#endif // Q_NULLPTR
+
+#ifndef Q_DECL_OVERRIDE
+#define Q_DECL_OVERRIDE override
+#endif // Q_DECL_OVERRIDE
+
+#ifndef QX_VERSION_JOIN
+#define QX_VERSION_JOIN2(major, minor, patch) major##.##minor##.##patch
+#define QX_VERSION_JOIN(major, minor, patch) QX_VERSION_JOIN2(major, minor, patch)
+#endif // QX_VERSION_JOIN
+
+#ifndef QX_DECLARE_PRIVATE
+
+#define QX_DECLARE_PRIVATE(Class) \
+    Class##Private *d_ptr; \
+    Q_DECLARE_PRIVATE(Class)
+
+#define QX_DECLARE_PUBLIC(Class) \
+    Class *q_ptr; \
+    inline void setPublic(Class *ptr) { q_ptr = ptr; } \
+    Q_DECLARE_PUBLIC(Class)
+
+#define QX_INIT_PRIVATE(Class) \
+    d_ptr = new Class##Private(); \
+    d_ptr->setPublic(this);
+
+#define QX_SET_PRIVATE(Dptr) \
+    d_ptr = Dptr; \
+    d_ptr->setPublic(this);
+
+#define QX_FINI_PRIVATE() \
+    delete d_ptr; d_ptr = Q_NULLPTR;
+
+#endif // QX_DECLARE_PRIVATE
+
+#if !defined(QX_RIBBON_NAMESPACE_DISABLE)
+#define QX_RIBBON_NAMESPACE  QxRibbon
+#endif
+
+#if !defined(QX_RIBBON_NAMESPACE)
+#define QX_RIBBON_BEGIN_NAMESPACE
+#define QX_RIBBON_END_NAMESPACE
+#define QX_RIBBON_USE_NAMESPACE
+#define QX_RIBBON_PREPEND_NAMESPACE(name) name
+#else
+#define QX_RIBBON_BEGIN_NAMESPACE namespace QX_RIBBON_NAMESPACE {
+#define QX_RIBBON_END_NAMESPACE }
+#define QX_RIBBON_USE_NAMESPACE using namespace QX_RIBBON_NAMESPACE;
+#define QX_RIBBON_PREPEND_NAMESPACE(name) QX_RIBBON_NAMESPACE::name
+#endif // QX_RIBBON_NAMESPACE
 
 #ifndef QX_RIBBON_LIBRARY_STATIC
 #ifdef  QX_RIBBON_LIBRARY

@@ -35,7 +35,6 @@ SOURCES += \
     $$PWD/QxRibbonQuickAccessBar.cpp
 
 PUBLIC_HEADERS = \
-    $$PWD/QxGlobal.h \
     $$PWD/QxRibbon.h \
     $$PWD/QxRibbonActionsManager.h \
     $$PWD/QxRibbonBar.h \

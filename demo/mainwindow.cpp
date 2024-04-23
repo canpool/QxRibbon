@@ -46,8 +46,6 @@
 #include "aboutdialog.h"
 #include "editablecontainer.h"
 
-QX_USE_NAMESPACE
-
 #define COST_START()                                                                                                   \
     QElapsedTimer __TMP_COST;                                                                                          \
     __TMP_COST.start();                                                                                                \
