@@ -101,6 +101,25 @@ void RibbonStackedWidget::moveWidget(int from, int to)
     insertWidget(to, w);
 }
 
+/* RibbonQuickAccessBarContainer */
+RibbonQuickAccessBarContainer::RibbonQuickAccessBarContainer(QWidget *parent)
+    : RibbonCtrlContainer(parent)
+{
+    m_quickAccessBar = new RibbonQuickAccessBar(this);
+    m_quickAccessBar->setObjectName(QStringLiteral("qx_QuickAccessBar"));
+    setWidget(m_quickAccessBar);
+    setTitleVisible(false);
+}
+
+RibbonQuickAccessBarContainer::~RibbonQuickAccessBarContainer()
+{
+}
+
+RibbonQuickAccessBar *RibbonQuickAccessBarContainer::quickAccessBar() const
+{
+    return m_quickAccessBar;
+}
+
 RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     : m_applicationButton(Q_NULLPTR)
     , m_tabBar(Q_NULLPTR)
@@ -150,7 +169,7 @@ void RibbonBarPrivate::init()
     m_stack->installEventFilter(q);
     setMinimizedFlag(false);
 
-    m_quickAccessBar = new RibbonQuickAccessBar(q);
+    m_quickAccessBar = new RibbonQuickAccessBarContainer(q);
     m_quickAccessBar->setObjectName(QStringLiteral("qx_RibbonQuickAccessBar"));
     m_quickAccessBar->setIcon(q->windowIcon());
 }
@@ -1454,7 +1473,7 @@ void RibbonBar::activeRightButtonGroup()
 
 RibbonQuickAccessBar *RibbonBar::quickAccessBar() const
 {
-    return d->m_quickAccessBar;
+    return d->m_quickAccessBar->quickAccessBar();
 }
 
 void RibbonBar::setQuickAccessBarPosition(QuickAccessBarPosition position)

@@ -45,6 +45,7 @@ set(QX_RIBBON_PRIVATE_HEADERS
     QxRibbonGroupLayout.h
     QxRibbonGroupPrivate.h
     QxRibbonPagePrivate.h
+    QxRibbonQuickAccessBarPrivate.h
     QxWindowButtonGroup.h
     QxWindowButtonGroupPrivate.h
 )

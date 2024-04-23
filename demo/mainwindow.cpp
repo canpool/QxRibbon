@@ -12,6 +12,7 @@
 #include "QxRibbonGallery.h"
 #include "QxRibbonGroup.h"
 #include "QxRibbonPage.h"
+#include "QxRibbonContainers.h"
 #include "QxRibbonQuickAccessBar.h"
 #include "QxRibbonUtils.h"
 
@@ -895,18 +896,22 @@ void MainWindow::createPageContext2(RibbonPage *page)
 void MainWindow::createQuickAccessBar()
 {
     RibbonQuickAccessBar *quickAccessBar = ribbonBar()->quickAccessBar();
+    connect(quickAccessBar, &RibbonQuickAccessBar::customizeActionChanged, this, [this]() {
+        this->ribbonBar()->resizeRibbon();
+    });
     quickAccessBar->addAction(createAction(tr("save"), ":/icon/res/save.svg", "save-quickbar"));
     quickAccessBar->addAction(createAction(tr("printer"), ":/icon/res/printer.svg"));
-    quickAccessBar->addSeparator();
+
     quickAccessBar->addAction(createAction(tr("undo"), ":/icon/res/undo.svg"));
     quickAccessBar->addAction(createAction(tr("redo"), ":/icon/res/redo.svg"));
-    quickAccessBar->addSeparator();
+
+    QAction *menuAction = createAction(tr("file"), ":/icon/res/file.svg");
     RibbonMenu *m = new RibbonMenu(tr("file"), this);
-    m->setIcon(QIcon(":/icon/res/file.svg"));
     for (int i = 0; i < 10; ++i) {
         m->addAction(createAction(tr("file%1").arg(i + 1), ":/icon/res/file.svg"));
     }
-    quickAccessBar->addMenu(m);
+    menuAction->setMenu(m);
+    quickAccessBar->addAction(menuAction);
 
     QAction *actionCustomizeAndSave = createAction(tr("customize and save"), ":/icon/res/customize.svg");
     quickAccessBar->addAction(actionCustomizeAndSave);

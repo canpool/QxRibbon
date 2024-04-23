@@ -6,9 +6,11 @@
 
 #include "QxRibbonGlobal.h"
 #include "QxRibbonBar.h"
+#include "QxRibbonContainers.h"
 
 #include <QStackedWidget>
 
+class RibbonQuickAccessBar;
 class RibbonControlButton;
 
 class RibbonStackedWidget : public QStackedWidget
@@ -32,6 +34,19 @@ protected:
 
 private:
     bool m_isPopup;
+};
+
+/* RibbonQuickAccessBarContainer */
+class RibbonQuickAccessBarContainer : public RibbonCtrlContainer
+{
+    Q_OBJECT
+public:
+    RibbonQuickAccessBarContainer(QWidget *parent = Q_NULLPTR);
+    ~RibbonQuickAccessBarContainer();
+public:
+    RibbonQuickAccessBar *quickAccessBar() const;
+private:
+    RibbonQuickAccessBar *m_quickAccessBar;
 };
 
 class PageContextManagerData
@@ -117,7 +132,7 @@ public:
     int m_iconRightBorderPosition;   ///< 标题栏x值的最小值，在有图标和快捷启动按钮，此值都需要变化
     RibbonControlButton *m_minimumPageButton;   ///< 隐藏面板按钮
     RibbonButtonGroup *m_rightButtonGroup;      ///< 在 tabbar 右边的按钮群
-    RibbonQuickAccessBar *m_quickAccessBar;
+    RibbonQuickAccessBarContainer *m_quickAccessBar;
     RibbonBar::QuickAccessBarPosition m_quickAccessBarPosition;
     RibbonBar::RibbonStyle m_ribbonStyle;
     RibbonBar::RibbonStyle m_lastShowStyle;

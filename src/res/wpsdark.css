@@ -297,6 +297,7 @@ QToolBar::separator {
 
 QToolBar QToolButton {
   background: transparent;
+  border: none;
 }
 
 QToolBar QToolButton:hover {
@@ -711,12 +712,32 @@ RibbonGroup > RibbonButtonGroup {
 
 /*RibbonQuickAccessBar*/
 
+QWidget#qx_RibbonQuickAccessBar QLabel {
+  background-color: transparent;
+}
+
 RibbonQuickAccessBar {
   background-color: transparent;
 }
 
-RibbonQuickAccessBar QWidget {
-  background-color: transparent;
+RibbonQuickAccessBar {
+  border: none;
+  background: transparent;
+}
+
+RibbonQuickAccessBar QToolButton {
+  width: 18px;
+  height: 18px;
+}
+
+RibbonQuickAccessBar QAbstractButton {
+  padding: 0px;
+}
+
+RibbonQuickAccessButton::menu-indicator {
+  width: 6px;
+  height: 6px;
+  padding-right: 3px;
 }
 
 /*RibbonCtrlContainer*/

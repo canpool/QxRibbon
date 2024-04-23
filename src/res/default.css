@@ -168,7 +168,7 @@ RibbonGroup > RibbonButtonGroup {
 /*RibbonQuickAccessBar*/
 
 RibbonQuickAccessBar {
-  background-color: #FF0000;
+  background-color: transparent;
 }
 
 /*RibbonCtrlContainer*/

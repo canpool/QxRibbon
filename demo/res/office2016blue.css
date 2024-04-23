@@ -192,11 +192,41 @@ RibbonGroup > RibbonButtonGroup {
 /*RibbonQuickAccessBar*/
 
 RibbonQuickAccessBar {
-  background-color: #cee8fc;
+  background-color: transparent;
 }
 
-RibbonQuickAccessBar QWidget {
-  background-color: transparent;
+RibbonQuickAccessBar QToolButton {
+  border: none;
+  color: white;
+}
+
+RibbonQuickAccessBar QToolButton:hover,
+RibbonQuickAccessBar QToolButton:focus {
+  background-color: #124078;
+}
+
+RibbonQuickAccessBar QToolButton:pressed,
+RibbonQuickAccessBar QToolButton:checked {
+  background-color: #002050;
+}
+
+RibbonQuickAccessBar QToolButton {
+  width: 18px;
+  height: 18px;
+}
+
+RibbonQuickAccessBar QToolButton[popupMode="1"] {
+  padding-right: 12px;
+}
+
+RibbonQuickAccessBar QAbstractButton {
+  padding: 0px;
+}
+
+RibbonQuickAccessButton::menu-indicator {
+  width: 6px;
+  height: 6px;
+  padding-right: 3px;
 }
 
 /*RibbonCtrlContainer*/
