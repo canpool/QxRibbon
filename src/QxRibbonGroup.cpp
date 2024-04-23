@@ -687,7 +687,6 @@ void RibbonGroup::paintEvent(QPaintEvent *event)
     if (titleVisible()) {
         const int th = titleHeight();
         QFont f = font();
-        f.setPixelSize(th * 0.6);
         p.setFont(f);
         QRect r;
         if (d->m_optionActionButton) {
