@@ -45,6 +45,7 @@ set(QX_RIBBON_PRIVATE_HEADERS
     QxRibbonGroupPrivate.h
     QxRibbonPagePrivate.h
     QxWindowButtonGroup.h
+    QxWindowButtonGroupPrivate.h
 )
 
 set(QX_RIBBON_SOURCES

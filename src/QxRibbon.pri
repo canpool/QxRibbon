@@ -70,7 +70,8 @@ PRIVATE_HEADERS = \
     $$PWD/QxRibbonGroupLayout.h \
     $$PWD/QxRibbonGroupPrivate.h \
     $$PWD/QxRibbonPagePrivate.h \
-    $$PWD/QxWindowButtonGroup.h
+    $$PWD/QxWindowButtonGroup.h \
+    $$PWD/QxWindowButtonGroupPrivate.h
 
 HEADERS  += \
     $$PUBLIC_HEADERS \

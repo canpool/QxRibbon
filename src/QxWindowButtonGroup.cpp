@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
 **/
 #include "QxWindowButtonGroup.h"
+#include "QxWindowButtonGroupPrivate.h"
 #include "QxRibbonManager.h"
 
 #include <QResizeEvent>
@@ -14,28 +15,12 @@
 #define MAX_BUTTON_WIDTH    30
 #define CLS_BUTTON_WIDTH    40
 
-class WindowButtonGroupPrivate
+WindowToolButton::WindowToolButton(QWidget *p)
+    : QPushButton(p)
 {
-public:
-    WindowButtonGroupPrivate(WindowButtonGroup *p);
+    setFlat(true);
+}
 
-    void setupMinimizeButton(bool on);
-    void setupMaximizeButton(bool on);
-    void setupCloseButton(bool on);
-    void updateSize();
-    void resize(QSize size);
-    QSize sizeHint() const;
-    int groupHeight() const;
-public:
-    WindowButtonGroup *q;
-    WindowToolButton *m_closeButton;
-    WindowToolButton *m_minimizeButton;
-    WindowToolButton *m_maximizeButton;
-    int m_closeStretch;
-    int m_maxStretch;
-    int m_minStretch;
-    qreal m_iconScale;
-};
 
 WindowButtonGroupPrivate::WindowButtonGroupPrivate(WindowButtonGroup *p)
     : q(p)
@@ -193,12 +178,6 @@ int WindowButtonGroupPrivate::groupHeight() const
     // In the WpsLiteStyle style, tabBarHeight may be smaller than titleBarHeight,
     // which causes the window buttons to cover the ribbon area, so use the smallest one
     return qMin(RibbonElementStyleOpt.titleBarHeight(), RibbonElementStyleOpt.tabBarHeight());
-}
-
-WindowToolButton::WindowToolButton(QWidget *p)
-    : QPushButton(p)
-{
-    setFlat(true);
 }
 
 WindowButtonGroup::WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags)

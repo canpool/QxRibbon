@@ -5,7 +5,6 @@
 #pragma once
 
 #include "QxRibbonGlobal.h"
-#include <QPushButton>
 #include <QWidget>
 
 class WindowButtonGroupPrivate;
@@ -41,9 +40,3 @@ private:
     WindowButtonGroupPrivate *d;
 };
 
-class WindowToolButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    explicit WindowToolButton(QWidget *p = Q_NULLPTR);
-};
