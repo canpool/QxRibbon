@@ -445,10 +445,10 @@ void RibbonActionsManager::onPageTitleChanged(const QString &title)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// RibbonActionsModel
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-class RibbonActionsModelPrivete
+class RibbonActionsManagerModelPrivate
 {
 public:
-    RibbonActionsModelPrivete(RibbonActionsManagerModel *m);
+    RibbonActionsManagerModelPrivate(RibbonActionsManagerModel *m);
 
     void updateRef();
     int count() const;
@@ -462,7 +462,7 @@ public:
     QList<QAction *> m_actions;
 };
 
-RibbonActionsModelPrivete::RibbonActionsModelPrivete(RibbonActionsManagerModel *m)
+RibbonActionsManagerModelPrivate::RibbonActionsManagerModelPrivate(RibbonActionsManagerModel *m)
     : q(m)
     , m_mgr(Q_NULLPTR)
     , m_tag(RibbonActionsManager::CommonlyUsedActionTag)
@@ -470,7 +470,7 @@ RibbonActionsModelPrivete::RibbonActionsModelPrivete(RibbonActionsManagerModel *
 {
 }
 
-void RibbonActionsModelPrivete::updateRef()
+void RibbonActionsManagerModelPrivate::updateRef()
 {
     if (isNull()) {
         return;
@@ -482,7 +482,7 @@ void RibbonActionsModelPrivete::updateRef()
     }
 }
 
-int RibbonActionsModelPrivete::count() const
+int RibbonActionsManagerModelPrivate::count() const
 {
     if (isNull()) {
         return 0;
@@ -490,7 +490,7 @@ int RibbonActionsModelPrivete::count() const
     return m_actions.size();
 }
 
-QAction *RibbonActionsModelPrivete::at(int index)
+QAction *RibbonActionsManagerModelPrivate::at(int index)
 {
     if (isNull()) {
         return Q_NULLPTR;
@@ -501,18 +501,18 @@ QAction *RibbonActionsModelPrivete::at(int index)
     return m_actions.at(index);
 }
 
-bool RibbonActionsModelPrivete::isNull() const
+bool RibbonActionsManagerModelPrivate::isNull() const
 {
     return (m_mgr == Q_NULLPTR);
 }
 
 RibbonActionsManagerModel::RibbonActionsManagerModel(QObject *p)
-    : QAbstractListModel(p), d(new RibbonActionsModelPrivete(this))
+    : QAbstractListModel(p), d(new RibbonActionsManagerModelPrivate(this))
 {
 }
 
 RibbonActionsManagerModel::RibbonActionsManagerModel(RibbonActionsManager *m, QObject *p)
-    : QAbstractListModel(p), d(new RibbonActionsModelPrivete(this))
+    : QAbstractListModel(p), d(new RibbonActionsManagerModelPrivate(this))
 {
     setupActionsManager(m);
 }

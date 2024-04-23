@@ -17,7 +17,7 @@ class RibbonBar;
 class RibbonPage;
 class RibbonActionsManagerPrivate;
 // RibbonActionsModel 特有
-class RibbonActionsModelPrivete;
+class RibbonActionsManagerModelPrivate;
 
 /**
  * @brief 用于管理 Ribbon 的所有 Action
@@ -156,5 +156,5 @@ public:
 private slots:
     void onActionTagChanged(int tag, bool isdelete);
 private:
-    RibbonActionsModelPrivete *d;
+    RibbonActionsManagerModelPrivate *d;
 };
