@@ -642,7 +642,7 @@ QAction *RibbonCustomizeWidgetPrivate::itemToAction(QStandardItem *item) const
 /**
  * @brief RibbonCustomizeWidget::RibbonCustomizeWidget
  * @param ribbonBar 传入需要管理的ribbonBar指针
- * @param arent 用于界面生成的parent
+ * @param parent 用于界面生成的parent
  * @param f 同QWidget::QWidget的第二个参数
  */
 RibbonCustomizeWidget::RibbonCustomizeWidget(RibbonBar *ribbonBar, QWidget *parent, Qt::WindowFlags f)

@@ -87,8 +87,8 @@ public:
 
     QColor getPageContextColor();
 
-    bool isOfficeStyle() { return ((m_ribbonStyle & 0x00FF) == 0); }
-    bool isTwoRowStyle() { return ((m_ribbonStyle & 0xFF00) != 0); }
+    bool isOfficeStyle() const { return ((m_ribbonStyle & 0x00FF) == 0); }
+    bool isTwoRowStyle() const { return ((m_ribbonStyle & 0xFF00) != 0); }
 
     void updateTabData();
     void updatePageContextManagerData();
@@ -109,7 +109,7 @@ public:
     int calcMinTabBarWidth() const;
     int mainBarHeight() const;
 
-    int tabIndex(RibbonPage *obj);
+    int tabIndex(RibbonPage *obj) const;
 
 public slots:
     void onWindowTitleChanged(const QString &title);

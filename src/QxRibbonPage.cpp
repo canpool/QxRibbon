@@ -128,7 +128,7 @@ bool RibbonPagePrivate::removeGroup(RibbonGroup *group)
     return false;
 }
 
-QList<RibbonGroup *> RibbonPagePrivate::groupList()
+QList<RibbonGroup *> RibbonPagePrivate::groupList() const
 {
     QList<RibbonGroup *> res;
 
@@ -569,7 +569,7 @@ RibbonGroup *RibbonPage::groupByName(const QString &title) const
  */
 RibbonGroup *RibbonPage::groupByObjectName(const QString &objname) const
 {
-    for (RibbonPageItem &i : d->m_itemList) {
+    for (const RibbonPageItem &i : d->m_itemList) {
         if (i.m_group) {
             if (i.m_group->objectName() == objname) {
                 return i.m_group;

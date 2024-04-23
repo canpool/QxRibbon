@@ -143,7 +143,7 @@ QList<RibbonPage *> RibbonPageContext::pageList() const
 {
     QList<RibbonPage *> res;
 
-    for (RibbonPageData &data : d->pageDataList) {
+    for (const RibbonPageData &data : d->pageDataList) {
         res.append(data.page);
     }
     return res;

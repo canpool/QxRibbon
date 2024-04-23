@@ -260,9 +260,9 @@ void RibbonBarPrivate::updateTabData()
     for (int i = 0; i < tabcount; ++i) {
         QVariant var = m_tabBar->tabData(i);
         if (var.isValid()) {
-            RibbonTabData p = var.value<RibbonTabData>();
-            p.index = i;
-            m_tabBar->setTabData(i, QVariant::fromValue(p));
+            RibbonTabData data = var.value<RibbonTabData>();
+            data.index = i;
+            m_tabBar->setTabData(i, QVariant::fromValue(data));
         }
     }
     // 刷新完tabdata信息也要接着刷新ContextPage信息
@@ -283,8 +283,8 @@ void RibbonBarPrivate::updatePageContextManagerData()
             for (int t = 0; t < c; ++t) {
                 QVariant v = m_tabBar->tabData(t);
                 if (v.isValid()) {
-                    RibbonTabData d = v.value<RibbonTabData>();
-                    if (d.page == page) {
+                    RibbonTabData data = v.value<RibbonTabData>();
+                    if (data.page == page) {
                         cd.tabPageIndex.append(t);
                     }
                 } else {
@@ -753,7 +753,7 @@ int RibbonBarPrivate::mainBarHeight() const
  * @return 如果没有找到，返回-1
  * @note 此函数不会调用RibbonPage*的任何方法，因此可以在RibbonPage的destroyed槽中调用
  */
-int RibbonBarPrivate::tabIndex(RibbonPage *page)
+int RibbonBarPrivate::tabIndex(RibbonPage *page) const
 {
     if (page == Q_NULLPTR) {
         return -1;
@@ -797,8 +797,8 @@ void RibbonBarPrivate::onPageWindowTitleChanged(const QString &title)
         // 鉴于tab不会很多，不考虑效率问题
         QVariant var = m_tabBar->tabData(i);
         if (var.isValid()) {
-            RibbonTabData p = var.value<RibbonTabData>();
-            if (w == p.page) {
+            RibbonTabData data = var.value<RibbonTabData>();
+            if (w == data.page) {
                 m_tabBar->setTabText(i, title);
             }
         }
@@ -821,8 +821,8 @@ void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
     RibbonPage *page = Q_NULLPTR;
 
     if (var.isValid()) {
-        RibbonTabData p = var.value<RibbonTabData>();
-        page = p.page;
+        RibbonTabData data = var.value<RibbonTabData>();
+        page = data.page;
     }
     if (page) {
         if (m_stack->currentWidget() != page) {
@@ -1023,8 +1023,8 @@ RibbonPage *RibbonBar::page(int index) const
     QVariant var = d->m_tabBar->tabData(index);
 
     if (var.isValid()) {
-        RibbonTabData p = var.value<RibbonTabData>();
-        return p.page;
+        RibbonTabData data = var.value<RibbonTabData>();
+        return data.page;
     }
     return Q_NULLPTR;
 }
@@ -1514,10 +1514,14 @@ void RibbonBar::setRibbonStyle(RibbonBar::RibbonStyle v)
     d->m_quickAccessBar->setIconVisible(isOfficeStyle() && d->m_titleVisible);
     d->updateRibbonElementGeometry();
 
+    /*
     QSize oldSize = size();
     QSize newSize(oldSize.width(), d->mainBarHeight());
     QResizeEvent es(newSize, oldSize);
     QApplication::sendEvent(this, &es);
+    */
+    // sendEvent会导致RibbonQuickAccessBar在样式切换后无法更新尺寸，改为用postEvent
+    resizeRibbon();
 
     if (isMinimized()) {
         // 处于最小模式下时，bar的高度为tabbar的bottom,这个调整必须在resize event之后

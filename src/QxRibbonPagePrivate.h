@@ -66,7 +66,7 @@ public:
 
     bool removeGroup(RibbonGroup *group);
 
-    QList<RibbonGroup *> groupList();
+    QList<RibbonGroup *> groupList() const;
 
     void setGroupLayoutMode(RibbonGroup::GroupLayoutMode m);
 
