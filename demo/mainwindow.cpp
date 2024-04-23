@@ -291,6 +291,9 @@ void MainWindow::createPageHome()
         // FIXME: 全屏显示时，如果切换有边框和无边框会影响全屏显示，所以当全屏显示时，暂时先禁止有无边框切换
         framelessCB->setDisabled(checked);
     });
+    connect(this, &MainWindow::windowStateChanged, cb, [cb](Qt::WindowStates s) {
+        cb->setChecked(s.testFlag(Qt::WindowFullScreen));
+    });
 
     RibbonGroup *groupToolButtonStyle = page->addGroup(tr("ribbon toolbutton style"));
 
