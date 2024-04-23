@@ -28,9 +28,7 @@ protected:
     virtual void parentResize();
     virtual void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
 protected slots:
-    Q_SLOT void closeWindow();
-    Q_SLOT void minimizeWindow();
-    Q_SLOT void maximizeWindow();
+    void buttonClicked();
 private:
     friend class WindowButtonGroupPrivate;
     WindowButtonGroupPrivate *d;
