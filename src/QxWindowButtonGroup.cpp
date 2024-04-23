@@ -198,29 +198,16 @@ WindowButtonGroup::~WindowButtonGroup()
     delete d;
 }
 
-void WindowButtonGroup::setupMinimizeButton(bool on)
-{
-    d->setupMinimizeButton(on);
-}
-
-void WindowButtonGroup::setupMaximizeButton(bool on)
-{
-    d->setupMaximizeButton(on);
-}
-
-void WindowButtonGroup::setupCloseButton(bool on)
-{
-    d->setupCloseButton(on);
-}
-
 void WindowButtonGroup::updateWindowFlags(Qt::WindowFlags flags)
 {
     if (flags == Qt::WindowFlags()) {
-        flags = parentWidget()->windowFlags();
+        if (QWidget *pw = parentWidget()) {
+            flags = pw->windowFlags();
+        }
     }
-    setupMinimizeButton(flags & Qt::WindowMinimizeButtonHint);
-    setupMaximizeButton(flags & Qt::WindowMaximizeButtonHint);
-    setupCloseButton(flags & Qt::WindowCloseButtonHint);
+    d->setupMinimizeButton(flags & Qt::WindowMinimizeButtonHint);
+    d->setupMaximizeButton(flags & Qt::WindowMaximizeButtonHint);
+    d->setupCloseButton(flags & Qt::WindowCloseButtonHint);
     parentResize();
 }
 

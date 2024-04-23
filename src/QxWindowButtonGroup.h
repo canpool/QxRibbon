@@ -16,10 +16,6 @@ public:
     explicit WindowButtonGroup(QWidget *parent, Qt::WindowFlags flags = Qt::WindowFlags());
     ~WindowButtonGroup();
 
-    void setupMinimizeButton(bool on);
-    void setupMaximizeButton(bool on);
-    void setupCloseButton(bool on);
-
     void updateWindowFlags(Qt::WindowFlags flags);
 
     void setButtonWidthStretch(int close = 4, int max = 3, int min = 3);
