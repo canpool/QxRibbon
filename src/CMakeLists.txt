@@ -23,6 +23,7 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonPage.h
     QxRibbonPageContext.h
     QxRibbonStyleOption.h
+    QxRibbonTheme.h
     QxRibbonUtils.h
     QxRibbonWindow.h
     QxRibbonApplicationButton.h
@@ -67,6 +68,7 @@ set(QX_RIBBON_SOURCES
     QxRibbonPage.cpp
     QxRibbonPageContext.cpp
     QxRibbonStyleOption.cpp
+    QxRibbonTheme.cpp
     QxRibbonUtils.cpp
     QxRibbonWindow.cpp
     QxWindowButtonGroup.cpp

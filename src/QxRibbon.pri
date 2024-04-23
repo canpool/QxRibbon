@@ -24,6 +24,7 @@ SOURCES += \
     $$PWD/QxRibbonPage.cpp \
     $$PWD/QxRibbonPageContext.cpp \
     $$PWD/QxRibbonStyleOption.cpp \
+    $$PWD/QxRibbonTheme.cpp \
     $$PWD/QxRibbonUtils.cpp \
     $$PWD/QxRibbonWindow.cpp \
     $$PWD/QxWindowButtonGroup.cpp \
@@ -50,6 +51,7 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonPage.h \
     $$PWD/QxRibbonPageContext.h \
     $$PWD/QxRibbonStyleOption.h \
+    $$PWD/QxRibbonTheme.h \
     $$PWD/QxRibbonUtils.h \
     $$PWD/QxRibbonWindow.h \
     $$PWD/QxRibbonApplicationButton.h \
