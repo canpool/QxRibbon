@@ -30,7 +30,6 @@ set(QX_RIBBON_PUBLIC_HEADERS
     QxRibbonTabBar.h
     QxRibbonGallery.h
     QxRibbonGalleryGroup.h
-    QxRibbonDrawHelper.h
     QxRibbonQuickAccessBar.h
 )
 
@@ -77,7 +76,6 @@ set(QX_RIBBON_SOURCES
     QxRibbonTabBar.cpp
     QxRibbonGallery.cpp
     QxRibbonGalleryGroup.cpp
-    QxRibbonDrawHelper.cpp
     QxRibbonQuickAccessBar.cpp
 )
 

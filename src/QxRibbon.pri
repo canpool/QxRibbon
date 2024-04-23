@@ -32,7 +32,6 @@ SOURCES += \
     $$PWD/QxRibbonTabBar.cpp \
     $$PWD/QxRibbonGallery.cpp \
     $$PWD/QxRibbonGalleryGroup.cpp \
-    $$PWD/QxRibbonDrawHelper.cpp \
     $$PWD/QxRibbonQuickAccessBar.cpp
 
 PUBLIC_HEADERS = \
@@ -58,7 +57,6 @@ PUBLIC_HEADERS = \
     $$PWD/QxRibbonTabBar.h \
     $$PWD/QxRibbonGallery.h \
     $$PWD/QxRibbonGalleryGroup.h \
-    $$PWD/QxRibbonDrawHelper.h \
     $$PWD/QxRibbonQuickAccessBar.h
 
 PRIVATE_HEADERS = \
