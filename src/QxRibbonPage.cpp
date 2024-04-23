@@ -23,9 +23,8 @@ RibbonPageScrollButton::RibbonPageScrollButton(Qt::ArrowType arr, QWidget *p)
     setArrowType(arr);
 }
 
-RibbonPagePrivate::RibbonPagePrivate(RibbonPage *parent)
-    : q(parent)
-    , m_ribbonBar(Q_NULLPTR)
+RibbonPagePrivate::RibbonPagePrivate()
+    : m_ribbonBar(Q_NULLPTR)
     , m_groupLayoutMode(RibbonGroup::ThreeRowMode)
     , m_leftScrollBtn(Q_NULLPTR)
     , m_rightScrollBtn(Q_NULLPTR)
@@ -44,6 +43,7 @@ RibbonPagePrivate::~RibbonPagePrivate()
 
 void RibbonPagePrivate::init()
 {
+    Q_Q(RibbonPage);
     m_leftScrollBtn = new RibbonPageScrollButton(Qt::LeftArrow, q);
     m_rightScrollBtn = new RibbonPageScrollButton(Qt::RightArrow, q);
     m_leftScrollBtn->setVisible(false);
@@ -59,6 +59,7 @@ RibbonGroup *RibbonPagePrivate::addGroup(const QString &title)
 
 RibbonGroup *RibbonPagePrivate::insertGroup(int index, const QString &title)
 {
+    Q_Q(RibbonPage);
     RibbonGroup *group = new RibbonGroup(q);
 
     group->setWindowTitle(title);
@@ -74,6 +75,7 @@ void RibbonPagePrivate::addGroup(RibbonGroup *group)
 
 void RibbonPagePrivate::insertGroup(int index, RibbonGroup *group)
 {
+    Q_Q(RibbonPage);
     if (Q_NULLPTR == group) {
         return;
     }
@@ -192,8 +194,8 @@ int RibbonPagePrivate::totalSizeHintWidth() const
 
 QSize RibbonPagePrivate::pageContentSize() const
 {
-    const RibbonPage *page = q;
-    QSize s = page->size();
+    Q_Q(const RibbonPage);
+    QSize s = q->size();
     QMargins mag = m_contentsMargins;
 
     if (!mag.isNull()) {
@@ -205,6 +207,7 @@ QSize RibbonPagePrivate::pageContentSize() const
 
 void RibbonPagePrivate::updateItemGeometry()
 {
+    Q_Q(RibbonPage);
     RibbonPage *page = q;
     QSize contentSize = pageContentSize();
     int y = 0;
@@ -315,6 +318,7 @@ void RibbonPagePrivate::updateItemGeometry()
 
 void RibbonPagePrivate::doItemLayout()
 {
+    Q_Q(RibbonPage);
     RibbonPage *page = q;
 
     // 两个滚动按钮的位置永远不变
@@ -448,8 +452,9 @@ void RibbonPagePrivate::onRightScrollButtonClicked()
 
 RibbonPage::RibbonPage(QWidget *parent)
     : QWidget(parent)
-    , d(new RibbonPagePrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonPage)
+    Q_D(RibbonPage);
     d->init();
     setAutoFillBackground(true);
     setBackgroundBrush(Qt::white);
@@ -463,7 +468,7 @@ RibbonPage::RibbonPage(const QString &name, QWidget *parent)
 
 RibbonPage::~RibbonPage()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -486,6 +491,7 @@ void RibbonPage::setPageName(const QString &title)
 
 RibbonGroup::GroupLayoutMode RibbonPage::groupLayoutMode() const
 {
+    Q_D(const RibbonPage);
     return d->m_groupLayoutMode;
 }
 
@@ -498,6 +504,7 @@ RibbonGroup::GroupLayoutMode RibbonPage::groupLayoutMode() const
  */
 void RibbonPage::setGroupLayoutMode(RibbonGroup::GroupLayoutMode m)
 {
+    Q_D(RibbonPage);
     d->setGroupLayoutMode(m);
 }
 
@@ -511,6 +518,7 @@ void RibbonPage::setGroupLayoutMode(RibbonGroup::GroupLayoutMode m)
  */
 RibbonGroup *RibbonPage::addGroup(const QString &title)
 {
+    Q_D(RibbonPage);
     return d->addGroup(title);
 }
 
@@ -520,6 +528,7 @@ RibbonGroup *RibbonPage::addGroup(const QString &title)
  */
 void RibbonPage::addGroup(RibbonGroup *group)
 {
+    Q_D(RibbonPage);
     d->addGroup(group);
 }
 
@@ -532,6 +541,7 @@ void RibbonPage::addGroup(RibbonGroup *group)
  */
 RibbonGroup *RibbonPage::insertGroup(int index, const QString &title)
 {
+    Q_D(RibbonPage);
     return d->insertGroup(index, title);
 }
 
@@ -542,6 +552,7 @@ RibbonGroup *RibbonPage::insertGroup(int index, const QString &title)
  */
 RibbonGroup *RibbonPage::group(int index) const
 {
+    Q_D(const RibbonPage);
     return d->m_itemList.value(index).m_group;
 }
 
@@ -552,7 +563,8 @@ RibbonGroup *RibbonPage::group(int index) const
  */
 RibbonGroup *RibbonPage::groupByName(const QString &title) const
 {
-    for (RibbonPageItem &i : d->m_itemList) {
+    Q_D(const RibbonPage);
+    for (const RibbonPageItem &i : d->m_itemList) {
         if (i.m_group) {
             if (i.m_group->windowTitle() == title) {
                 return i.m_group;
@@ -569,6 +581,7 @@ RibbonGroup *RibbonPage::groupByName(const QString &title) const
  */
 RibbonGroup *RibbonPage::groupByObjectName(const QString &objname) const
 {
+    Q_D(const RibbonPage);
     for (const RibbonPageItem &i : d->m_itemList) {
         if (i.m_group) {
             if (i.m_group->objectName() == objname) {
@@ -586,6 +599,7 @@ RibbonGroup *RibbonPage::groupByObjectName(const QString &objname) const
  */
 int RibbonPage::groupIndex(RibbonGroup *group) const
 {
+    Q_D(const RibbonPage);
     int c = groupCount();
 
     for (int i = 0; i < c; ++i) {
@@ -603,6 +617,7 @@ int RibbonPage::groupIndex(RibbonGroup *group) const
  */
 void RibbonPage::moveGroup(int from, int to)
 {
+    Q_D(RibbonPage);
     int c = groupCount();
     if (c <= 0) {
         return;
@@ -628,6 +643,7 @@ void RibbonPage::moveGroup(int from, int to)
  */
 bool RibbonPage::takeGroup(RibbonGroup *group)
 {
+    Q_D(RibbonPage);
     return d->takeGroup(group);
 }
 
@@ -648,6 +664,7 @@ bool RibbonPage::takeGroup(RibbonGroup *group)
  */
 bool RibbonPage::removeGroup(RibbonGroup *group)
 {
+    Q_D(RibbonPage);
     return d->removeGroup(group);
 }
 
@@ -672,6 +689,7 @@ bool RibbonPage::removeGroup(int index)
  */
 QList<RibbonGroup *> RibbonPage::groupList() const
 {
+    Q_D(const RibbonPage);
     return d->groupList();
 }
 
@@ -688,6 +706,7 @@ void RibbonPage::setBackgroundBrush(const QBrush &brush)
 
 QSize RibbonPage::sizeHint() const
 {
+    Q_D(const RibbonPage);
     return d->m_sizeHint;
 }
 
@@ -697,6 +716,7 @@ QSize RibbonPage::sizeHint() const
  */
 bool RibbonPage::isPageContext() const
 {
+    Q_D(const RibbonPage);
     return d->m_isPageContext;
 }
 
@@ -706,6 +726,7 @@ bool RibbonPage::isPageContext() const
  */
 int RibbonPage::groupCount() const
 {
+    Q_D(const RibbonPage);
     return d->m_itemList.size();
 }
 
@@ -715,6 +736,7 @@ int RibbonPage::groupCount() const
  */
 bool RibbonPage::isCanCustomize() const
 {
+    Q_D(const RibbonPage);
     return d->m_isCanCustomize;
 }
 
@@ -724,6 +746,7 @@ bool RibbonPage::isCanCustomize() const
  */
 void RibbonPage::setCanCustomize(bool b)
 {
+    Q_D(RibbonPage);
     d->m_isCanCustomize = b;
 }
 
@@ -733,6 +756,7 @@ void RibbonPage::setCanCustomize(bool b)
  */
 RibbonBar *RibbonPage::ribbonBar() const
 {
+    Q_D(const RibbonPage);
     return d->m_ribbonBar;
 }
 
@@ -741,6 +765,7 @@ RibbonBar *RibbonPage::ribbonBar() const
  */
 void RibbonPage::updateItemGeometry()
 {
+    Q_D(RibbonPage);
     QList<RibbonGroup *> groups = groupList();
     for (RibbonGroup *group : qAsConst(groups)) {
         group->updateItemGeometry();
@@ -754,6 +779,7 @@ void RibbonPage::updateItemGeometry()
  */
 void RibbonPage::markIsPageContext(bool isPageContext)
 {
+    Q_D(RibbonPage);
     d->m_isPageContext = isPageContext;
 }
 
@@ -764,6 +790,7 @@ void RibbonPage::markIsPageContext(bool isPageContext)
  */
 bool RibbonPage::event(QEvent *e)
 {
+    Q_D(RibbonPage);
     switch (e->type()) {
     case QEvent::LayoutRequest: {
         d->updateItemGeometry();
@@ -777,6 +804,7 @@ bool RibbonPage::event(QEvent *e)
 
 void RibbonPage::resizeEvent(QResizeEvent *e)
 {
+    Q_D(RibbonPage);
     QWidget::resizeEvent(e);
 
     // 尺寸没变就不用管
@@ -819,6 +847,7 @@ bool RibbonPage::eventFilter(QObject *watched, QEvent *event)
  */
 void RibbonPage::wheelEvent(QWheelEvent *event)
 {
+    Q_D(RibbonPage);
     d->doWheelEvent(event);
 }
 
@@ -828,5 +857,6 @@ void RibbonPage::wheelEvent(QWheelEvent *event)
  */
 void RibbonPage::setRibbonBar(RibbonBar *bar)
 {
+    Q_D(RibbonPage);
     d->m_ribbonBar = bar;
 }

@@ -16,10 +16,12 @@ public:
     explicit WindowToolButton(QWidget *p = Q_NULLPTR);
 };
 
-class WindowButtonGroupPrivate
+class WindowButtonGroupPrivate : public QObject
 {
+    Q_OBJECT
+    QX_DECLARE_PUBLIC(WindowButtonGroup)
 public:
-    WindowButtonGroupPrivate(WindowButtonGroup *p);
+    WindowButtonGroupPrivate();
 
     void setupMinimizeButton(bool on);
     void setupMaximizeButton(bool on);
@@ -28,8 +30,9 @@ public:
     void resize(QSize size);
     QSize sizeHint() const;
     int groupHeight() const;
+public slots:
+    void buttonClicked();
 public:
-    WindowButtonGroup *q;
     WindowToolButton *m_closeButton;
     WindowToolButton *m_minimizeButton;
     WindowToolButton *m_maximizeButton;

@@ -13,10 +13,11 @@ class RibbonColorButton;
 class RibbonColorButtonPrivate : public RibbonButtonPrivate
 {
 public:
+    Q_DECLARE_PUBLIC(RibbonColorButton)
+public:
     RibbonColorButtonPrivate();
 
     QPixmap createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize) Q_DECL_OVERRIDE;
 public:
-    RibbonColorButton *qq;
     QColor m_color;
 };

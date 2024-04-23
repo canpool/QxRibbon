@@ -79,6 +79,7 @@ RibbonButtonPrivate::~RibbonButtonPrivate()
 
 QStyle *RibbonButtonPrivate::style() const
 {
+    Q_Q(const RibbonButton);
     return q->style();
 }
 
@@ -94,6 +95,7 @@ QStyle *RibbonButtonPrivate::style() const
  */
 void RibbonButtonPrivate::recalcSizeHint(QStyleOptionToolButton &opt, QSize s)
 {
+    Q_Q(RibbonButton);
     // QToolButton的sizeHint已经考虑了菜单箭头的位置
     // 从源码看，QToolButton的sizeHint是不会考虑换行的
     if (RibbonButton::LargeButton == m_buttonType) {
@@ -378,6 +380,7 @@ void RibbonButtonPrivate::drawArrow(const QStyle *style, const QStyleOptionToolB
  */
 void RibbonButtonPrivate::calcIconAndTextRect(const QStyleOptionToolButton &opt)
 {
+    Q_Q(RibbonButton);
     if (RibbonButton::LargeButton == m_buttonType) {
         m_iconRect =
             opt.rect.adjusted(m_iconAndTextSpace, m_iconAndTextSpace, -m_iconAndTextSpace, -m_iconAndTextSpace);
@@ -524,6 +527,7 @@ QRect RibbonButtonPrivate::calcIndicatorArrowDownRect(const QStyleOptionToolButt
 
 QPixmap RibbonButtonPrivate::createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize)
 {
+    Q_Q(RibbonButton);
     if (!opt.icon.isNull()) {   // 有图标
         QIcon::State state = opt.state & QStyle::State_On ? QIcon::On : QIcon::Off;
         QIcon::Mode mode;
@@ -546,6 +550,7 @@ QPixmap RibbonButtonPrivate::createIconPixmap(const QStyleOptionToolButton &opt,
 
 void RibbonButtonPrivate::updateButtonState(const QPoint &pos)
 {
+    Q_Q(RibbonButton);
     bool isMouseOnSubControl(false);
     if (RibbonButton::LargeButton == m_buttonType) {
         isMouseOnSubControl = m_textRect.united(m_indicatorArrowRect).contains(pos);
@@ -641,8 +646,12 @@ void RibbonButtonPrivate::drawButton(QStyleOptionToolButton &opt, QPainter &p, c
 }
 
 RibbonButton::RibbonButton(QWidget *parent)
-    : RibbonButton(new RibbonButtonPrivate(), parent)
+    : QToolButton(parent)
 {
+    QX_INIT_PRIVATE(RibbonButton)
+    setAutoRaise(true);
+    setButtonType(SmallButton);
+    setMouseTracking(true);
 }
 
 RibbonButton::RibbonButton(QAction *defaultAction, QWidget *parent)
@@ -651,11 +660,10 @@ RibbonButton::RibbonButton(QAction *defaultAction, QWidget *parent)
     setDefaultAction(defaultAction);
 }
 
-RibbonButton::RibbonButton(RibbonButtonPrivate *_d, QWidget *parent)
+RibbonButton::RibbonButton(RibbonButtonPrivate *d, QWidget *parent)
     : QToolButton(parent)
 {
-    d = _d;
-    d->q = this;
+    QX_SET_PRIVATE(d)
     setAutoRaise(true);
     setButtonType(SmallButton);
     setMouseTracking(true);
@@ -663,11 +671,12 @@ RibbonButton::RibbonButton(RibbonButtonPrivate *_d, QWidget *parent)
 
 RibbonButton::~RibbonButton()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 void RibbonButton::paintEvent(QPaintEvent *event)
 {
+    Q_D(RibbonButton);
     Q_UNUSED(event);
     QPainter p(this);
     QStyleOptionToolButton opt;
@@ -677,12 +686,14 @@ void RibbonButton::paintEvent(QPaintEvent *event)
 
 void RibbonButton::mouseMoveEvent(QMouseEvent *e)
 {
+    Q_D(RibbonButton);
     d->updateButtonState(e->pos());
     QToolButton::mouseMoveEvent(e);
 }
 
 void RibbonButton::mousePressEvent(QMouseEvent *e)
 {
+    Q_D(RibbonButton);
     if ((e->button() == Qt::LeftButton) && (popupMode() == MenuButtonPopup)) {
         d->updateButtonState(e->pos());
         if (d->m_mouseOnSubControl) {
@@ -702,24 +713,28 @@ void RibbonButton::mousePressEvent(QMouseEvent *e)
 
 void RibbonButton::mouseReleaseEvent(QMouseEvent *e)
 {
+    Q_D(RibbonButton);
     QToolButton::mouseReleaseEvent(e);
     d->m_menuButtonPressed = false;
 }
 
 void RibbonButton::focusOutEvent(QFocusEvent *e)
 {
+    Q_D(RibbonButton);
     QToolButton::focusOutEvent(e);
     d->m_mouseOnSubControl = false;
 }
 
 void RibbonButton::leaveEvent(QEvent *e)
 {
+    Q_D(RibbonButton);
     d->m_mouseOnSubControl = false;
     QToolButton::leaveEvent(e);
 }
 
 bool RibbonButton::hitButton(const QPoint &pos) const
 {
+    Q_D(const RibbonButton);
     if (QAbstractButton::hitButton(pos)) {
         return !d->m_menuButtonPressed;
     }
@@ -732,6 +747,7 @@ bool RibbonButton::hitButton(const QPoint &pos) const
  */
 void RibbonButton::resizeEvent(QResizeEvent *e)
 {
+    Q_D(RibbonButton);
 #if DebugRibbonButton_TextDrawPrint
     qDebug() << "RibbonButton::resizeEvent, text=" << text() << " obj=" << objectName() << " size=" << e->size();
 #endif
@@ -755,12 +771,13 @@ QSize RibbonButton::sizeHint() const
     QSize sz = QToolButton::sizeHint();
     QStyleOptionToolButton opt;
     initStyleOption(&opt);
-    d->recalcSizeHint(opt, sz);
-    return d->m_sizeHint;
+    d_ptr->recalcSizeHint(opt, sz);
+    return d_ptr->m_sizeHint;
 }
 
 void RibbonButton::changeEvent(QEvent *e)
 {
+    Q_D(RibbonButton);
     if (e) {
         if (e->type() == QEvent::FontChange) {
             // todo 说明字体改变，需要重新计算和字体相关的信息
@@ -791,6 +808,7 @@ void RibbonButton::actionEvent(QActionEvent *e)
 
 RibbonButton::RibbonButtonType RibbonButton::buttonType() const
 {
+    Q_D(const RibbonButton);
     return d->m_buttonType;
 }
 
@@ -802,6 +820,7 @@ RibbonButton::RibbonButtonType RibbonButton::buttonType() const
  */
 void RibbonButton::setButtonType(RibbonButton::RibbonButtonType type)
 {
+    Q_D(RibbonButton);
     d->m_buttonType = type;
     if (LargeButton == type) {
         setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -819,11 +838,13 @@ QSize RibbonButton::minimumSizeHint() const
 
 void RibbonButton::setLargeButtonType(RibbonButton::LargeButtonType type)
 {
+    Q_D(RibbonButton);
     d->m_largeButtonType = type;
 }
 
 RibbonButton::LargeButtonType RibbonButton::largeButtonType() const
 {
+    Q_D(const RibbonButton);
     return d->m_largeButtonType;
 }
 
@@ -861,6 +882,7 @@ bool RibbonButton::isLiteStyleEnableWordWrap()
 
 bool RibbonButton::event(QEvent *e)
 {
+    Q_D(RibbonButton);
     switch (e->type()) {
     case QEvent::WindowDeactivate:
     case QEvent::ActionChanged:

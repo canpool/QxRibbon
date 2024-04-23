@@ -39,6 +39,7 @@ bool RibbonGroupItem::isEmpty() const
 
 class RibbonGroupLayoutPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonGroupLayout)
 public:
     RibbonGroupLayoutPrivate();
 
@@ -53,7 +54,6 @@ public:
     void layoutActions();
 
 public:
-    RibbonGroupLayout *q;
     QList<RibbonGroupItem *> m_items;
     QSize m_sizeHint;    ///< sizeHint返回的尺寸
     static QMargins s_contentsMargins;
@@ -189,6 +189,7 @@ void RibbonGroupLayoutPrivate::recalcExpandGeomArray(const QRect &setrect)
  */
 RibbonGroupItem *RibbonGroupLayoutPrivate::createItem(QAction *action, RibbonGroup::RowProportion rp)
 {
+    Q_Q(RibbonGroupLayout);
     bool customWidget = false;
     QWidget *widget = Q_NULLPTR;
     RibbonGroup *group = qobject_cast<RibbonGroup *>(q->parentWidget());
@@ -239,6 +240,7 @@ RibbonGroupItem *RibbonGroupLayoutPrivate::createItem(QAction *action, RibbonGro
  */
 void RibbonGroupLayoutPrivate::updateGeomArray(const QRect &setrect)
 {
+    Q_Q(RibbonGroupLayout);
     RibbonGroup *group = qobject_cast<RibbonGroup *>(q->parentWidget());
     if (!group) {
         return;
@@ -488,6 +490,7 @@ void RibbonGroupLayoutPrivate::updateGeomArray(const QRect &setrect)
  */
 void RibbonGroupLayoutPrivate::layoutActions()
 {
+    Q_Q(RibbonGroupLayout);
     if (m_dirty) {
         updateGeomArray(q->geometry());
     }
@@ -524,14 +527,14 @@ void RibbonGroupLayoutPrivate::layoutActions()
 
 RibbonGroupLayout::RibbonGroupLayout(QWidget *p)
     : QLayout(p)
-    , d(new RibbonGroupLayoutPrivate)
 {
-    d->q = this;
+    QX_INIT_PRIVATE(RibbonGroupLayout)
     setSpacing(1);
 }
 
 RibbonGroupLayout::~RibbonGroupLayout()
 {
+    Q_D(RibbonGroupLayout);
     while (!d->m_items.isEmpty()) {
         RibbonGroupItem *item = d->m_items.takeFirst();
         if (QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(item->action)) {
@@ -541,7 +544,7 @@ RibbonGroupLayout::~RibbonGroupLayout()
         }
         delete item;
     }
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -551,6 +554,7 @@ RibbonGroupLayout::~RibbonGroupLayout()
  */
 int RibbonGroupLayout::indexOf(QAction *action) const
 {
+    Q_D(const RibbonGroupLayout);
     for (int i = 0; i < d->m_items.count(); ++i) {
         if (d->m_items.at(i)->action == action) {
             return i;
@@ -573,6 +577,7 @@ void RibbonGroupLayout::addItem(QLayoutItem *item)
  */
 void RibbonGroupLayout::insertAction(int index, QAction *act, RibbonGroup::RowProportion rp)
 {
+    Q_D(RibbonGroupLayout);
     if (index < 0 || index > d->m_items.count()) {
         index = d->m_items.count();
     }
@@ -587,6 +592,7 @@ void RibbonGroupLayout::insertAction(int index, QAction *act, RibbonGroup::RowPr
 
 QLayoutItem *RibbonGroupLayout::itemAt(int index) const
 {
+    Q_D(const RibbonGroupLayout);
     if ((index < 0) || (index >= d->m_items.count())) {
         return Q_NULLPTR;
     }
@@ -595,6 +601,7 @@ QLayoutItem *RibbonGroupLayout::itemAt(int index) const
 
 QLayoutItem *RibbonGroupLayout::takeAt(int index)
 {
+    Q_D(RibbonGroupLayout);
     if ((index < 0) || (index >= d->m_items.count())) {
         return Q_NULLPTR;
     }
@@ -616,16 +623,19 @@ QLayoutItem *RibbonGroupLayout::takeAt(int index)
 
 int RibbonGroupLayout::count() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_items.count();
 }
 
 bool RibbonGroupLayout::isEmpty() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_items.isEmpty();
 }
 
 void RibbonGroupLayout::invalidate()
 {
+    Q_D(RibbonGroupLayout);
     d->m_dirty = true;
     QLayout::invalidate();
 }
@@ -637,11 +647,13 @@ Qt::Orientations RibbonGroupLayout::expandingDirections() const
 
 QSize RibbonGroupLayout::minimumSize() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_sizeHint;
 }
 
 QSize RibbonGroupLayout::sizeHint() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_sizeHint;
 }
 
@@ -652,6 +664,7 @@ QSize RibbonGroupLayout::sizeHint() const
  */
 RibbonGroupItem *RibbonGroupLayout::groupItem(QAction *action) const
 {
+    Q_D(const RibbonGroupLayout);
     int index = indexOf(action);
 
     if (index >= 0) {
@@ -666,6 +679,7 @@ RibbonGroupItem *RibbonGroupLayout::groupItem(QAction *action) const
  */
 RibbonGroupItem *RibbonGroupLayout::lastItem() const
 {
+    Q_D(const RibbonGroupLayout);
     if (d->m_items.isEmpty()) {
         return Q_NULLPTR;
     }
@@ -694,6 +708,7 @@ QWidget *RibbonGroupLayout::lastWidget() const
  */
 void RibbonGroupLayout::move(int from, int to)
 {
+    Q_D(RibbonGroupLayout);
     int c = count();
     if (c <= 0) {
         return;
@@ -717,6 +732,7 @@ void RibbonGroupLayout::move(int from, int to)
  */
 bool RibbonGroupLayout::isDirty() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_dirty;
 }
 
@@ -759,11 +775,13 @@ void RibbonGroupLayout::setGroupContentsMargins(const QMargins &m)
 
 const QList<RibbonGroupItem *> &RibbonGroupLayout::ribbonGroupItems() const
 {
+    Q_D(const RibbonGroupLayout);
     return d->m_items;
 }
 
 void RibbonGroupLayout::setGeometry(const QRect &rect)
 {
+    Q_D(RibbonGroupLayout);
     d->m_dirty = false;
     d->updateGeomArray(rect);
     QLayout::setGeometry(rect);

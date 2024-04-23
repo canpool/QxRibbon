@@ -336,12 +336,13 @@ void RibbonGalleryGroupModel::append(RibbonGalleryItem *item)
 /* RibbonGalleryGroupPrivate */
 class RibbonGalleryGroupPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonGalleryGroup)
 public:
-    RibbonGalleryGroupPrivate(RibbonGalleryGroup *p);
+    RibbonGalleryGroupPrivate();
+    void init();
     RibbonGalleryGroupModel *groupModel();
     void itemActivate(const QModelIndex &index, QAction::ActionEvent event);
 public:
-    RibbonGalleryGroup *q;
     QString m_groupTitle;
     RibbonGalleryGroup::GalleryGroupStyle m_preStyle;
     RibbonGalleryGroup::DisplayRow m_displayRow;
@@ -351,21 +352,26 @@ public:
     bool m_blockRecalc;
 };
 
-RibbonGalleryGroupPrivate::RibbonGalleryGroupPrivate(RibbonGalleryGroup *p)
-    : q(p)
-    , m_preStyle(RibbonGalleryGroup::IconWithText)
+RibbonGalleryGroupPrivate::RibbonGalleryGroupPrivate()
+    : m_preStyle(RibbonGalleryGroup::IconWithText)
     , m_displayRow(RibbonGalleryGroup::DisplayOneRow)
     , m_gridMinimumWidth(0)
     , m_gridMaximumWidth(0)
     , m_blockRecalc(false)
 {
-    m_actionGroup = new QActionGroup(p);
-    QObject::connect(m_actionGroup, &QActionGroup::triggered, p, &RibbonGalleryGroup::triggered);
-    QObject::connect(m_actionGroup, &QActionGroup::hovered, p, &RibbonGalleryGroup::hovered);
+}
+
+void RibbonGalleryGroupPrivate::init()
+{
+    Q_Q(RibbonGalleryGroup);
+    m_actionGroup = new QActionGroup(q);
+    QObject::connect(m_actionGroup, &QActionGroup::triggered, q, &RibbonGalleryGroup::triggered);
+    QObject::connect(m_actionGroup, &QActionGroup::hovered, q, &RibbonGalleryGroup::hovered);
 }
 
 RibbonGalleryGroupModel *RibbonGalleryGroupPrivate::groupModel()
 {
+    Q_Q(const RibbonGalleryGroup);
     return qobject_cast<RibbonGalleryGroupModel *>(q->model());
 }
 
@@ -385,8 +391,10 @@ void RibbonGalleryGroupPrivate::itemActivate(const QModelIndex &index, QAction::
 /* RibbonGalleryGroup */
 RibbonGalleryGroup::RibbonGalleryGroup(QWidget *w)
     : QListView(w)
-    , d(new RibbonGalleryGroupPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonGalleryGroup)
+    Q_D(RibbonGalleryGroup);
+    d->init();
     setViewMode(QListView::IconMode);
     setResizeMode(QListView::Adjust);
     setSelectionRectVisible(true);
@@ -401,7 +409,7 @@ RibbonGalleryGroup::RibbonGalleryGroup(QWidget *w)
 
 RibbonGalleryGroup::~RibbonGalleryGroup()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -410,11 +418,13 @@ RibbonGalleryGroup::~RibbonGalleryGroup()
  */
 void RibbonGalleryGroup::setRecalcGridSizeBlock(bool on)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_blockRecalc = on;
 }
 
 bool RibbonGalleryGroup::isRecalcGridSizeBlock() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_blockRecalc;
 }
 
@@ -497,6 +507,7 @@ void RibbonGalleryGroup::recalcGridSize(int galleryHeight)
 ///
 void RibbonGalleryGroup::setGalleryGroupStyle(RibbonGalleryGroup::GalleryGroupStyle style)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_preStyle = style;
     if (style == IconWithWordWrapText) {
         setWordWrap(true);
@@ -508,11 +519,13 @@ void RibbonGalleryGroup::setGalleryGroupStyle(RibbonGalleryGroup::GalleryGroupSt
 
 RibbonGalleryGroup::GalleryGroupStyle RibbonGalleryGroup::galleryGroupStyle() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_preStyle;
 }
 
 void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
 {
+    Q_D(RibbonGalleryGroup);
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
@@ -522,6 +535,7 @@ void RibbonGalleryGroup::addItem(const QString &text, const QIcon &icon)
 
 void RibbonGalleryGroup::addItem(QAction *act)
 {
+    Q_D(RibbonGalleryGroup);
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
@@ -532,6 +546,7 @@ void RibbonGalleryGroup::addItem(QAction *act)
 
 void RibbonGalleryGroup::addItems(const QList<QAction *> &acts)
 {
+    Q_D(RibbonGalleryGroup);
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
@@ -546,17 +561,20 @@ void RibbonGalleryGroup::addItems(const QList<QAction *> &acts)
 
 void RibbonGalleryGroup::setGroupTitle(const QString &title)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_groupTitle = title;
     emit groupTitleChanged(title);
 }
 
 QString RibbonGalleryGroup::groupTitle() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_groupTitle;
 }
 
 void RibbonGalleryGroup::selectByIndex(int i)
 {
+    Q_D(RibbonGalleryGroup);
     RibbonGalleryGroupModel *model = d->groupModel();
     if (Q_NULLPTR == model) {
         return;
@@ -574,6 +592,7 @@ void RibbonGalleryGroup::selectByIndex(int i)
  */
 void RibbonGalleryGroup::setDisplayRow(DisplayRow r)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_displayRow = r;
     recalcGridSize();
 }
@@ -584,6 +603,7 @@ void RibbonGalleryGroup::setDisplayRow(DisplayRow r)
  */
 RibbonGalleryGroup::DisplayRow RibbonGalleryGroup::displayRow() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_displayRow;
 }
 
@@ -593,6 +613,7 @@ RibbonGalleryGroup::DisplayRow RibbonGalleryGroup::displayRow() const
  */
 void RibbonGalleryGroup::setGridMinimumWidth(int w)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_gridMinimumWidth = w;
 }
 
@@ -602,6 +623,7 @@ void RibbonGalleryGroup::setGridMinimumWidth(int w)
  */
 int RibbonGalleryGroup::gridMinimumWidth() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_gridMinimumWidth;
 }
 
@@ -611,6 +633,7 @@ int RibbonGalleryGroup::gridMinimumWidth() const
  */
 void RibbonGalleryGroup::setGridMaximumWidth(int w)
 {
+    Q_D(RibbonGalleryGroup);
     d->m_gridMaximumWidth = w;
 }
 
@@ -620,6 +643,7 @@ void RibbonGalleryGroup::setGridMaximumWidth(int w)
  */
 int RibbonGalleryGroup::gridMaximumWidth() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_gridMaximumWidth;
 }
 
@@ -629,15 +653,18 @@ int RibbonGalleryGroup::gridMaximumWidth() const
  */
 QActionGroup *RibbonGalleryGroup::actionGroup() const
 {
+    Q_D(const RibbonGalleryGroup);
     return d->m_actionGroup;
 }
 
 void RibbonGalleryGroup::onItemClicked(const QModelIndex &index)
 {
+    Q_D(RibbonGalleryGroup);
     d->itemActivate(index, QAction::Trigger);
 }
 
 void RibbonGalleryGroup::onItemEntered(const QModelIndex &index)
 {
+    Q_D(RibbonGalleryGroup);
     d->itemActivate(index, QAction::Hover);
 }

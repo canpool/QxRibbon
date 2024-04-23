@@ -78,5 +78,5 @@ protected:
     virtual bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
     virtual bool event(QEvent *e) Q_DECL_OVERRIDE;
 private:
-    RibbonWindowPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonWindow)
 };

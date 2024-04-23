@@ -11,11 +11,11 @@
 
 class RibbonActionsManagerPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonActionsManager)
 public:
-    RibbonActionsManagerPrivate(RibbonActionsManager *p);
+    RibbonActionsManagerPrivate();
     void clear();
 public:
-    RibbonActionsManager *q;
     QMap<int, QList<QAction *> > m_tagToActions;    ///< tag : QList<QAction*>
     QMap<int, QString> m_tagToName;                 ///< tag对应的名字
     QHash<QString, QAction *> m_keyToAction;        ///< key对应action
@@ -25,9 +25,8 @@ public:
                     ///< 只要RibbonActionsManager的调用registeAction顺序不变，生成的id都不变，因为它是基于自增实现的
 };
 
-RibbonActionsManagerPrivate::RibbonActionsManagerPrivate(RibbonActionsManager *p)
-    : q(p)
-    , m_sale(0)
+RibbonActionsManagerPrivate::RibbonActionsManagerPrivate()
+    : m_sale(0)
 {
 }
 
@@ -43,14 +42,14 @@ void RibbonActionsManagerPrivate::clear()
 
 RibbonActionsManager::RibbonActionsManager(RibbonBar *p)
     : QObject(p)
-    , d(new RibbonActionsManagerPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonActionsManager);
     autoRegisteActions(p);
 }
 
 RibbonActionsManager::~RibbonActionsManager()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -61,6 +60,7 @@ RibbonActionsManager::~RibbonActionsManager()
  */
 void RibbonActionsManager::setTagName(int tag, const QString &name)
 {
+    Q_D(RibbonActionsManager);
     d->m_tagToName[tag] = name;
 }
 
@@ -71,6 +71,7 @@ void RibbonActionsManager::setTagName(int tag, const QString &name)
  */
 QString RibbonActionsManager::tagName(int tag) const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_tagToName.value(tag, "");
 }
 
@@ -81,6 +82,7 @@ QString RibbonActionsManager::tagName(int tag) const
  */
 void RibbonActionsManager::removeTag(int tag)
 {
+    Q_D(RibbonActionsManager);
     QList<QAction *> oldacts = actions(tag);
 
     // 开始移除
@@ -121,6 +123,7 @@ void RibbonActionsManager::removeTag(int tag)
  */
 bool RibbonActionsManager::registeAction(QAction *act, int tag, const QString &key, bool enableEmit)
 {
+    Q_D(RibbonActionsManager);
     if (Q_NULLPTR == act) {
         return false;
     }
@@ -177,6 +180,7 @@ void RibbonActionsManager::unregisteAction(QAction *act, bool enableEmit)
  */
 void RibbonActionsManager::removeAction(QAction *act, bool enableEmit)
 {
+    Q_D(RibbonActionsManager);
     QList<int> deletedTags;                      // 记录删除的tag，用于触发actionTagChanged
     QMap<int, QList<QAction *> > tagToActions;   ///< tag : QList<QAction*>
 
@@ -229,11 +233,13 @@ QList<QAction *> &RibbonActionsManager::filter(int tag)
  */
 QList<QAction *> &RibbonActionsManager::actions(int tag)
 {
+    Q_D(RibbonActionsManager);
     return d->m_tagToActions[tag];
 }
 
 const QList<QAction *> RibbonActionsManager::actions(int tag) const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_tagToActions[tag];
 }
 
@@ -243,6 +249,7 @@ const QList<QAction *> RibbonActionsManager::actions(int tag) const
  */
 QList<int> RibbonActionsManager::actionTags() const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_tagToActions.keys();
 }
 
@@ -253,6 +260,7 @@ QList<int> RibbonActionsManager::actionTags() const
  */
 QAction *RibbonActionsManager::action(const QString &key) const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_keyToAction.value(key, Q_NULLPTR);
 }
 
@@ -263,6 +271,7 @@ QAction *RibbonActionsManager::action(const QString &key) const
  */
 QString RibbonActionsManager::key(QAction *act) const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_actionToKey.value(act, QString());
 }
 
@@ -272,6 +281,7 @@ QString RibbonActionsManager::key(QAction *act) const
  */
 int RibbonActionsManager::count() const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_keyToAction.size();
 }
 
@@ -281,6 +291,7 @@ int RibbonActionsManager::count() const
  */
 QList<QAction *> RibbonActionsManager::allActions() const
 {
+    Q_D(const RibbonActionsManager);
     return d->m_keyToAction.values();
 }
 
@@ -300,6 +311,7 @@ QList<QAction *> RibbonActionsManager::allActions() const
  */
 QMap<int, RibbonPage *> RibbonActionsManager::autoRegisteActions(RibbonBar *bar)
 {
+    Q_D(RibbonActionsManager);
     QMap<int, RibbonPage *> res;
     if (Q_NULLPTR == bar) {
         // 非ribbon模式，直接退出
@@ -380,6 +392,7 @@ QSet<QAction *> RibbonActionsManager::autoRegisteWidgetActions(QWidget *w, int t
  */
 QList<QAction *> RibbonActionsManager::search(const QString &text)
 {
+    Q_D(const RibbonActionsManager);
     QList<QAction *> res;
 
     if (text.isEmpty()) {
@@ -403,6 +416,7 @@ QList<QAction *> RibbonActionsManager::search(const QString &text)
 
 void RibbonActionsManager::clear()
 {
+    Q_D(RibbonActionsManager);
     d->clear();
 }
 
@@ -429,6 +443,7 @@ void RibbonActionsManager::onActionDestroyed(QObject *o)
  */
 void RibbonActionsManager::onPageTitleChanged(const QString &title)
 {
+    Q_D(RibbonActionsManager);
     RibbonPage *c = qobject_cast<RibbonPage *>(sender());
 
     if (Q_NULLPTR == c) {
@@ -447,24 +462,23 @@ void RibbonActionsManager::onPageTitleChanged(const QString &title)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class RibbonActionsManagerModelPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonActionsManagerModel)
 public:
-    RibbonActionsManagerModelPrivate(RibbonActionsManagerModel *m);
+    RibbonActionsManagerModelPrivate();
 
     void updateRef();
     int count() const;
-    QAction *at(int index);
+    QAction *at(int index) const;
     bool isNull() const;
 public:
-    RibbonActionsManagerModel *q;
     RibbonActionsManager *m_mgr;
     int m_tag;
     QString m_seatchText;
     QList<QAction *> m_actions;
 };
 
-RibbonActionsManagerModelPrivate::RibbonActionsManagerModelPrivate(RibbonActionsManagerModel *m)
-    : q(m)
-    , m_mgr(Q_NULLPTR)
+RibbonActionsManagerModelPrivate::RibbonActionsManagerModelPrivate()
+    : m_mgr(Q_NULLPTR)
     , m_tag(RibbonActionsManager::CommonlyUsedActionTag)
     , m_seatchText(QString())
 {
@@ -490,7 +504,7 @@ int RibbonActionsManagerModelPrivate::count() const
     return m_actions.size();
 }
 
-QAction *RibbonActionsManagerModelPrivate::at(int index)
+QAction *RibbonActionsManagerModelPrivate::at(int index) const
 {
     if (isNull()) {
         return Q_NULLPTR;
@@ -507,23 +521,25 @@ bool RibbonActionsManagerModelPrivate::isNull() const
 }
 
 RibbonActionsManagerModel::RibbonActionsManagerModel(QObject *p)
-    : QAbstractListModel(p), d(new RibbonActionsManagerModelPrivate(this))
+    : QAbstractListModel(p)
 {
+    QX_INIT_PRIVATE(RibbonActionsManagerModel)
 }
 
 RibbonActionsManagerModel::RibbonActionsManagerModel(RibbonActionsManager *m, QObject *p)
-    : QAbstractListModel(p), d(new RibbonActionsManagerModelPrivate(this))
+    : RibbonActionsManagerModel(p)
 {
     setupActionsManager(m);
 }
 
 RibbonActionsManagerModel::~RibbonActionsManagerModel()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 int RibbonActionsManagerModel::rowCount(const QModelIndex &parent) const
 {
+    Q_D(const RibbonActionsManagerModel);
     if (parent.isValid()) {   // 非顶层
         return 0;
     }
@@ -574,12 +590,14 @@ QVariant RibbonActionsManagerModel::data(const QModelIndex &index, int role) con
 
 void RibbonActionsManagerModel::setFilter(int tag)
 {
+    Q_D(RibbonActionsManagerModel);
     d->m_tag = tag;
     update();
 }
 
 void RibbonActionsManagerModel::update()
 {
+    Q_D(RibbonActionsManagerModel);
     beginResetModel();
     d->updateRef();
     endResetModel();
@@ -587,6 +605,7 @@ void RibbonActionsManagerModel::update()
 
 void RibbonActionsManagerModel::setupActionsManager(RibbonActionsManager *m)
 {
+    Q_D(RibbonActionsManagerModel);
     d->m_mgr = m;
     d->m_tag = RibbonActionsManager::CommonlyUsedActionTag;
     d->m_actions = m->filter(d->m_tag);
@@ -596,6 +615,7 @@ void RibbonActionsManagerModel::setupActionsManager(RibbonActionsManager *m)
 
 void RibbonActionsManagerModel::uninstallActionsManager()
 {
+    Q_D(RibbonActionsManagerModel);
     if (!d->isNull()) {
         disconnect(d->m_mgr, &RibbonActionsManager::actionTagChanged, this,
                    &RibbonActionsManagerModel::onActionTagChanged);
@@ -607,6 +627,7 @@ void RibbonActionsManagerModel::uninstallActionsManager()
 
 QAction *RibbonActionsManagerModel::indexToAction(QModelIndex index) const
 {
+    Q_D(const RibbonActionsManagerModel);
     if (!index.isValid()) {
         return Q_NULLPTR;
     }
@@ -622,12 +643,14 @@ QAction *RibbonActionsManagerModel::indexToAction(QModelIndex index) const
  */
 void RibbonActionsManagerModel::search(const QString &text)
 {
+    Q_D(RibbonActionsManagerModel);
     d->m_seatchText = text;
     update();
 }
 
 void RibbonActionsManagerModel::onActionTagChanged(int tag, bool isdelete)
 {
+    Q_D(RibbonActionsManagerModel);
     if (isdelete && (tag == d->m_tag)) {
         d->m_tag = RibbonActionsManager::UnknowActionTag;
         update();

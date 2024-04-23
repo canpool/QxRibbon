@@ -51,5 +51,5 @@ public:
     Qt::Orientation orientation() const;
     void setOrientation(Qt::Orientation orientation);
 private:
-    RibbonCtrlContainerPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonCtrlContainer)
 };

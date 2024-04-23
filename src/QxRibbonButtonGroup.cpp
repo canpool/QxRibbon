@@ -52,22 +52,22 @@ bool RibbonButtonGroupItem::operator==(const RibbonButtonGroupItem &w)
 /* RibbonButtonGroupPrivate */
 class RibbonButtonGroupPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonButtonGroup)
 public:
-    RibbonButtonGroupPrivate(RibbonButtonGroup *p);
+    RibbonButtonGroupPrivate();
 
     void init();
 public:
-    RibbonButtonGroup *q;
     QList<RibbonButtonGroupItem> m_items;
 };
 
-RibbonButtonGroupPrivate::RibbonButtonGroupPrivate(RibbonButtonGroup *p)
-    : q(p)
+RibbonButtonGroupPrivate::RibbonButtonGroupPrivate()
 {
 }
 
 void RibbonButtonGroupPrivate::init()
 {
+    Q_Q(RibbonButtonGroup);
     QHBoxLayout *layout = new QHBoxLayout(q);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -77,13 +77,15 @@ void RibbonButtonGroupPrivate::init()
 /* RibbonButtonGroup */
 RibbonButtonGroup::RibbonButtonGroup(QWidget *parent)
     : QFrame(parent)
-    , d(new RibbonButtonGroupPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonButtonGroup)
+    Q_D(RibbonButtonGroup);
     d->init();
 }
 
 RibbonButtonGroup::~RibbonButtonGroup()
 {
+    Q_D(RibbonButtonGroup);
     for (RibbonButtonGroupItem &item : d->m_items) {
         if (QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(item.action)) {
             if (item.customWidget) {
@@ -91,7 +93,7 @@ RibbonButtonGroup::~RibbonButtonGroup()
             }
         }
     }
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 QAction *RibbonButtonGroup::addAction(QAction *a)
@@ -103,6 +105,7 @@ QAction *RibbonButtonGroup::addAction(QAction *a)
 QAction *RibbonButtonGroup::addAction(const QString &text, const QIcon &icon,
                                       QToolButton::ToolButtonPopupMode popMode)
 {
+    Q_D(RibbonButtonGroup);
     QAction *a = new QAction(icon, text, this);
 
     addAction(a);
@@ -115,6 +118,7 @@ QAction *RibbonButtonGroup::addAction(const QString &text, const QIcon &icon,
 
 QAction *RibbonButtonGroup::addMenu(QMenu *menu, QToolButton::ToolButtonPopupMode popMode)
 {
+    Q_D(RibbonButtonGroup);
     QAction *a = menu->menuAction();
 
     addAction(a);
@@ -156,6 +160,7 @@ QSize RibbonButtonGroup::minimumSizeHint() const
 
 void RibbonButtonGroup::actionEvent(QActionEvent *e)
 {
+    Q_D(RibbonButtonGroup);
     RibbonButtonGroupItem item;
     item.action = e->action();
 

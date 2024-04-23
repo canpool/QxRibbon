@@ -9,6 +9,7 @@
 
 class RibbonStyleOptionPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonStyleOption)
 public:
     RibbonStyleOptionPrivate();
     void calc();
@@ -71,17 +72,18 @@ int RibbonStyleOptionPrivate::calcRibbonBarHeight(RibbonBar::RibbonStyle s) cons
 }
 
 RibbonStyleOption::RibbonStyleOption()
-    : d(new RibbonStyleOptionPrivate)
 {
+    QX_INIT_PRIVATE(RibbonStyleOption)
 }
 
 RibbonStyleOption::~RibbonStyleOption()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 int RibbonStyleOption::ribbonBarHeight(RibbonBar::RibbonStyle s) const
 {
+    Q_D(const RibbonStyleOption);
     switch (s) {
     case RibbonBar::OfficeStyle:
         return d->m_ribbonBarHeightOfficeStyleThreeRow;
@@ -99,16 +101,19 @@ int RibbonStyleOption::ribbonBarHeight(RibbonBar::RibbonStyle s) const
 
 int RibbonStyleOption::titleBarHeight() const
 {
+    Q_D(const RibbonStyleOption);
     return d->m_titleBarHeight;
 }
 
 int RibbonStyleOption::tabBarHeight() const
 {
+    Q_D(const RibbonStyleOption);
     return d->m_tabBarHeight;
 }
 
 void RibbonStyleOption::recalc()
 {
+    Q_D(RibbonStyleOption);
     d->calcBaseHeight();
     d->m_ribbonBarHeightOfficeStyleThreeRow = calcRibbonBarHeight(RibbonBar::OfficeStyle);
     d->m_ribbonBarHeightWpsLiteStyleThreeRow = calcRibbonBarHeight(RibbonBar::WpsLiteStyle);
@@ -118,6 +123,7 @@ void RibbonStyleOption::recalc()
 
 int RibbonStyleOption::calcRibbonBarHeight(RibbonBar::RibbonStyle s) const
 {
+    Q_D(const RibbonStyleOption);
     return d->calcRibbonBarHeight(s);
 }
 

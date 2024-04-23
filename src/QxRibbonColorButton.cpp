@@ -19,6 +19,7 @@ RibbonColorButtonPrivate::RibbonColorButtonPrivate()
 
 QPixmap RibbonColorButtonPrivate::createIconPixmap(const QStyleOptionToolButton &opt, const QSize &iconsize)
 {
+    Q_Q(RibbonColorButton);
     if (opt.icon.isNull()) {
         return QPixmap();
     }
@@ -65,8 +66,8 @@ QPixmap RibbonColorButtonPrivate::createIconPixmap(const QStyleOptionToolButton 
 RibbonColorButton::RibbonColorButton(QWidget *parent)
     : RibbonButton(new RibbonColorButtonPrivate(), parent)
 {
-    dd = reinterpret_cast<RibbonColorButtonPrivate *>(d);
-    dd->qq = this;
+    Q_D(RibbonColorButton);
+    d->setPublic(this);
 
     connect(this, &QAbstractButton::clicked, this, &RibbonColorButton::onButtonClicked);
 }
@@ -83,20 +84,23 @@ RibbonColorButton::~RibbonColorButton()
 
 const QColor &RibbonColorButton::color() const
 {
-    return dd->m_color;
+    Q_D(const RibbonColorButton);
+    return d->m_color;
 }
 
 void RibbonColorButton::setColor(const QColor &color)
 {
-    if (dd->m_color == color) {
+    Q_D(RibbonColorButton);
+    if (d->m_color == color) {
         return;
     }
-    dd->m_color = color;
+    d->m_color = color;
     update();
     emit colorChanged(color);
 }
 
 void RibbonColorButton::onButtonClicked(bool checked)
 {
-    emit colorClicked(dd->m_color, checked);
+    Q_D(RibbonColorButton);
+    emit colorClicked(d->m_color, checked);
 }

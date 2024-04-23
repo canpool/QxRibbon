@@ -30,9 +30,11 @@ public:
 
 class RibbonGroupPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonGroup)
 public:
-    RibbonGroupPrivate(RibbonGroup *p);
+    RibbonGroupPrivate();
 
+    void init();
     void resetLargeToolButtonStyle();
 
     // 返回最后一个添加的action对应的button，前提是最后一个是toolbutton，否则返回Q_NULLPTR
@@ -40,7 +42,6 @@ public:
     // RibbonGroup的友元类RibbonCustommizeWidget会通过该接口获取所有item
     const QList<RibbonGroupItem *> &ribbonGroupItems() const;
 public:
-    RibbonGroup *q;
     RibbonGroupLayout *m_layout;
     RibbonGroupOptionButton *m_optionActionButton;
     RibbonGroup::GroupLayoutMode m_groupLayoutMode;   ///< group的布局模式，默认为3行模式ThreeRowMode

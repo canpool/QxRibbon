@@ -13,6 +13,8 @@
 class RibbonButtonPrivate
 {
 public:
+    QX_DECLARE_PUBLIC(RibbonButton)
+public:
     RibbonButtonPrivate();
     virtual ~RibbonButtonPrivate();
 
@@ -35,7 +37,6 @@ public:
                    QPainter *painter, const QWidget *widget = Q_NULLPTR);
 
 public:
-    RibbonButton *q;
     RibbonButton::RibbonButtonType m_buttonType;
     RibbonButton::LargeButtonType m_largeButtonType;
     bool m_mouseOnSubControl;   ///< 这个用于标记MenuButtonPopup模式下，鼠标在文本区域

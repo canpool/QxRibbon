@@ -32,5 +32,5 @@ signals:
 protected:
     virtual void actionEvent(QActionEvent *e) Q_DECL_OVERRIDE;
 private:
-    RibbonButtonGroupPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonButtonGroup)
 };

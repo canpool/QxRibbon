@@ -83,7 +83,7 @@ protected:
 private:
     void setRibbonBar(RibbonBar *bar);
 private:
-    RibbonPagePrivate *d;
+    QX_DECLARE_PRIVATE(RibbonPage)
     friend class RibbonBar;
     friend class RibbonBarPrivate;
     friend class RibbonPageContext;

@@ -120,7 +120,7 @@ RibbonQuickAccessBar *RibbonQuickAccessBarContainer::quickAccessBar() const
     return m_quickAccessBar;
 }
 
-RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
+RibbonBarPrivate::RibbonBarPrivate()
     : m_applicationButton(Q_NULLPTR)
     , m_tabBar(Q_NULLPTR)
     , m_stack(Q_NULLPTR)
@@ -140,7 +140,6 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
     , m_layoutRequest(false)
     , m_blockResize(false)
 {
-    q = par;
     m_pageContextColorList << QColor(201, 89, 156)   // 玫红
                            << QColor(242, 203, 29)   // 黄
                            << QColor(255, 157, 0)    // 橙
@@ -152,6 +151,7 @@ RibbonBarPrivate::RibbonBarPrivate(RibbonBar *par)
 
 void RibbonBarPrivate::init()
 {
+    Q_Q(RibbonBar);
     m_applicationButton = new RibbonApplicationButton(tr("app"), q);
     m_applicationButton->setObjectName(QStringLiteral("qx_RibbonApplicationButton"));
     connect(m_applicationButton, &QAbstractButton::clicked, q, &RibbonBar::applicationButtonClicked);
@@ -176,6 +176,7 @@ void RibbonBarPrivate::init()
 
 void RibbonBarPrivate::setApplicationButton(QAbstractButton *btn)
 {
+    Q_Q(RibbonBar);
     if (m_applicationButton) {
         delete m_applicationButton;
     }
@@ -206,6 +207,7 @@ bool RibbonBarPrivate::isContainPageContextInList(RibbonPageContext *pageContext
 
 void RibbonBarPrivate::setMinimizedFlag(bool flag)
 {
+    Q_Q(RibbonBar);
     if (m_minimized == flag) {
         return;
     }
@@ -229,6 +231,7 @@ void RibbonBarPrivate::setMinimizedFlag(bool flag)
 
 void RibbonBarPrivate::updateMinimumButtonIcon()
 {
+    Q_Q(RibbonBar);
     if (m_minimumPageButton) {
         QAction *action = m_minimumPageButton->defaultAction();
         if (action) {
@@ -297,6 +300,7 @@ void RibbonBarPrivate::updatePageContextManagerData()
 
 void RibbonBarPrivate::updateRibbonElementGeometry()
 {
+    Q_Q(RibbonBar);
     // 根据样式调整 RibbonPage 的布局形式
     QList<RibbonPage *> pages = q->pages();
     for (RibbonPage *page : qAsConst(pages)) {
@@ -310,6 +314,7 @@ void RibbonBarPrivate::updateRibbonElementGeometry()
 
 void RibbonBarPrivate::updateRibbonBarHeight()
 {
+    Q_Q(RibbonBar);
     // 根据样式调整bar的高度
     if (m_minimized){
         // 处于最小模式下时，bar 的高度为 tabbar 的 bottom
@@ -322,7 +327,7 @@ void RibbonBarPrivate::updateRibbonBarHeight()
 
 void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
 {
-    //!
+    Q_Q(RibbonBar);
     paintBackground(p);
     //! 显示上下文标签
     p.save();
@@ -399,7 +404,7 @@ void RibbonBarPrivate::paintInOfficeStyle(QPainter &p)
 
 void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
 {
-    //!
+    Q_Q(RibbonBar);
     paintBackground(p);
     //! 显示上下文标签
     p.save();
@@ -458,6 +463,7 @@ void RibbonBarPrivate::paintInWpsLiteStyle(QPainter &p)
 
 void RibbonBarPrivate::paintBackground(QPainter &painter)
 {
+    Q_Q(RibbonBar);
     painter.save();
     // 在tabbar下绘制一条线
     const int lineY = m_tabBar->geometry().bottom();
@@ -480,6 +486,7 @@ void RibbonBarPrivate::paintBackground(QPainter &painter)
 ///
 void RibbonBarPrivate::paintWindowTitle(QPainter &painter, const QString &title, const QRect &titleRegion)
 {
+    Q_Q(RibbonBar);
     painter.save();
     painter.setPen(q->palette().color(QPalette::WindowText));
     painter.drawText(titleRegion, m_titleAligment, title);
@@ -496,6 +503,7 @@ void RibbonBarPrivate::paintWindowTitle(QPainter &painter, const QString &title,
 void RibbonBarPrivate::paintPageContextTab(QPainter &painter, const QString &title, QRect contextRect,
                                            const QColor &color)
 {
+    Q_Q(RibbonBar);
     // 绘制上下文标签
     // 首先有5像素的实体粗线位于顶部
     QMargins border = q->contentsMargins();
@@ -539,6 +547,7 @@ void RibbonBarPrivate::paintPageContextTab(QPainter &painter, const QString &tit
 
 void RibbonBarPrivate::resizeInOfficeStyle()
 {
+    Q_Q(RibbonBar);
     updateRibbonElementGeometry();
     QMargins border = q->contentsMargins();
     int x = border.left();
@@ -611,6 +620,7 @@ void RibbonBarPrivate::resizeInOfficeStyle()
 
 void RibbonBarPrivate::resizeInWpsLiteStyle()
 {
+    Q_Q(RibbonBar);
     updateRibbonElementGeometry();
     QMargins border = q->contentsMargins();
     int x = border.left();
@@ -698,6 +708,7 @@ void RibbonBarPrivate::resizeInWpsLiteStyle()
 
 void RibbonBarPrivate::resizeStackedWidget()
 {
+    Q_Q(RibbonBar);
     QMargins border = q->contentsMargins();
     if (m_stack->isPopup()) {
         QPoint absPosition = q->mapToGlobal(QPoint(border.left(), m_tabBar->geometry().bottom() + 1));
@@ -775,6 +786,7 @@ int RibbonBarPrivate::tabIndex(RibbonPage *page) const
 
 void RibbonBarPrivate::onWindowTitleChanged(const QString &title)
 {
+    Q_Q(RibbonBar);
     Q_UNUSED(title);
     q->update();
 }
@@ -817,6 +829,7 @@ void RibbonBarPrivate::onPageContextAdded(RibbonPage *page)
  */
 void RibbonBarPrivate::onCurrentRibbonTabChanged(int index)
 {
+    Q_Q(RibbonBar);
     QVariant var = m_tabBar->tabData(index);
     RibbonPage *page = Q_NULLPTR;
 
@@ -894,6 +907,7 @@ void RibbonBarPrivate::onCurrentRibbonTabClicked(int index)
  */
 void RibbonBarPrivate::onCurrentRibbonTabDoubleClicked(int index)
 {
+    Q_Q(RibbonBar);
     if (index == -1) {
         return;
     }
@@ -922,8 +936,9 @@ void RibbonBarPrivate::onStackWidgetHided()
 /* RibbonBar */
 RibbonBar::RibbonBar(QWidget *parent)
     : QMenuBar(parent)
-    , d(new RibbonBarPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonBar)
+    Q_D(RibbonBar);
     d->init();
     if (parent) {
         connect(parent, &QWidget::windowTitleChanged, d, &RibbonBarPrivate::onWindowTitleChanged);
@@ -934,7 +949,7 @@ RibbonBar::RibbonBar(QWidget *parent)
 
 RibbonBar::~RibbonBar()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -943,6 +958,7 @@ RibbonBar::~RibbonBar()
  */
 QAbstractButton *RibbonBar::applicationButton()
 {
+    Q_D(RibbonBar);
     return d->m_applicationButton;
 }
 
@@ -957,12 +973,14 @@ QAbstractButton *RibbonBar::applicationButton()
  */
 void RibbonBar::setApplicationButton(QAbstractButton *btn)
 {
+    Q_D(RibbonBar);
     d->setApplicationButton(btn);
     QApplication::postEvent(this, new QResizeEvent(size(), size()));
 }
 
 RibbonTabBar *RibbonBar::ribbonTabBar()
 {
+    Q_D(RibbonBar);
     return d->m_tabBar;
 }
 
@@ -987,6 +1005,7 @@ RibbonPage *RibbonBar::insertPage(int index, const QString &title)
 
 void RibbonBar::insertPage(int index, RibbonPage *page)
 {
+    Q_D(RibbonBar);
     if (Q_NULLPTR == page) {
         return;
     }
@@ -1020,6 +1039,7 @@ void RibbonBar::insertPage(int index, RibbonPage *page)
  */
 RibbonPage *RibbonBar::page(int index) const
 {
+    Q_D(const RibbonBar);
     QVariant var = d->m_tabBar->tabData(index);
 
     if (var.isValid()) {
@@ -1038,6 +1058,7 @@ RibbonPage *RibbonBar::page(int index) const
  */
 RibbonPage *RibbonBar::pageByName(const QString &title) const
 {
+    Q_D(const RibbonBar);
     int c = d->m_stack->count();
 
     for (int i = 0; i < c; ++i) {
@@ -1057,6 +1078,7 @@ RibbonPage *RibbonBar::pageByName(const QString &title) const
  */
 RibbonPage *RibbonBar::pageByObjectName(const QString &objname) const
 {
+    Q_D(const RibbonBar);
     int c = d->m_stack->count();
 
     for (int i = 0; i < c; ++i) {
@@ -1075,6 +1097,7 @@ RibbonPage *RibbonBar::pageByObjectName(const QString &objname) const
  */
 QList<RibbonPage *> RibbonBar::pages(bool getAll) const
 {
+    Q_D(const RibbonBar);
     int c = d->m_stack->count();
     QList<RibbonPage *> res;
 
@@ -1109,6 +1132,7 @@ bool RibbonBar::isPageVisible(RibbonPage *page) const
  */
 void RibbonBar::showPage(RibbonPage *page)
 {
+    Q_D(RibbonBar);
     for (auto i = d->m_hidedPage.begin(); i != d->m_hidedPage.end(); ++i) {
         if (i->page == page) { // 说明要显示
             int index = d->m_tabBar->insertTab(i->index, i->page->windowTitle());
@@ -1128,6 +1152,7 @@ void RibbonBar::showPage(RibbonPage *page)
  */
 void RibbonBar::hidePage(RibbonPage *page)
 {
+    Q_D(RibbonBar);
     int tabcount = d->m_tabBar->count();
 
     for (int i = 0; i < tabcount; ++i) {
@@ -1151,6 +1176,7 @@ void RibbonBar::hidePage(RibbonPage *page)
 ///
 void RibbonBar::raisePage(RibbonPage *page)
 {
+    Q_D(RibbonBar);
     int index = d->m_stack->indexOf(page);
 
     if (index >= 0) {
@@ -1167,6 +1193,7 @@ void RibbonBar::raisePage(RibbonPage *page)
  */
 void RibbonBar::removePage(RibbonPage *page)
 {
+    Q_D(RibbonBar);
     int index = d->tabIndex(page);
     bool isupdate = false;
     if (index >= 0) {
@@ -1194,6 +1221,7 @@ void RibbonBar::removePage(RibbonPage *page)
  */
 void RibbonBar::movePage(int from, int to)
 {
+    Q_D(RibbonBar);
     d->m_tabBar->moveTab(from, to);
     // 这时要刷新所有tabdata的index信息
     d->updateTabData();
@@ -1207,6 +1235,7 @@ void RibbonBar::movePage(int from, int to)
  */
 int RibbonBar::pageIndex(RibbonPage *page) const
 {
+    Q_D(const RibbonBar);
     return d->tabIndex(page);
 }
 
@@ -1227,6 +1256,7 @@ int RibbonBar::pageIndex(RibbonPage *page) const
  */
 RibbonPageContext *RibbonBar::addPageContext(const QString &title, const QColor &color, const QVariant &id)
 {
+    Q_D(RibbonBar);
     RibbonPageContext *context = new RibbonPageContext(this);
 
     context->setObjectName(title);
@@ -1243,6 +1273,7 @@ RibbonPageContext *RibbonBar::addPageContext(const QString &title, const QColor 
  */
 void RibbonBar::addPageContext(RibbonPageContext *context)
 {
+    Q_D(RibbonBar);
     if (Q_NULLPTR == context) {
         return;
     }
@@ -1260,6 +1291,7 @@ void RibbonBar::addPageContext(RibbonPageContext *context)
  */
 void RibbonBar::showPageContext(RibbonPageContext *context)
 {
+    Q_D(RibbonBar);
     if (isPageContextVisible(context)) {
         return;
     }
@@ -1298,6 +1330,7 @@ void RibbonBar::showPageContext(RibbonPageContext *context)
  */
 void RibbonBar::hidePageContext(RibbonPageContext *context)
 {
+    Q_D(RibbonBar);
     bool needResize = false;
 
     for (int i = 0; i < d->m_currentShowingPageContextList.size(); ++i) {
@@ -1327,6 +1360,7 @@ void RibbonBar::hidePageContext(RibbonPageContext *context)
  */
 bool RibbonBar::isPageContextVisible(RibbonPageContext *context)
 {
+    Q_D(RibbonBar);
     return d->isContainPageContextInList(context);
 }
 
@@ -1351,11 +1385,13 @@ void RibbonBar::setPageContextVisible(RibbonPageContext *context, bool visible)
 
 bool RibbonBar::isPageContextCoverTab()
 {
+    Q_D(RibbonBar);
     return d->m_pageContextCoverTab;
 }
 
 void RibbonBar::setPageContextCoverTab(bool cover)
 {
+    Q_D(RibbonBar);
     d->m_pageContextCoverTab = cover;
 }
 
@@ -1365,6 +1401,7 @@ void RibbonBar::setPageContextCoverTab(bool cover)
  */
 QList<RibbonPageContext *> RibbonBar::pageContextList() const
 {
+    Q_D(const RibbonBar);
     return d->m_pageContextList;
 }
 
@@ -1374,6 +1411,7 @@ QList<RibbonPageContext *> RibbonBar::pageContextList() const
  */
 void RibbonBar::destroyPageContext(RibbonPageContext *context)
 {
+    Q_D(RibbonBar);
     if (Q_NULLPTR == context) {
         return;
     }
@@ -1401,11 +1439,13 @@ void RibbonBar::minimize()
 
 bool RibbonBar::isMinimized() const
 {
+    Q_D(const RibbonBar);
     return d->m_minimized;
 }
 
 void RibbonBar::setMinimized(bool flag)
 {
+    Q_D(RibbonBar);
     d->setMinimizedFlag(flag);
     d->updateMinimumButtonIcon();
     QResizeEvent resizeEvent(size(), size());
@@ -1415,11 +1455,13 @@ void RibbonBar::setMinimized(bool flag)
 
 bool RibbonBar::haveShowMinimumButton() const
 {
+    Q_D(const RibbonBar);
     return (Q_NULLPTR != d->m_minimumPageButton);
 }
 
 void RibbonBar::showMinimumButton(bool isShow)
 {
+    Q_D(RibbonBar);
     if (isShow) {
         activeRightButtonGroup();
         if (Q_NULLPTR == d->m_minimumPageButton) {
@@ -1457,12 +1499,14 @@ int RibbonBar::titleBarHeight() const
 
 RibbonButtonGroup *RibbonBar::rightButtonGroup()
 {
+    Q_D(RibbonBar);
     activeRightButtonGroup();
     return d->m_rightButtonGroup;
 }
 
 void RibbonBar::activeRightButtonGroup()
 {
+    Q_D(RibbonBar);
     if (Q_NULLPTR == d->m_rightButtonGroup) {
         d->m_rightButtonGroup = new RibbonButtonGroup(this);
         d->m_rightButtonGroup->setObjectName(QStringLiteral("qx_RibbonButtonGroup"));
@@ -1473,11 +1517,13 @@ void RibbonBar::activeRightButtonGroup()
 
 RibbonQuickAccessBar *RibbonBar::quickAccessBar() const
 {
+    Q_D(const RibbonBar);
     return d->m_quickAccessBar->quickAccessBar();
 }
 
 void RibbonBar::setQuickAccessBarPosition(QuickAccessBarPosition position)
 {
+    Q_D(RibbonBar);
     if (d->m_quickAccessBarPosition == position) {
         return;
     }
@@ -1489,6 +1535,7 @@ void RibbonBar::setQuickAccessBarPosition(QuickAccessBarPosition position)
 
 RibbonBar::QuickAccessBarPosition RibbonBar::quickAccessBarPosition() const
 {
+    Q_D(const RibbonBar);
     return d->m_quickAccessBarPosition;
 }
 
@@ -1498,6 +1545,7 @@ RibbonBar::QuickAccessBarPosition RibbonBar::quickAccessBarPosition() const
  */
 RibbonBar::RibbonStyle RibbonBar::currentRibbonStyle() const
 {
+    Q_D(const RibbonBar);
     return d->m_ribbonStyle;
 }
 
@@ -1509,6 +1557,7 @@ RibbonBar::RibbonStyle RibbonBar::currentRibbonStyle() const
  */
 void RibbonBar::setRibbonStyle(RibbonBar::RibbonStyle v)
 {
+    Q_D(RibbonBar);
     d->m_ribbonStyle = v;
     d->m_lastShowStyle = v;
     d->m_quickAccessBar->setIconVisible(isOfficeStyle() && d->m_titleVisible);
@@ -1538,6 +1587,7 @@ void RibbonBar::setRibbonStyle(RibbonBar::RibbonStyle v)
  */
 int RibbonBar::currentIndex()
 {
+    Q_D(RibbonBar);
     return d->m_tabBar->currentIndex();
 }
 
@@ -1547,17 +1597,20 @@ int RibbonBar::currentIndex()
 ///
 void RibbonBar::setCurrentIndex(int index)
 {
+    Q_D(RibbonBar);
     d->m_tabBar->setCurrentIndex(index);
     // onCurrentRibbonTabChanged(index);
 }
 
 bool RibbonBar::isOfficeStyle() const
 {
+    Q_D(const RibbonBar);
     return d->isOfficeStyle();
 }
 
 bool RibbonBar::isTwoRowStyle() const
 {
+    Q_D(const RibbonBar);
     return d->isTwoRowStyle();
 }
 
@@ -1568,6 +1621,7 @@ bool RibbonBar::isTwoRowStyle() const
  */
 void RibbonBar::setWindowButtonsSize(const QSize &size)
 {
+    Q_D(RibbonBar);
     d->m_windowButtonsSize = size;
 }
 
@@ -1578,6 +1632,7 @@ void RibbonBar::setWindowButtonsSize(const QSize &size)
  */
 void RibbonBar::updateRibbonGeometry()
 {
+    Q_D(RibbonBar);
     d->updateRibbonBarHeight();
     QList<RibbonPage *> pages = this->pages();
     for (RibbonPage *page : qAsConst(pages)) {
@@ -1587,6 +1642,7 @@ void RibbonBar::updateRibbonGeometry()
 
 void RibbonBar::updateRibbonTheme()
 {
+    Q_D(RibbonBar);
     d->updateMinimumButtonIcon();
 }
 
@@ -1599,32 +1655,38 @@ void RibbonBar::resizeRibbon()
 
 QColor RibbonBar::tabBarBaseLineColor() const
 {
+    Q_D(const RibbonBar);
     return d->m_tabBarBaseLineColor;
 }
 
 void RibbonBar::setTabBarBaseLineColor(const QColor &clr)
 {
+    Q_D(RibbonBar);
     d->m_tabBarBaseLineColor = clr;
 }
 
 Qt::Alignment RibbonBar::windowTitleAligment() const
 {
+    Q_D(const RibbonBar);
     return d->m_titleAligment;
 }
 
 void RibbonBar::setWindowTitleAligment(Qt::Alignment al)
 {
+    Q_D(RibbonBar);
     d->m_titleAligment = al;
 }
 
 void RibbonBar::setWindowTitleVisible(bool visible)
 {
+    Q_D(RibbonBar);
     d->m_titleVisible = visible;
     d->m_quickAccessBar->setIconVisible(isOfficeStyle() && visible);
 }
 
 bool RibbonBar::event(QEvent *event)
 {
+    Q_D(RibbonBar);
     bool res = QMenuBar::event(event);
 
     switch (event->type()) {
@@ -1646,6 +1708,7 @@ bool RibbonBar::event(QEvent *event)
 
 bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
 {
+    Q_D(RibbonBar);
     if (obj) {
         // 调整多文档时在窗口模式下的按钮更新
         if ((obj == cornerWidget(Qt::TopLeftCorner)) || (obj == cornerWidget(Qt::TopRightCorner))) {
@@ -1683,6 +1746,7 @@ bool RibbonBar::eventFilter(QObject *obj, QEvent *e)
 
 void RibbonBar::paintEvent(QPaintEvent *e)
 {
+    Q_D(RibbonBar);
     Q_UNUSED(e);
     QPainter p(this);
     if (isOfficeStyle()) {
@@ -1699,6 +1763,7 @@ void RibbonBar::paintEvent(QPaintEvent *e)
 
 void RibbonBar::resizeEvent(QResizeEvent *e)
 {
+    Q_D(RibbonBar);
     Q_UNUSED(e);
     if (d->m_blockResize) {
         return;

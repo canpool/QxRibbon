@@ -87,5 +87,5 @@ signals:
      */
     void hovered(QAction *action);
 private:
-    RibbonGalleryGroupPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonGalleryGroup)
 };

@@ -14,14 +14,14 @@
 
 class RibbonCtrlContainerPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonCtrlContainer)
 public:
-    RibbonCtrlContainerPrivate(RibbonCtrlContainer *p);
+    RibbonCtrlContainerPrivate();
 
     void init();
     void setWidget(QWidget *w);
     void takeWidget(QWidget *w);
 public:
-    RibbonCtrlContainer *q;
     QWidget *m_widget;
     QBoxLayout *m_layout;
     QLabel *m_labelPixmap;
@@ -32,9 +32,8 @@ public:
 };
 
 
-RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate(RibbonCtrlContainer *p)
-    : q(p)
-    , m_widget(Q_NULLPTR)
+RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate()
+    : m_widget(Q_NULLPTR)
     , m_iconSize(18, 18)
     , m_orientation(Qt::Horizontal)
 {
@@ -43,6 +42,7 @@ RibbonCtrlContainerPrivate::RibbonCtrlContainerPrivate(RibbonCtrlContainer *p)
 
 void RibbonCtrlContainerPrivate::init()
 {
+    Q_Q(RibbonCtrlContainer);
     QHBoxLayout *headerLayout = new QHBoxLayout();
     headerLayout->setSpacing(2);
     headerLayout->setContentsMargins(0, 0, 0, 0);
@@ -66,6 +66,7 @@ void RibbonCtrlContainerPrivate::init()
 
 void RibbonCtrlContainerPrivate::setWidget(QWidget *w)
 {
+    Q_Q(RibbonCtrlContainer);
     if (m_widget) {
         QWidget *oldwidget = m_widget;
         takeWidget(oldwidget);
@@ -102,76 +103,89 @@ RibbonCtrlContainer::RibbonCtrlContainer(QWidget *parent)
 
 RibbonCtrlContainer::RibbonCtrlContainer(Qt::Orientation orientation, QWidget *parent)
     : QWidget(parent)
-    , d(new RibbonCtrlContainerPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonCtrlContainer)
+    Q_D(RibbonCtrlContainer);
     d->m_orientation = orientation;
     d->init();
 }
 
 RibbonCtrlContainer::~RibbonCtrlContainer()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 void RibbonCtrlContainer::setIconVisible(bool b)
 {
+    Q_D(RibbonCtrlContainer);
     d->m_labelPixmap->setVisible(b);
 }
 
 void RibbonCtrlContainer::setTitleVisible(bool b)
 {
+    Q_D(RibbonCtrlContainer);
     d->m_labelText->setVisible(b);
 }
 
 void RibbonCtrlContainer::setIcon(const QIcon &i)
 {
+    Q_D(RibbonCtrlContainer);
     d->m_icon = i;
     d->m_labelPixmap->setPixmap(i.pixmap(d->m_iconSize));
 }
 
 QIcon RibbonCtrlContainer::icon() const
 {
+    Q_D(const RibbonCtrlContainer);
     return d->m_icon;
 }
 
 void RibbonCtrlContainer::setIconSize(const QSize &size)
 {
+    Q_D(RibbonCtrlContainer);
     d->m_iconSize = size;
     setIcon(icon());
 }
 
 QSize RibbonCtrlContainer::iconSize() const
 {
+    Q_D(const RibbonCtrlContainer);
     return d->m_iconSize;
 }
 
 void RibbonCtrlContainer::setText(const QString &t)
 {
+    Q_D(RibbonCtrlContainer);
     d->m_labelText->setText(t);
 }
 
 QString RibbonCtrlContainer::text() const
 {
+    Q_D(const RibbonCtrlContainer);
     return d->m_labelText->text();
 }
 
 void RibbonCtrlContainer::setWidget(QWidget *w)
 {
+    Q_D(RibbonCtrlContainer);
     d->setWidget(w);
 }
 
 QWidget *RibbonCtrlContainer::widget() const
 {
+    Q_D(const RibbonCtrlContainer);
     return d->m_widget;
 }
 
 Qt::Orientation RibbonCtrlContainer::orientation() const
 {
+    Q_D(const RibbonCtrlContainer);
     return d->m_orientation;
 }
 
 void RibbonCtrlContainer::setOrientation(Qt::Orientation orientation)
 {
+    Q_D(RibbonCtrlContainer);
     if (orientation == d->m_orientation) {
         return;
     }

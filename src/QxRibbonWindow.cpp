@@ -12,14 +12,14 @@
 
 class RibbonWindowPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonWindow)
 public:
-    RibbonWindowPrivate(RibbonWindow *p);
+    RibbonWindowPrivate();
     void setMenuWidget(QWidget *menuBar);
     void destroyFrameless();
     void setFrameless(bool frameless);
     void resizeRibbon();
 public:
-    RibbonWindow *q;
     RibbonBar *m_ribbonBar;
     WindowButtonGroup *m_windowButtonGroup;
     FramelessHelper *m_framelessHelper;
@@ -28,9 +28,8 @@ public:
     bool m_frameless;
 };
 
-RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
-    : q(p)
-    , m_ribbonBar(Q_NULLPTR)
+RibbonWindowPrivate::RibbonWindowPrivate()
+    : m_ribbonBar(Q_NULLPTR)
     , m_windowButtonGroup(Q_NULLPTR)
     , m_framelessHelper(Q_NULLPTR)
     , m_theme(RibbonTheme::Office2013Theme)
@@ -41,6 +40,7 @@ RibbonWindowPrivate::RibbonWindowPrivate(RibbonWindow *p)
 
 void RibbonWindowPrivate::setMenuWidget(QWidget *menuBar)
 {
+    Q_Q(RibbonWindow);
     RibbonBar *bar = qobject_cast<RibbonBar *>(menuBar);
 
     if (bar) {
@@ -69,6 +69,7 @@ void RibbonWindowPrivate::destroyFrameless()
 
 void RibbonWindowPrivate::setFrameless(bool frameless)
 {
+    Q_Q(RibbonWindow);
     if (m_useRibbon && frameless) {
         if (Q_NULLPTR == m_framelessHelper) {
             m_framelessHelper = new FramelessHelper(q);
@@ -107,8 +108,9 @@ void RibbonWindowPrivate::resizeRibbon()
 
 RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
     : QMainWindow(parent)
-    , d(new RibbonWindowPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonWindow)
+    Q_D(RibbonWindow);
     if (useRibbon) {
         setRibbonTheme(ribbonTheme());
         setMenuWidget(new RibbonBar(this));
@@ -118,41 +120,48 @@ RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
 
 RibbonWindow::~RibbonWindow()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 RibbonBar *RibbonWindow::ribbonBar() const
 {
+    Q_D(const RibbonWindow);
     return d->m_ribbonBar;
 }
 
 void RibbonWindow::setRibbonTheme(int theme)
 {
+    Q_D(RibbonWindow);
     RibbonTheme::setTheme(theme, this);
     d->m_theme = theme;
 
     if (d->m_ribbonBar) {
         d->m_ribbonBar->updateRibbonTheme();
+        d->m_ribbonBar->resizeRibbon();
     }
 }
 
 int RibbonWindow::ribbonTheme() const
 {
+    Q_D(const RibbonWindow);
     return d->m_theme;
 }
 
 bool RibbonWindow::isUseRibbon() const
 {
+    Q_D(const RibbonWindow);
     return d->m_useRibbon;
 }
 
 bool RibbonWindow::isFrameless() const
 {
+    Q_D(const RibbonWindow);
     return d->m_frameless;
 }
 
 void RibbonWindow::setFrameless(bool frameless)
 {
+    Q_D(RibbonWindow);
     if (d->m_frameless == frameless) {
         return;
     }
@@ -165,6 +174,7 @@ void RibbonWindow::setFrameless(bool frameless)
 
 void RibbonWindow::updateWindowFlags(Qt::WindowFlags flags)
 {
+    Q_D(RibbonWindow);
     setWindowFlags(flags);
     // Note: This function setWindowFlags calls setParent() when changing the flags for a window,
     // causing the widget to be hidden. You must call show() to make the widget visible again..
@@ -196,18 +206,21 @@ Qt::WindowFlags RibbonWindow::windowButtonFlags() const
 
 void RibbonWindow::setMenuWidget(QWidget *menuBar)
 {
+    Q_D(RibbonWindow);
     QMainWindow::setMenuWidget(menuBar);
     d->setMenuWidget(menuBar);
 }
 
 void RibbonWindow::setMenuBar(QMenuBar *menuBar)
 {
+    Q_D(RibbonWindow);
     QMainWindow::setMenuBar(menuBar);
     d->setMenuWidget(menuBar);
 }
 
 void RibbonWindow::resizeEvent(QResizeEvent *event)
 {
+    Q_D(RibbonWindow);
     if (d->m_ribbonBar) {
         if (d->m_ribbonBar->size().width() != this->size().width()) {
             d->m_ribbonBar->setFixedWidth(this->size().width());
@@ -223,6 +236,7 @@ void RibbonWindow::resizeEvent(QResizeEvent *event)
 
 bool RibbonWindow::eventFilter(QObject *obj, QEvent *e)
 {
+    Q_D(RibbonWindow);
     if (isFrameless()) {
         // event post ribbonBar -> mainwindow -> framelessHelper
         if (obj == d->m_ribbonBar) {
@@ -244,6 +258,7 @@ bool RibbonWindow::eventFilter(QObject *obj, QEvent *e)
 
 bool RibbonWindow::event(QEvent *e)
 {
+    Q_D(RibbonWindow);
     switch (e->type()) {
     case QEvent::WindowStateChange: {
         Qt::WindowStates s = windowState();

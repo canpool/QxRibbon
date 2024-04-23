@@ -26,5 +26,5 @@ public slots:
 private slots:
     void onButtonClicked(bool checked = false);
 private:
-    RibbonColorButtonPrivate *dd;
+    Q_DECLARE_PRIVATE(RibbonColorButton)
 };

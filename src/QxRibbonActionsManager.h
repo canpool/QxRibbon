@@ -127,7 +127,7 @@ private slots:
 private:
     void removeAction(QAction *act, bool enableEmit = true);
 private:
-    RibbonActionsManagerPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonActionsManager)
     friend class RibbonActionsManagerModel;
 };
 
@@ -156,5 +156,5 @@ public:
 private slots:
     void onActionTagChanged(int tag, bool isdelete);
 private:
-    RibbonActionsManagerModelPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonActionsManagerModel)
 };

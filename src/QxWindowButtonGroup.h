@@ -37,10 +37,7 @@ protected:
     virtual bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
     virtual void parentResize();
     virtual void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-protected slots:
-    void buttonClicked();
 private:
-    friend class WindowButtonGroupPrivate;
-    WindowButtonGroupPrivate *d;
+    QX_DECLARE_PRIVATE(WindowButtonGroup)
 };
 

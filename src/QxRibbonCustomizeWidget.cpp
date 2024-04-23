@@ -465,7 +465,7 @@ void RibbonCustomizeWidgetPrivate::updateModel()
                 grpSI->setData(true, RibbonCustomizeWidget::CanCustomizeRole);   // 标记这个是可以自定义的
             }
             pageSI->appendRow(grpSI);
-            const QList<RibbonGroupItem *> &goupItems = grp->d->ribbonGroupItems();
+            const QList<RibbonGroupItem *> &goupItems = grp->d_ptr->ribbonGroupItems();
             for (RibbonGroupItem *grpItem : goupItems) {
                 if (grpItem->action->isSeparator()) {
                     continue;

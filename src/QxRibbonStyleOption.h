@@ -36,7 +36,7 @@ public:
 protected:
     virtual int calcRibbonBarHeight(RibbonBar::RibbonStyle s) const;
 private:
-    RibbonStyleOptionPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonStyleOption)
 };
 
 QX_RIBBON_EXPORT QDebug operator<<(QDebug debug, const RibbonStyleOption &c);

@@ -51,8 +51,9 @@ public:
 class RibbonPagePrivate : public QObject
 {
     Q_OBJECT
+    QX_DECLARE_PUBLIC(RibbonPage)
 public:
-    RibbonPagePrivate(RibbonPage *parent);
+    RibbonPagePrivate();
     virtual ~RibbonPagePrivate();
 
     void init();
@@ -84,7 +85,6 @@ public slots:
     void onLeftScrollButtonClicked();
     void onRightScrollButtonClicked();
 public:
-    RibbonPage *q;
     RibbonBar *m_ribbonBar;
     RibbonGroup::GroupLayoutMode m_groupLayoutMode;
     RibbonPageScrollButton *m_leftScrollBtn;

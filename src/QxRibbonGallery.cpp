@@ -17,13 +17,13 @@
 /* RibbonGalleryPrivate */
 class RibbonGalleryPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonGallery)
 public:
     RibbonGalleryPrivate();
 public:
-    void init(RibbonGallery *parent);
+    void init();
     void setViewPort(RibbonGalleryGroup *v);
 public:
-    RibbonGallery *q;
     RibbonControlButton *m_buttonUp;
     RibbonControlButton *m_buttonDown;
     RibbonControlButton *m_buttonMore;
@@ -37,15 +37,14 @@ public:
 int RibbonGalleryPrivate::s_galleryButtonMaximumWidth = 15;
 
 RibbonGalleryPrivate::RibbonGalleryPrivate()
-    : q(Q_NULLPTR)
-    , m_popupWidget(Q_NULLPTR)
+    : m_popupWidget(Q_NULLPTR)
     , m_viewportGroup(Q_NULLPTR)
 {
 }
 
-void RibbonGalleryPrivate::init(RibbonGallery *parent)
+void RibbonGalleryPrivate::init()
 {
-    q = parent;
+    Q_Q(RibbonGallery);
     m_buttonUp = new RibbonControlButton(q);
     m_buttonDown = new RibbonControlButton(q);
     m_buttonMore = new RibbonControlButton(q);
@@ -85,6 +84,7 @@ void RibbonGalleryPrivate::init(RibbonGallery *parent)
 
 void RibbonGalleryPrivate::setViewPort(RibbonGalleryGroup *v)
 {
+    Q_Q(RibbonGallery);
     if (Q_NULLPTR == m_viewportGroup) {
         m_viewportGroup = new RibbonGalleryGroup(q);
         m_layout->addWidget(m_viewportGroup, 1);
@@ -108,9 +108,10 @@ void RibbonGalleryPrivate::setViewPort(RibbonGalleryGroup *v)
 
 RibbonGallery::RibbonGallery(QWidget *parent)
     : QFrame(parent)
-    , d(new RibbonGalleryPrivate)
 {
-    d->init(this);
+    QX_INIT_PRIVATE(RibbonGallery)
+    Q_D(RibbonGallery);
+    d->init();
     setFrameShape(QFrame::Box);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumWidth(200);
@@ -118,7 +119,7 @@ RibbonGallery::RibbonGallery(QWidget *parent)
 
 RibbonGallery::~RibbonGallery()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -175,11 +176,13 @@ RibbonGalleryGroup *RibbonGallery::addCategoryActions(const QString &title, QLis
 
 RibbonGalleryGroup *RibbonGallery::currentViewGroup() const
 {
+    Q_D(const RibbonGallery);
     return d->m_viewportGroup;
 }
 
 void RibbonGallery::setCurrentViewGroup(RibbonGalleryGroup *group)
 {
+    Q_D(RibbonGallery);
     d->setViewPort(group);
     QApplication::postEvent(this, new QResizeEvent(size(), size()));
 }
@@ -190,6 +193,7 @@ void RibbonGallery::setCurrentViewGroup(RibbonGalleryGroup *group)
  */
 RibbonGalleryViewport *RibbonGallery::getPopupViewPort() const
 {
+    Q_D(const RibbonGallery);
     return d->m_popupWidget;
 }
 
@@ -212,6 +216,7 @@ void RibbonGallery::setGalleryButtonMaximumWidth(int w)
  */
 void RibbonGallery::pageDown()
 {
+    Q_D(RibbonGallery);
     if (d->m_viewportGroup) {
         QScrollBar *vscrollBar = d->m_viewportGroup->verticalScrollBar();
         int v = vscrollBar->value();
@@ -225,6 +230,7 @@ void RibbonGallery::pageDown()
  */
 void RibbonGallery::pageUp()
 {
+    Q_D(RibbonGallery);
     if (d->m_viewportGroup) {
         QScrollBar *vscrollBar = d->m_viewportGroup->verticalScrollBar();
         int v = vscrollBar->value();
@@ -238,6 +244,7 @@ void RibbonGallery::pageUp()
  */
 void RibbonGallery::showMoreDetail()
 {
+    Q_D(RibbonGallery);
     if (Q_NULLPTR == d->m_popupWidget) {
         return;
     }
@@ -265,6 +272,7 @@ void RibbonGallery::onItemClicked(const QModelIndex &index)
 
 void RibbonGallery::onTriggered(QAction *action)
 {
+    Q_D(RibbonGallery);
     Q_UNUSED(action);
     // 点击后关闭弹出窗口
     if (d->m_popupWidget && d->m_popupWidget->isVisible()) {
@@ -274,6 +282,7 @@ void RibbonGallery::onTriggered(QAction *action)
 
 RibbonGalleryViewport *RibbonGallery::getPopupViewPort()
 {
+    Q_D(RibbonGallery);
     if (Q_NULLPTR == d->m_popupWidget) {
         d->m_popupWidget = new RibbonGalleryViewport(this);
     }
@@ -282,6 +291,7 @@ RibbonGalleryViewport *RibbonGallery::getPopupViewPort()
 
 void RibbonGallery::resizeEvent(QResizeEvent *event)
 {
+    Q_D(RibbonGallery);
     QFrame::resizeEvent(event);
     // 对RibbonGalleryViewport所有RibbonGalleryGroup重置尺寸
     int h = layout()->contentsRect().height();
@@ -322,11 +332,11 @@ void RibbonGallery::paintEvent(QPaintEvent *event)
 
 class RibbonGalleryViewportPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonGalleryViewport)
 public:
     RibbonGalleryViewportPrivate();
     void init();
 public:
-    RibbonGalleryViewport *q;
     QVBoxLayout *m_layout;
     QMap<QWidget *, QLabel *> m_widgetToTitleLabel;   ///< QWidget和lable的对应
 };
@@ -338,6 +348,7 @@ RibbonGalleryViewportPrivate::RibbonGalleryViewportPrivate()
 
 void RibbonGalleryViewportPrivate::init()
 {
+    Q_Q(RibbonGalleryViewport);
     m_layout = new QVBoxLayout(q);
     m_layout->setSpacing(0);
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -345,9 +356,9 @@ void RibbonGalleryViewportPrivate::init()
 
 RibbonGalleryViewport::RibbonGalleryViewport(QWidget *parent)
     : QWidget(parent)
-    , d(new RibbonGalleryViewportPrivate)
 {
-    d->q = this;
+    QX_INIT_PRIVATE(RibbonGalleryViewport)
+    Q_D(RibbonGalleryViewport);
     d->init();
 
     setWindowFlags(Qt::Popup);
@@ -358,7 +369,7 @@ RibbonGalleryViewport::RibbonGalleryViewport(QWidget *parent)
 
 RibbonGalleryViewport::~RibbonGalleryViewport()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 /**
@@ -367,6 +378,7 @@ RibbonGalleryViewport::~RibbonGalleryViewport()
  */
 void RibbonGalleryViewport::addWidget(QWidget *w)
 {
+    Q_D(RibbonGalleryViewport);
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->m_layout->addWidget(w);
 }
@@ -378,6 +390,7 @@ void RibbonGalleryViewport::addWidget(QWidget *w)
  */
 void RibbonGalleryViewport::addWidget(QWidget *w, const QString &title)
 {
+    Q_D(RibbonGalleryViewport);
     QLabel *label = new QLabel(this);
     label->setText(title);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -393,6 +406,7 @@ void RibbonGalleryViewport::addWidget(QWidget *w, const QString &title)
  */
 void RibbonGalleryViewport::removeWidget(QWidget *w)
 {
+    Q_D(RibbonGalleryViewport);
     QLabel *label = getWidgetTitleLabel(w);
     if (label) {
         d->m_layout->removeWidget(label);
@@ -408,6 +422,7 @@ void RibbonGalleryViewport::removeWidget(QWidget *w)
  */
 QLabel *RibbonGalleryViewport::getWidgetTitleLabel(QWidget *w)
 {
+    Q_D(RibbonGalleryViewport);
     return d->m_widgetToTitleLabel.value(w, Q_NULLPTR);
 }
 

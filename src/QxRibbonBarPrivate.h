@@ -74,8 +74,9 @@ Q_DECLARE_METATYPE(RibbonTabData)
 class RibbonBarPrivate : public QObject
 {
     Q_OBJECT
+    QX_DECLARE_PUBLIC(RibbonBar)
 public:
-    RibbonBarPrivate(RibbonBar *par);
+    RibbonBarPrivate();
 
     void init();
 
@@ -122,7 +123,6 @@ public slots:
     void onTabMoved(int from, int to);
     void onStackWidgetHided();
 public:
-    RibbonBar *q;
     QAbstractButton *m_applicationButton;
     RibbonTabBar *m_tabBar;
     RibbonStackedWidget *m_stack;

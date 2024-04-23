@@ -86,8 +86,7 @@ public:
 protected:
     const QList<RibbonGroupItem *> &ribbonGroupItems() const;
 private:
-    RibbonGroupLayoutPrivate *d;
-
+    QX_DECLARE_PRIVATE(RibbonGroupLayout)
     friend class RibbonGroup;
     friend class RibbonGroupPrivate;
 };

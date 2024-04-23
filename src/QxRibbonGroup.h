@@ -122,8 +122,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     virtual void actionEvent(QActionEvent *event) Q_DECL_OVERRIDE;
 private:
-    RibbonGroupPrivate *d;
-
+    QX_DECLARE_PRIVATE(RibbonGroup)
     friend class RibbonPage;
     friend class RibbonPagePrivate;
     friend class RibbonCustomizeWidgetPrivate;

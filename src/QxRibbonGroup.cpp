@@ -56,12 +56,16 @@ void RibbonGroupOptionButton::connectAction(QAction *action)
 int RibbonGroupPrivate::s_groupTitleHeight = 21;
 bool RibbonGroupPrivate::s_titleVisible = true;
 
-RibbonGroupPrivate::RibbonGroupPrivate(RibbonGroup *p)
-    : q(p)
-    , m_optionActionButton(Q_NULLPTR)
+RibbonGroupPrivate::RibbonGroupPrivate()
+    : m_optionActionButton(Q_NULLPTR)
     , m_groupLayoutMode(RibbonGroup::ThreeRowMode)
     , m_isCanCustomize(true)
 {
+}
+
+void RibbonGroupPrivate::init()
+{
+    Q_Q(RibbonGroup);
     m_layout = new RibbonGroupLayout(q);
     m_layout->setSpacing(2);
     m_layout->setContentsMargins(2, 2, 2, 2);
@@ -79,6 +83,7 @@ RibbonButton *RibbonGroupPrivate::lastAddedButton()
  */
 void RibbonGroupPrivate::resetLargeToolButtonStyle()
 {
+    Q_Q(RibbonGroup);
     QList<RibbonButton *> btns = q->ribbonButtons();
 
     for (RibbonButton *b : qAsConst(btns)) {
@@ -109,8 +114,10 @@ const QList<RibbonGroupItem *> &RibbonGroupPrivate::ribbonGroupItems() const
 /* RibbonGroup */
 RibbonGroup::RibbonGroup(QWidget *parent)
     : QWidget(parent)
-    , d(new RibbonGroupPrivate(this))
 {
+    QX_INIT_PRIVATE(RibbonGroup)
+    Q_D(RibbonGroup);
+    d->init();
     setGroupLayoutMode(ThreeRowMode);
 }
 
@@ -122,7 +129,7 @@ RibbonGroup::RibbonGroup(const QString &name, QWidget *parent)
 
 RibbonGroup::~RibbonGroup()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 QString RibbonGroup::groupName() const
@@ -177,6 +184,7 @@ void RibbonGroup::setActionRowProportionProperty(QAction *action, RibbonGroup::R
  */
 void RibbonGroup::setActionRowProportion(QAction *action, RibbonGroup::RowProportion rp)
 {
+    Q_D(RibbonGroup);
     if (action == Q_NULLPTR) {
         return;
     }
@@ -200,6 +208,7 @@ void RibbonGroup::setActionRowProportion(QAction *action, RibbonGroup::RowPropor
  */
 RibbonButton *RibbonGroup::addAction(QAction *action, RibbonGroup::RowProportion rp)
 {
+    Q_D(RibbonGroup);
     if (action == Q_NULLPTR) {
         return Q_NULLPTR;
     }
@@ -251,6 +260,7 @@ RibbonButton *RibbonGroup::addSmallAction(QAction *action)
 void RibbonGroup::addAction(QAction *act, QToolButton::ToolButtonPopupMode popMode,
                             RibbonGroup::RowProportion rp)
 {
+    Q_D(RibbonGroup);
     if (act == Q_NULLPTR) {
         return;
     }
@@ -294,6 +304,7 @@ QAction *RibbonGroup::addAction(const QString &text, const QIcon &icon, QToolBut
 RibbonButton *RibbonGroup::addMenu(QMenu *menu, RibbonGroup::RowProportion rp,
                                    QToolButton::ToolButtonPopupMode popMode)
 {
+    Q_D(RibbonGroup);
     if (menu == Q_NULLPTR) {
         return Q_NULLPTR;
     }
@@ -417,6 +428,7 @@ RibbonGallery *RibbonGroup::addGallery()
  */
 QAction *RibbonGroup::addSeparator(int top, int bottom)
 {
+    Q_D(RibbonGroup);
     QAction *action = new QAction(this);
 
     action->setSeparator(true);
@@ -476,6 +488,7 @@ QList<RibbonButton *> RibbonGroup::ribbonButtons() const
  */
 bool RibbonGroup::hasOptionAction() const
 {
+    Q_D(const RibbonGroup);
     return (d->m_optionActionButton != Q_NULLPTR);
 }
 
@@ -487,6 +500,7 @@ bool RibbonGroup::hasOptionAction() const
  */
 void RibbonGroup::addOptionAction(QAction *action)
 {
+    Q_D(RibbonGroup);
     if (Q_NULLPTR == action) {
         if (d->m_optionActionButton) {
             delete d->m_optionActionButton;
@@ -511,6 +525,7 @@ void RibbonGroup::addOptionAction(QAction *action)
  */
 int RibbonGroup::actionIndex(QAction *act) const
 {
+    Q_D(const RibbonGroup);
     return d->m_layout->indexOf(act);
 }
 
@@ -521,12 +536,14 @@ int RibbonGroup::actionIndex(QAction *act) const
  */
 void RibbonGroup::moveAction(int from, int to)
 {
+    Q_D(RibbonGroup);
     d->m_layout->move(from, to);
     updateGeometry();   // 通知layout进行重新布局
 }
 
 RibbonGroup::GroupLayoutMode RibbonGroup::groupLayoutMode() const
 {
+    Q_D(const RibbonGroup);
     return d->m_groupLayoutMode;
 }
 
@@ -536,6 +553,7 @@ RibbonGroup::GroupLayoutMode RibbonGroup::groupLayoutMode() const
  */
 void RibbonGroup::setGroupLayoutMode(RibbonGroup::GroupLayoutMode mode)
 {
+    Q_D(RibbonGroup);
     if (d->m_groupLayoutMode == mode) {
         return;
     }
@@ -545,6 +563,7 @@ void RibbonGroup::setGroupLayoutMode(RibbonGroup::GroupLayoutMode mode)
 
 void RibbonGroup::updateItemGeometry()
 {
+    Q_D(RibbonGroup);
     // reset layout
     layout()->setSpacing(isTwoRow() ? 4 : 2);
     updateGeometry();
@@ -554,6 +573,7 @@ void RibbonGroup::updateItemGeometry()
 
 bool RibbonGroup::isTwoRow() const
 {
+    Q_D(const RibbonGroup);
     return (TwoRowMode == d->m_groupLayoutMode);
 }
 
@@ -568,6 +588,7 @@ QSize RibbonGroup::optionActionButtonSize() const
 
 QSize RibbonGroup::sizeHint() const
 {
+    Q_D(const RibbonGroup);
     QSize laySize = layout()->sizeHint();
     int maxWidth = laySize.width() + 2;
 
@@ -614,6 +635,7 @@ void RibbonGroup::setExpanding(bool expanding)
  */
 bool RibbonGroup::isCanCustomize() const
 {
+    Q_D(const RibbonGroup);
     return d->m_isCanCustomize;
 }
 
@@ -623,6 +645,7 @@ bool RibbonGroup::isCanCustomize() const
  */
 void RibbonGroup::setCanCustomize(bool b)
 {
+    Q_D(RibbonGroup);
     d->m_isCanCustomize = b;
 }
 
@@ -678,6 +701,7 @@ void RibbonGroup::setGroupTitleHeight(int h)
 
 void RibbonGroup::paintEvent(QPaintEvent *event)
 {
+    Q_D(RibbonGroup);
     QPainter p(this);
 
     //! 1. 绘制标题
@@ -705,6 +729,7 @@ void RibbonGroup::paintEvent(QPaintEvent *event)
 
 void RibbonGroup::resizeEvent(QResizeEvent *event)
 {
+    Q_D(RibbonGroup);
     //! 1.移动操作按钮到角落
     if (d->m_optionActionButton) {
         if (titleVisible()) {
@@ -738,6 +763,7 @@ void RibbonGroup::resizeEvent(QResizeEvent *event)
  */
 void RibbonGroup::actionEvent(QActionEvent *event)
 {
+    Q_D(RibbonGroup);
     QAction *action = event->action();
     QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(action);
 

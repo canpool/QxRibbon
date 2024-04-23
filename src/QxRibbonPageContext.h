@@ -46,5 +46,5 @@ protected:
     QWidget *parentWidget() const;
     virtual bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
 private:
-    RibbonPageContextPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonPageContext)
 };

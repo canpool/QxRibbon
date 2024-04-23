@@ -20,6 +20,7 @@ public:
 /* RibbonPageContextPrivate */
 class RibbonPageContextPrivate
 {
+    QX_DECLARE_PUBLIC(RibbonPageContext)
 public:
     QList<RibbonPageData> pageDataList;
     QVariant contextID;
@@ -28,17 +29,19 @@ public:
 };
 
 RibbonPageContext::RibbonPageContext(QWidget *parent)
-    : QObject(parent), d(new RibbonPageContextPrivate)
+    : QObject(parent)
 {
+    QX_INIT_PRIVATE(RibbonPageContext)
 }
 
 RibbonPageContext::~RibbonPageContext()
 {
-    delete d;
+    QX_FINI_PRIVATE()
 }
 
 RibbonPage *RibbonPageContext::addPage(const QString &title)
 {
+    Q_D(RibbonPageContext);
     RibbonPageData pageData;
     RibbonPage *page = new RibbonPage(parentWidget());
 
@@ -54,26 +57,31 @@ RibbonPage *RibbonPageContext::addPage(const QString &title)
 
 int RibbonPageContext::pageCount() const
 {
+    Q_D(const RibbonPageContext);
     return d->pageDataList.count();
 }
 
 void RibbonPageContext::setId(const QVariant &id)
 {
+    Q_D(RibbonPageContext);
     d->contextID = id;
 }
 
 QVariant RibbonPageContext::id() const
 {
+    Q_D(const RibbonPageContext);
     return d->contextID;
 }
 
 void RibbonPageContext::setContextColor(const QColor color)
 {
+    Q_D(RibbonPageContext);
     d->contextColor = color;
 }
 
 QColor RibbonPageContext::contextColor() const
 {
+    Q_D(const RibbonPageContext);
     return d->contextColor;
 }
 
@@ -110,6 +118,7 @@ bool RibbonPageContext::eventFilter(QObject *watched, QEvent *e)
  */
 QString RibbonPageContext::contextTitle() const
 {
+    Q_D(const RibbonPageContext);
     return d->contextTitle;
 }
 
@@ -119,6 +128,7 @@ QString RibbonPageContext::contextTitle() const
  */
 void RibbonPageContext::setContextTitle(const QString &title)
 {
+    Q_D(RibbonPageContext);
     d->contextTitle = title;
 }
 
@@ -129,6 +139,7 @@ void RibbonPageContext::setContextTitle(const QString &title)
  */
 RibbonPage *RibbonPageContext::page(int index)
 {
+    Q_D(RibbonPageContext);
     if (index < 0 || index >= d->pageDataList.size()) {
         return Q_NULLPTR;
     }
@@ -141,6 +152,7 @@ RibbonPage *RibbonPageContext::page(int index)
  */
 QList<RibbonPage *> RibbonPageContext::pageList() const
 {
+    Q_D(const RibbonPageContext);
     QList<RibbonPage *> res;
 
     for (const RibbonPageData &data : d->pageDataList) {
@@ -156,6 +168,7 @@ QList<RibbonPage *> RibbonPageContext::pageList() const
  */
 bool RibbonPageContext::takePage(RibbonPage *page)
 {
+    Q_D(RibbonPageContext);
     for (int i = 0; i < d->pageDataList.size(); ++i) {
         if (d->pageDataList[i].page == page) {
             d->pageDataList.takeAt(i);

@@ -73,8 +73,7 @@ protected:
 private:
     RibbonGalleryViewport *getPopupViewPort();
 private:
-    RibbonGalleryPrivate *d;
-    friend class RibbonGalleryPrivate;
+    QX_DECLARE_PRIVATE(RibbonGallery)
 };
 
 class RibbonGalleryViewportPrivate;
@@ -93,5 +92,5 @@ public:
 public slots:
     void widgetTitleChanged(QWidget *w, const QString &title);
 private:
-    RibbonGalleryViewportPrivate *d;
+    QX_DECLARE_PRIVATE(RibbonGalleryViewport)
 };
