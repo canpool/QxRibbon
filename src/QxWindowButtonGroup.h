@@ -1,5 +1,5 @@
 ﻿/**
- * Copyleft (C) 2023 maminjie <canpool@163.com>
+ * Copyleft (C) 2023-2024 maminjie <canpool@163.com>
  * SPDX-License-Identifier: MIT
 **/
 #pragma once
@@ -23,6 +23,16 @@ public:
     void setWindowStates(Qt::WindowStates s);
 
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+
+    /** default is disabled */
+    bool signalIsEnabled() const;
+public Q_SLOTS:
+    void setSignalEnabled(bool enable);
+Q_SIGNALS:
+    void buttonMinimizeClicked();
+    void buttonMaximzieClicked();
+    void buttonCloseClicked();
+
 protected:
     virtual bool eventFilter(QObject *watched, QEvent *e) Q_DECL_OVERRIDE;
     virtual void parentResize();

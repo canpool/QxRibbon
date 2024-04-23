@@ -37,4 +37,5 @@ public:
     int m_maxStretch;
     int m_minStretch;
     qreal m_iconScale;
+    bool m_signalEnabled;
 };

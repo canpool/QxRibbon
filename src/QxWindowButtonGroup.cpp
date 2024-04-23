@@ -1,5 +1,5 @@
 ﻿/**
- * Copyleft (C) 2023 maminjie <canpool@163.com>
+ * Copyleft (C) 2023-2024 maminjie <canpool@163.com>
  * SPDX-License-Identifier: MIT
 **/
 #include "QxWindowButtonGroup.h"
@@ -31,6 +31,7 @@ WindowButtonGroupPrivate::WindowButtonGroupPrivate(WindowButtonGroup *p)
     , m_maxStretch(3)
     , m_minStretch(3)
     , m_iconScale(0.5)
+    , m_signalEnabled(false)
 {
 }
 
@@ -238,6 +239,21 @@ QSize WindowButtonGroup::sizeHint() const
     return d->sizeHint();
 }
 
+/**
+ * If the signal is disabled, the window button's signal
+ * will be directly applied to the parent window; otherwise,
+ * only the button signal will be sent
+ */
+bool WindowButtonGroup::signalIsEnabled() const
+{
+    return d->m_signalEnabled;
+}
+
+void WindowButtonGroup::setSignalEnabled(bool enable)
+{
+    d->m_signalEnabled = enable;
+}
+
 bool WindowButtonGroup::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == parentWidget()) {
@@ -269,19 +285,29 @@ void WindowButtonGroup::resizeEvent(QResizeEvent *e)
 void WindowButtonGroup::buttonClicked()
 {
     WindowToolButton *button = qobject_cast<WindowToolButton *>(sender());
-    QWidget *pw = parentWidget();
 
-    if (pw) {
+    if (d->m_signalEnabled) {
         if (button == d->m_minimizeButton) {
-            pw->showMinimized();
+            emit buttonMinimizeClicked();
         } else if (button == d->m_maximizeButton) {
-            if (pw->isMaximized()) {
-                pw->showNormal();
-            } else {
-                pw->showMaximized();
-            }
+            emit buttonMaximzieClicked();
         } else if (button == d->m_closeButton) {
-            pw->close();
+            emit buttonCloseClicked();
+        }
+    } else {
+        QWidget *pw = parentWidget();
+        if (pw) {
+            if (button == d->m_minimizeButton) {
+                pw->showMinimized();
+            } else if (button == d->m_maximizeButton) {
+                if (pw->isMaximized()) {
+                    pw->showNormal();
+                } else {
+                    pw->showMaximized();
+                }
+            } else if (button == d->m_closeButton) {
+                pw->close();
+            }
         }
     }
 }
