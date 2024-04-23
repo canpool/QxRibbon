@@ -9,7 +9,7 @@
 
 class WindowButtonGroupPrivate;
 
-class WindowButtonGroup : public QWidget
+class QX_RIBBON_EXPORT WindowButtonGroup : public QWidget
 {
     Q_OBJECT
 public:
