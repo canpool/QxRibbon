@@ -87,4 +87,5 @@ DEPENDPATH += $$PWD
 
 win32 {
     LIBS += -lUser32
+    lessThan(QT_MAJOR_VERSION, 6): DEFINES += FRAMELESS_USE_NATIVE
 }

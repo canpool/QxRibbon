@@ -74,6 +74,7 @@ void RibbonWindowPrivate::setFrameless(bool frameless)
             m_framelessHelper = new FramelessHelper(q);
         }
         m_framelessHelper->setTitleHeight(m_ribbonBar->titleBarHeight());
+        m_framelessHelper->addCaptionClassName("RibbonBar");
         if (Q_NULLPTR == m_windowButtonGroup) {
             m_windowButtonGroup = new WindowButtonGroup(q);
         }

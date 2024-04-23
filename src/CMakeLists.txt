@@ -95,6 +95,12 @@ add_library(${QX_RIBBON_LIB_NAME} SHARED
 
 target_compile_definitions(${QX_RIBBON_LIB_NAME} PRIVATE QX_RIBBON_LIBRARY)
 
+if (WIN32)
+    if (Qt5_VERSION VERSION_LESS 6.0.0)
+        target_compile_definitions(${QX_RIBBON_LIB_NAME} PRIVATE FRAMELESS_USE_NATIVE)
+    endif()
+endif()
+
 target_include_directories(${QX_RIBBON_LIB_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(${QX_RIBBON_LIB_NAME} PUBLIC
