@@ -111,6 +111,7 @@ RibbonWindow::RibbonWindow(QWidget *parent, bool useRibbon)
 {
     QX_INIT_PRIVATE(RibbonWindow)
     Q_D(RibbonWindow);
+    d->m_useRibbon = useRibbon;
     if (useRibbon) {
         setRibbonTheme(ribbonTheme());
         setMenuWidget(new RibbonBar(this));
